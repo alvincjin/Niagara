@@ -1,0 +1,26 @@
+{
+    "name": "PostEvent",
+    "namespace": "posts.avro",
+    "type": "record",
+    "fields": [
+        {
+            "name": "postId",
+            "type": "long"
+        },
+        {
+            "name": "postTypeId",
+            "type": "int"
+        },
+        {
+            "name": "tags",
+            "type": {
+                "items": "string",
+                "type": "array"
+            }
+        },
+        {
+            "name": "creationDate",
+            "type": "long"
+        }
+    ]
+}
