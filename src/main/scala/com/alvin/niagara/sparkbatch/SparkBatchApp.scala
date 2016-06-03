@@ -11,11 +11,11 @@ import com.alvin.niagara.common.{Settings, Util, Queries}
  * Created by JINC4 on 5/26/2016.
  */
 
-object SparkBatchSolution extends App with Settings {
+object SparkBatchApp extends App with Settings {
 
   val conf = new SparkConf()
-    .setAppName("SparkBatchSolution")
-    .setMaster("local[4]")
+    .setAppName("SparkBatchApp")
+    .setMaster(sparkMaster)
 
   val sc = new SparkContext(conf)
   implicit val sqlContext = new SQLContext(sc)
@@ -28,7 +28,7 @@ object SparkBatchSolution extends App with Settings {
 
     val totalPosts = sc.textFile(inputPath)
       .filter(_.contains("<row "))
-      .flatMap { line => Util.parseXml(line, sdf) }.toDS()
+      .flatMap {line => Util.parseXml(line, sdf)}.toDS()
 
     val postsOfMonth = Queries.collectPostsByMonth(totalPosts, "2014-07")
     println(s"Total posts in July 2014 : ${postsOfMonth.count()}")

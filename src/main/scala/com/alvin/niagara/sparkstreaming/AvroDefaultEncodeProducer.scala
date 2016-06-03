@@ -30,7 +30,7 @@ class AvroDefaultEncodeProducer extends Settings {
   def send(post: Post) = {
     val message = new ProducerRecord[String, Array[Byte]](topic, Post.serializeToAvro(post))
     producer.send(message)
-    println("Sent post: "+post.postId)
+    println("Sent post: "+post.postid)
 
   }
 

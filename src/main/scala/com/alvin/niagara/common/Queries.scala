@@ -17,7 +17,7 @@ object Queries {
 
 
   def collectPostsByTag(postDS: Dataset[Post], tag: String): Dataset[Post] =
-    postDS.filter { post => post.postTypeId == 1 && post.tags.contains(tag) }.cache()
+    postDS.filter { post => post.typeid == 1 && post.tags.contains(tag) }.cache()
 
 
   def collectTagOverMonth(postDS: Dataset[Post])
@@ -25,7 +25,7 @@ object Queries {
     import sqlContext.implicits._
 
     postDS
-      .map(post => (getYearMonth(post.creationDate), 1))
+      .map(post => (getYearMonth(post.creationdate), 1))
       .rdd
       .groupByKey()
       .map { case (month, times) => (month, times.sum) }
@@ -35,7 +35,7 @@ object Queries {
 
 
   def collectPostsByMonth(postDS: Dataset[Post], month: String): Dataset[Post] =
-    postDS.filter(post => getYearMonth(post.creationDate) == month)
+    postDS.filter(post => getYearMonth(post.creationdate) == month)
 
 
   private def getYearMonth(ts: Long): String = new SimpleDateFormat("yyyy-MM").format(new Date(ts))
@@ -49,7 +49,7 @@ object Queries {
       ("No posts with this tag", 0)
     else
       postDS
-        .map(post => (getYearMonth(post.creationDate), 1))
+        .map(post => (getYearMonth(post.creationdate), 1))
         .rdd
         .reduceByKey(_ + _)
         .sortBy(_._2)
@@ -59,8 +59,8 @@ object Queries {
   def countTagByMonth(stream: DStream[Post], tag: String) = {
 
     stream
-      .filter(post => post.postTypeId == 1 && post.tags.contains(tag))
-      .map { post => (getYearMonth(post.creationDate), 1) }
+      .filter(post => post.typeid == 1 && post.tags.contains(tag))
+      .map { post => (getYearMonth(post.creationdate), 1) }
       .reduceByKeyAndWindow((a, b) => a + b, Seconds(60))
       .foreachRDD { rdd => rdd.foreach(println) }
   }
@@ -75,4 +75,8 @@ object Queries {
       .filter{case(tag, count) => count >= 10}
       .foreachRDD { rdd => rdd.foreach(println) }
   }
+
+
+
+
 }

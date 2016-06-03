@@ -10,6 +10,10 @@ trait Settings {
 
   val appConfig = ConfigFactory.load()
 
+  val sparkConfig = appConfig.getConfig("spark")
+  val sparkMaster = sparkConfig.getString("masterUrl")
+  val checkpointDir = sparkConfig.getString("checkpointDir")
+
   val kafkaConfig = appConfig.getConfig("kafka")
   val brokerList = kafkaConfig.getString("brokerList")
   val schemaRegistry = kafkaConfig.getString("schemaRegistry")
@@ -17,7 +21,7 @@ trait Settings {
   val topic = kafkaConfig.getString("topic")
 
   val cassConfig = appConfig.getConfig("cassandra")
-  val hostList = cassConfig.getString("hostList")
+  val cassHost = cassConfig.getString("hostList")
   val keyspace = cassConfig.getString("keyspace")
   val table = cassConfig.getString("table")
 

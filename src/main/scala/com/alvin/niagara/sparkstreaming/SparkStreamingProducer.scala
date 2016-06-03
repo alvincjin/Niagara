@@ -18,7 +18,7 @@ object SparkStreamingProducer extends App with Settings {
 
   val conf = new SparkConf()
     .setAppName("SparkStreamingProducer")
-    .setMaster("local[4]")
+    .setMaster(sparkMaster)
 
   // Create the context
   val ssc = new StreamingContext(conf, Seconds(10))

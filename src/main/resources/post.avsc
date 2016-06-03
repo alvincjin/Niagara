@@ -4,11 +4,11 @@
     "type": "record",
     "fields": [
         {
-            "name": "postId",
+            "name": "postid",
             "type": "long"
         },
         {
-            "name": "postTypeId",
+            "name": "typeid",
             "type": "int"
         },
         {
@@ -19,7 +19,7 @@
             }
         },
         {
-            "name": "creationDate",
+            "name": "creationdate",
             "type": "long"
         }
     ]

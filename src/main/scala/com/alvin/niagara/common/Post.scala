@@ -15,7 +15,7 @@ import scala.io.Source
  * Created by jinc4 on 5/29/2016.
  */
 
-case class Post(postId: Long, postTypeId: Int, tags: Seq[String], creationDate: Long) {
+case class Post(postid: Long, typeid: Int, tags: Seq[String], creationdate: Long) {
 
   lazy val toAvro = Post.toAvro(this)
 }
@@ -32,9 +32,9 @@ object Post extends Settings {
   def toAvro(p: Post): Record = {
     val avroRecord = new Record(Post.schema)
 
-    avroRecord.put("postId", p.postId)
-    avroRecord.put("postTypeId", p.postTypeId)
-    avroRecord.put("creationDate", p.creationDate)
+    avroRecord.put("postid", p.postid)
+    avroRecord.put("typeid", p.typeid)
+    avroRecord.put("creationdate", p.creationdate)
     // convert to JavaCollection so Avro's GenericDatumWriter doesn't complain
     avroRecord.put("tags", asJavaCollection(p.tags))
 
@@ -47,10 +47,10 @@ object Post extends Settings {
       .asInstanceOf[util.Collection[AnyRef]])
       .map(_.toString).toList
 
-    Post(r.get("postId").asInstanceOf[Long],
-      r.get("postTypeId").asInstanceOf[Int],
+    Post(r.get("postid").asInstanceOf[Long],
+      r.get("typeid").asInstanceOf[Int],
       tagList,
-      r.get("creationDate").asInstanceOf[Long]
+      r.get("creationdate").asInstanceOf[Long]
       // omg, seek help, find a scala/avro marshaling lib
     )
   }
@@ -62,10 +62,10 @@ object Post extends Settings {
     val encoder = EncoderFactory.get.binaryEncoder(out, null)
 
     val avroRecord = new Record(Post.schema)
-    avroRecord.put("postId", post.postId)
-    avroRecord.put("postTypeId", post.postTypeId)
+    avroRecord.put("postid", post.postid)
+    avroRecord.put("typeid", post.typeid)
     avroRecord.put("tags", asJavaCollection(post.tags))
-    avroRecord.put("creationDate", post.creationDate)
+    avroRecord.put("creationdate", post.creationdate)
     // convert to JavaCollection so Avro's GenericDatumWriter doesn't complain
 
     writer.write(avroRecord, encoder)
@@ -84,10 +84,10 @@ object Post extends Settings {
       .asInstanceOf[util.Collection[AnyRef]])
       .map(_.toString).toList
 
-    Post(record.get("postId").asInstanceOf[Long],
-      record.get("postTypeId").asInstanceOf[Int],
+    Post(record.get("postid").asInstanceOf[Long],
+      record.get("typeid").asInstanceOf[Int],
       tagList,
-      record.get("creationDate").asInstanceOf[Long]
+      record.get("creationdate").asInstanceOf[Long]
     )
 
   }
