@@ -38,7 +38,7 @@ object Queries {
     postDS.filter(post => getYearMonth(post.creationdate) == month)
 
 
-  private def getYearMonth(ts: Long): String = new SimpleDateFormat("yyyy-MM").format(new Date(ts))
+  def getYearMonth(ts: Long): String = new SimpleDateFormat("yyyy-MM").format(new Date(ts))
 
 
   def findPopularMonth(postDS: Dataset[Post])
