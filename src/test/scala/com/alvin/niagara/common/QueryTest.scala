@@ -1,7 +1,6 @@
 package com.alvin.niagara.common
 
 import com.alvin.niagara.{SparkTest, SparkBase, DatasetSuite}
-import org.apache.spark.sql.Dataset
 import org.scalatest._
 
 /**
