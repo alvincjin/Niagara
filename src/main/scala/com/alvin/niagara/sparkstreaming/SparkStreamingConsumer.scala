@@ -1,6 +1,6 @@
 package com.alvin.niagara.sparkstreaming
 
-import com.alvin.niagara.common.{Post, Settings}
+import com.alvin.niagara.common.{Post, Setting}
 import com.datastax.spark.connector.SomeColumns
 import com.datastax.spark.connector.cql.CassandraConnector
 import com.datastax.spark.connector.streaming._
@@ -13,9 +13,14 @@ import org.apache.spark.SparkConf
 import org.apache.spark.streaming.{StreamingContext, Seconds}
 
 /**
- * Created by jinc4 on 6/2/2016.
+ * Created by JINC4 on 6/2/2016.
+ *
+ * A Spark streaming counsumer app connects to Kafka
+ * Consumes avro messages from Kafka and deserialized to Post object
+ * Runs real-time queries to incrementally update the (tag, count) pairs.
+ * Persists post data into Cassandra table
  */
-object SparkStreamingConsumerApp extends App with Settings {
+object SparkStreamingConsumer extends App with Setting {
 
   val sparkConf = new SparkConf()
     .setAppName("SparkStreamingConsumerApp")
@@ -31,7 +36,8 @@ object SparkStreamingConsumerApp extends App with Settings {
     ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG -> brokerList,
     "zookeeper.connect" -> zookeeperHost,
     ConsumerConfig.GROUP_ID_CONFIG -> "SparkStreamingConsumer",
-    "zookeeper.connection.timeout.ms" -> "1000")
+    "zookeeper.connection.timeout.ms" -> "1000"
+  )
 
   val messages = KafkaUtils
     .createStream[String, Array[Byte], DefaultDecoder, DefaultDecoder](context, kafkaConf,
@@ -43,7 +49,6 @@ object SparkStreamingConsumerApp extends App with Settings {
 
   val updateState = (batchTime: Time, key: String, value: Option[Int], state: State[Int]) => {
 
-    //println(key + " ==== " + state)
     val sum = value.getOrElse(0) + state.getOption.getOrElse(0)
     state.update(sum)
     Some((key, sum))
@@ -55,8 +60,8 @@ object SparkStreamingConsumerApp extends App with Settings {
   // This will give a Dstream made of state (which is the cumulative count of the tags)
   val tagStats = tagCounts.mapWithState(spec)
 
-  tagStats.reduceByKey((a, b)=> Math.max(a, b))
-    .filter{case(tag, count)=> count> 30}
+  tagStats.reduceByKey((a, b) => Math.max(a, b))
+    .filter { case (tag, count) => count > 30 }
     .print()
 
   messages.saveToCassandra(keyspace, table,
@@ -66,6 +71,10 @@ object SparkStreamingConsumerApp extends App with Settings {
   context.awaitTermination()
 
 
+  /**
+   * Create a steaming context and setup checkpoint
+   * @return
+   */
   def functionToCreateContext(): StreamingContext = {
 
     val ssc = new StreamingContext(sparkConf, Seconds(10))
@@ -73,6 +82,10 @@ object SparkStreamingConsumerApp extends App with Settings {
     ssc
   }
 
+  /**
+   * Create a Cassandra table if not exists
+   * @param connector
+   */
   def createTables(connector: CassandraConnector): Unit = {
 
     connector.withSessionDo { session =>

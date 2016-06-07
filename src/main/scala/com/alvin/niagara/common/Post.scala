@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream
 import java.util
 import org.apache.avro.Schema
 import org.apache.avro.generic.GenericData.Record
-import org.apache.avro.generic.{GenericDatumReader, GenericData, GenericRecord, GenericDatumWriter}
+import org.apache.avro.generic.{GenericDatumReader, GenericRecord, GenericDatumWriter}
 import org.apache.avro.io.{DecoderFactory, EncoderFactory}
 
 
@@ -13,49 +13,25 @@ import scala.io.Source
 
 /**
  * Created by jinc4 on 5/29/2016.
+ *
+ * Post case class object serializes/deserializes Object<->Avro
  */
 
-case class Post(postid: Long, typeid: Int, tags: Seq[String], creationdate: Long) {
+case class Post(postid: Long, typeid: Int, tags: Seq[String], creationdate: Long)
 
-  lazy val toAvro = Post.toAvro(this)
-}
-
-object Post extends Settings {
+object Post extends Setting {
 
   val avroSchema = Source.fromInputStream(getClass.getResourceAsStream("/post.avsc")).mkString
-
   val schema = new Schema.Parser().parse(avroSchema)
 
   val reader = new GenericDatumReader[GenericRecord](Post.schema)
   val writer = new GenericDatumWriter[GenericRecord](Post.schema)
 
-  def toAvro(p: Post): Record = {
-    val avroRecord = new Record(Post.schema)
-
-    avroRecord.put("postid", p.postid)
-    avroRecord.put("typeid", p.typeid)
-    avroRecord.put("creationdate", p.creationdate)
-    // convert to JavaCollection so Avro's GenericDatumWriter doesn't complain
-    avroRecord.put("tags", asJavaCollection(p.tags))
-
-    avroRecord
-  }
-
-  def toCaseClass(r: Record): Post = {
-
-    val tagList = collectionAsScalaIterable(r.get("tags")
-      .asInstanceOf[util.Collection[AnyRef]])
-      .map(_.toString).toList
-
-    Post(r.get("postid").asInstanceOf[Long],
-      r.get("typeid").asInstanceOf[Int],
-      tagList,
-      r.get("creationdate").asInstanceOf[Long]
-      // omg, seek help, find a scala/avro marshaling lib
-    )
-  }
-
-
+  /**
+   * Serialize case class object to an Avro message
+   * @param post the given case class
+   * @return An array byte to send
+   */
   def serializeToAvro(post: Post): Array[Byte] = {
 
     val out = new ByteArrayOutputStream()
@@ -66,7 +42,6 @@ object Post extends Settings {
     avroRecord.put("typeid", post.typeid)
     avroRecord.put("tags", asJavaCollection(post.tags))
     avroRecord.put("creationdate", post.creationdate)
-    // convert to JavaCollection so Avro's GenericDatumWriter doesn't complain
 
     writer.write(avroRecord, encoder)
     encoder.flush
@@ -74,7 +49,11 @@ object Post extends Settings {
     out.toByteArray
   }
 
-
+  /**
+   * Deserialize an avro message to a case class object
+   * @param post the received byte array
+   * @return  a case class object
+   */
   def deserializeToClass(post: Array[Byte]): Post = {
 
     val decoder = DecoderFactory.get.binaryDecoder(post, null)
@@ -89,6 +68,5 @@ object Post extends Settings {
       tagList,
       record.get("creationdate").asInstanceOf[Long]
     )
-
   }
 }

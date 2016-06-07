@@ -4,9 +4,11 @@ import com.typesafe.config.ConfigFactory
 
 /**
  * Created by jinc4 on 5/29/2016.
+ *
+ * The global setting for spark/kafka/cassandra parsed from application.conf
  */
 
-trait Settings {
+trait Setting {
 
   val appConfig = ConfigFactory.load()
 

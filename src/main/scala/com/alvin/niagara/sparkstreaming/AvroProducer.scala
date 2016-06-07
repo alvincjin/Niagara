@@ -1,16 +1,17 @@
 package com.alvin.niagara.sparkstreaming
 
 import java.util.Properties
-
-import com.alvin.niagara.common.{Post, Settings}
+import com.alvin.niagara.common.{Post, Setting}
 import org.apache.kafka.clients.producer._
-
 
 /**
  * Created by JINC4 on 5/26/2016.
+ *
+ * Avro message producer connects to kafka cluster
+ * Then, Sents avro message to kafka
  */
 
-class AvroDefaultEncodeProducer extends Settings {
+class AvroProducer extends Setting {
 
   val props = new Properties()
   props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList)
@@ -21,11 +22,11 @@ class AvroDefaultEncodeProducer extends Settings {
   props.put(ProducerConfig.ACKS_CONFIG, "all")
 
   val producer = new KafkaProducer[String, Array[Byte]](props)
+
   /**
-   * Produce a batch of Avro records to Kafka.
-   * Based on new Producer API.  More details:
-   * @param post case class to produce
-   * @return A Sequence of FutureRecordMetadata instances (based on Java Future)
+   * Sent a Post object as Avro records to Kafka.
+   * @param post a case class to send
+   * @return A sequence of FutureRecordMetadata instances
    */
   def send(post: Post) = {
     val message = new ProducerRecord[String, Array[Byte]](topic, Post.serializeToAvro(post))
@@ -33,7 +34,6 @@ class AvroDefaultEncodeProducer extends Settings {
     println("Sent post: "+post.postid)
 
   }
-
 
   def close() = producer.close()
 }
