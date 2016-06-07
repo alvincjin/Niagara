@@ -1,7 +1,6 @@
 package com.alvin.niagara.common
 
 import java.text.SimpleDateFormat
-import com.alvin.niagara.SparkBase
 import org.scalatest._
 
 /**

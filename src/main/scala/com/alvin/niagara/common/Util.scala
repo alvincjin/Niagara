@@ -2,6 +2,7 @@ package com.alvin.niagara.common
 
 import java.text.SimpleDateFormat
 import java.util.Date
+import com.datastax.spark.connector.cql.CassandraConnector
 import org.apache.spark.sql.{Dataset, SaveMode}
 import scala.xml.XML
 
@@ -62,5 +63,28 @@ object Util {
    * @return a literal timestamp in yyyy-MM
    */
   def getYearMonth(ts: Long): String = new SimpleDateFormat("yyyy-MM").format(new Date(ts))
+
+
+  /**
+   * Create a Cassandra table if not exists
+   * @param connector Connector for Spark access to Cassandra
+   * @param keyspace the database in Cassandra
+   * @param table    the Cassandra table
+   */
+  def createTables(connector: CassandraConnector, keyspace: String, table: String): Unit = {
+
+    connector.withSessionDo { session =>
+      session.execute(s"DROP KEYSPACE IF EXISTS $keyspace")
+      session.execute(s"CREATE KEYSPACE $keyspace WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 1 }")
+      session.execute(
+        s"""
+         CREATE TABLE IF NOT EXISTS $keyspace.$table  (
+         postid bigint PRIMARY KEY,
+         typeid int,
+         tags list<text>,
+         creationdate bigint
+        )""")
+    }
+  }
 
 }

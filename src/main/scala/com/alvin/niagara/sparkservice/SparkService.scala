@@ -52,8 +52,8 @@ trait SparkService extends HttpService with Setting {
             //df.show()
             val result = Try(df.rdd.map(r => r(0).asInstanceOf[Long]).collect).toOption
             result match {
-              case Some(data) => data(0).toString
-              case None => "0"
+              case Some(data) => s"The number of Posts with typeid $id: " + data(0)
+              case None => s"The number of Posts with typeid $id is 0."
             }
           }
         }
@@ -66,8 +66,8 @@ trait SparkService extends HttpService with Setting {
               val df = sqlContext.sql(s"SELECT count(*) FROM posts WHERE convertYM(creationdate) = $date")
               val result = Try(df.rdd.map(r => r(0).asInstanceOf[Long]).collect).toOption
               result match {
-                case Some(data) => data(0).toString
-                case None => "0"
+                case Some(data) => s"The number of Posts in $date: "+ data(0)
+                case None => s"The number of Posts in $date is 0."
               }
             }
           }
@@ -85,8 +85,8 @@ trait SparkService extends HttpService with Setting {
               ).count()
               ).toOption
               results match {
-                case Some(data) => data.toString
-                case None => "Not found"
+                case Some(data) => s"The number of Posts tagged as $tag: "+ data
+                case None => s"The number of Posts tagged as $tag is 0."
               }
             }
           }

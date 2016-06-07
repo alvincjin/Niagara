@@ -1,6 +1,6 @@
 package com.alvin.niagara.common
 
-import com.alvin.niagara.{SparkBase, DatasetSuite}
+import com.alvin.niagara.SparkBase
 import org.apache.avro.io.EncoderFactory
 import org.scalatest._
 import java.io.{ByteArrayOutputStream, File}

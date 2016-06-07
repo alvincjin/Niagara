@@ -1,6 +1,6 @@
 package com.alvin.niagara.sparkstreaming
 
-import com.alvin.niagara.common.{Post, Setting}
+import com.alvin.niagara.common.{Post, Setting, Util}
 import com.datastax.spark.connector.SomeColumns
 import com.datastax.spark.connector.cql.CassandraConnector
 import com.datastax.spark.connector.streaming._
@@ -28,10 +28,6 @@ object SparkStreamingConsumer extends App with Setting {
     .set("spark.cassandra.connection.host", cassHost)
     .set("spark.cassandra.connection.keep_alive_ms", "60000")
 
-  val context = StreamingContext.getOrCreate(checkpointDir, functionToCreateContext _)
-
-  createTables(CassandraConnector(sparkConf))
-
   val kafkaConf = Map(
     ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG -> brokerList,
     "zookeeper.connect" -> zookeeperHost,
@@ -39,33 +35,9 @@ object SparkStreamingConsumer extends App with Setting {
     "zookeeper.connection.timeout.ms" -> "1000"
   )
 
-  val messages = KafkaUtils
-    .createStream[String, Array[Byte], DefaultDecoder, DefaultDecoder](context, kafkaConf,
-    Map(topic -> 1), StorageLevel.MEMORY_AND_DISK)
-    .map { case (key, record: Array[Byte]) => Post.deserializeToClass(record) }
+  Util.createTables(CassandraConnector(sparkConf), keyspace, table)
 
-  val tagCounts = messages.flatMap(post => post.tags)
-    .map { tag => (tag, 1) }
-
-  val updateState = (batchTime: Time, key: String, value: Option[Int], state: State[Int]) => {
-
-    val sum = value.getOrElse(0) + state.getOption.getOrElse(0)
-    state.update(sum)
-    Some((key, sum))
-  }
-
-  val spec = StateSpec.function(updateState)
-
-  // Update the cumulative count using mapWithState()
-  // This will give a Dstream made of state (which is the cumulative count of the tags)
-  val tagStats = tagCounts.mapWithState(spec)
-
-  tagStats.reduceByKey((a, b) => Math.max(a, b))
-    .filter { case (tag, count) => count > 30 }
-    .print()
-
-  messages.saveToCassandra(keyspace, table,
-    SomeColumns("postid", "typeid", "tags", "creationdate"))
+  val context = StreamingContext.getOrCreate(checkpointDir, functionToCreateContext _)
 
   context.start()
   context.awaitTermination()
@@ -79,28 +51,45 @@ object SparkStreamingConsumer extends App with Setting {
 
     val ssc = new StreamingContext(sparkConf, Seconds(10))
     ssc.checkpoint(checkpointDir)
+
+    consumeEventsFromKafka(ssc)
     ssc
   }
 
-  /**
-   * Create a Cassandra table if not exists
-   * @param connector
-   */
-  def createTables(connector: CassandraConnector): Unit = {
 
-    connector.withSessionDo { session =>
-      session.execute(s"DROP KEYSPACE IF EXISTS $keyspace")
-      session.execute(s"CREATE KEYSPACE $keyspace WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 1 }")
-      session.execute(
-        s"""
-         CREATE TABLE IF NOT EXISTS $keyspace.$table  (
-         postid bigint PRIMARY KEY,
-         typeid int,
-         tags list<text>,
-         creationdate bigint
-        )""")
+  def consumeEventsFromKafka(ssc: StreamingContext) = {
+
+    val messages = KafkaUtils
+            .createStream[String, Array[Byte], DefaultDecoder, DefaultDecoder](
+            ssc,
+            kafkaConf,
+            Map(topic -> 1),
+            StorageLevel.MEMORY_AND_DISK)
+            .map {case (key, record: Array[Byte]) => Post.deserializeToClass(record)}
+
+    val tagCounts = messages.flatMap(post => post.tags)
+      .map { tag => (tag, 1) }
+
+    val updateState = (batchTime: Time, key: String, value: Option[Int], state: State[Int]) => {
+      val sum = value.getOrElse(0) + state.getOption.getOrElse(0)
+      state.update(sum)
+      Some((key, sum))
     }
+
+    val spec = StateSpec.function(updateState)
+
+    // This will give a Dstream made of state (which is the cumulative count of the tags)
+    val tagStats = tagCounts.mapWithState(spec)
+
+    tagStats.reduceByKey((a, b) => Math.max(a, b))
+      .filter { case (tag, count) => count > 30 }
+      .print()
+
+    messages.saveToCassandra(keyspace, table,
+              SomeColumns("postid", "typeid", "tags", "creationdate"))
   }
+
+
 
 
 }
