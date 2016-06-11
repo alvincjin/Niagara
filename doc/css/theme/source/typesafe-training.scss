@@ -1,0 +1,112 @@
+/**
+ * Typesafe training theme for reveal.js.
+ * Author: Heiko Seeberger
+ */
+
+
+// Default mixins and settings -----------------
+@import "../template/mixins";
+@import "../template/settings";
+// ---------------------------------------------
+
+
+
+// Include theme-specific fonts
+@font-face {
+	font-family: 'League Gothic';
+	src: url('../../lib/font/league_gothic-webfont.eot');
+	src: url('../../lib/font/league_gothic-webfont.eot?#iefix') format('embedded-opentype'),
+		 url('../../lib/font/league_gothic-webfont.woff') format('woff'),
+		 url('../../lib/font/league_gothic-webfont.ttf') format('truetype'),
+		 url('../../lib/font/league_gothic-webfont.svg#LeagueGothicRegular') format('svg');
+
+	font-weight: normal;
+	font-style: normal;
+}
+
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic,700italic);
+
+@import url(http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700);
+
+// Typesafe colors
+$typesafeNavy:      #103a51;
+$typesafeLightBlue: #c3eef8;
+$typesafeWebGray:   #627886;
+$typesafeBlueText:  #19aacf;
+
+
+// Override theme settings (see ../template/settings.scss)
+$mainColor: $typesafeNavy;
+$headingColor: $typesafeNavy;
+$headingTextShadow: none;
+$backgroundColor: #fff;
+$linkColor: $typesafeBlueText;
+$linkColorHover: lighten( $linkColor, 20% );
+$selectionColor: white;
+$selectionBackgroundColor: $typesafeWebGray;
+$headingTextTransform: none;
+
+// Background generator
+// @mixin bodyBackground() {
+// 	@include radial-gradient( rgba($base3,1), rgba(lighten($base3, 20%),1) );
+// }
+
+
+.reveal pre {
+  margin: 20px auto;
+}
+
+.reveal pre code {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 24px;
+  line-height: 1.2em;
+}
+
+.reveal section[data-background] {
+  h1, h2, h3 {
+    color: white;
+    text-shadow: 2px 2px 0 rgba(0,0,0,.3);
+  }
+  h4, h5, h6, p, div, ul {
+    color: white;
+  }
+}
+
+.reveal .backgrounds:after {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  margin: 0;
+  content: url("../../images/typesafe-logo.png");
+}
+
+.reveal .footnote {
+  margin-top: 1em;
+}
+
+.reveal img {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.reveal section > ul > li {
+  margin-bottom: 10px;
+}
+
+.h2Uppercase .reveal h2 {
+  text-transform: uppercase;
+}
+
+.reveal img.koan {
+  float: right;
+  background: none;
+}
+
+.reveal a:not(.image).agendaItem {
+  color: $mainColor;
+}
+
+
+// Theme template ------------------------------
+@import "../template/theme";
+// ---------------------------------------------
