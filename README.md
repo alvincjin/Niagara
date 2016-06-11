@@ -1,6 +1,6 @@
 # Niagara
 
-Niagara is a open-source project written in Scala for evaluating cutting-edge
+Niagara is a open-source a DaaS platform written in Scala for evaluating cutting-edge
 distributed systems, e.g. Spark, Akka, Cassandra, Kafka, etc.
 
 # Modules
@@ -56,3 +56,9 @@ Under the hood, the API triggers a Spark SQL query to run spark jobs on data sto
 * Storage Systems: Cassandra
 
 * Frameworks: Spray, Spark, Akka
+
+
+## Dataset used in the project:
+
+Stack Exchange Dataset contains 28 million posts in a 40GB single XML file.
+https://archive.org/details/stackexchange

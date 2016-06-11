@@ -1,4 +1,4 @@
-name := "Niagra"
+name := "Niagara"
 
 version := "1.0"
 
