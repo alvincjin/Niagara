@@ -3,6 +3,7 @@ package com.alvin.niagara.sparkservice
 /**
  * Created by JINC4 on 6/7/2016.
  */
+/*
 import org.specs2.execute.{ Failure, FailureException }
 import org.specs2.specification.core.{ Fragments, SpecificationStructure }
 import org.specs2.specification.create.DefaultFragmentFactory
@@ -23,3 +24,4 @@ trait NoAutoHtmlLinkFragments extends org.specs2.specification.dsl.ReferenceDsl 
   override def linkFragment(alias: String) = super.linkFragment(alias)
   override def seeFragment(alias: String) = super.seeFragment(alias)
 }
+*/

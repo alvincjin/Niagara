@@ -1,6 +1,6 @@
 package com.alvin.niagara.sparkservice
 
-
+/*
 import org.specs2.mutable.Specification
 import spray.testkit.RouteTest
 
@@ -38,3 +38,4 @@ with Specs2RouteTest with SparkService {
 }
 
 trait Specs2RouteTest extends RouteTest with Specs2Interface
+*/
