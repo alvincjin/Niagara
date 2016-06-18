@@ -1,0 +1,1 @@
+~\kafka_2.10-0.10.0.0\bin\windows\kafka-topics --zookeeper localhost:2181 --create --topic post
