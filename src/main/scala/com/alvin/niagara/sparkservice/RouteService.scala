@@ -32,22 +32,16 @@ trait RouteService extends AkkaJSONProtocol {
 
   val sparkRoutes =
     path("postid" / LongNumber) {
-      id => {
-        entity(as[Post]) { p => {
-          put {
-            complete(s"Update an existing task with id: $id and body: $p")
-          }
-        }}
-      } ~
+      id =>
         get {
           (setCookie(HttpCookie(name = "hello", value = "world")) &
             respondWithHeader(sampleHeader)) {
 
-              complete{ SparkService.searchPostsById(id) }
+              complete{ SparkService.searchPostById(id) }
             }
         } ~
         {
-            reject(MethodRejection(HttpMethods.GET), MethodRejection(HttpMethods.PUT))
+            reject(MethodRejection(HttpMethods.GET))
         }
     } ~
       path("createdate" / Segment) { (date: String) =>

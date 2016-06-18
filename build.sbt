@@ -6,6 +6,8 @@ val spray = "1.3.3"
 
 val spark = "1.6.1"
 
+val akka = "2.0.4"
+
 scalaVersion := "2.11.8"
 
 libraryDependencies ++= Seq(
@@ -31,9 +33,10 @@ libraryDependencies ++= Seq(
 //Cassandra
 "com.datastax.spark" %% "spark-cassandra-connector" % "1.5.0",
 //Akka
-"com.typesafe.akka" %% "akka-stream-experimental" % "2.0.4",
-"com.typesafe.akka" %% "akka-http-experimental" % "2.0.4",
-"com.typesafe.akka" %% "akka-http-spray-json-experimental" % "2.0.4",
+"com.typesafe.akka" %% "akka-stream-experimental" % akka,
+"com.typesafe.akka" %% "akka-http-experimental" % akka,
+"com.typesafe.akka" %% "akka-http-spray-json-experimental" % akka,
+"com.typesafe.akka" %% "akka-http-testkit-experimental" % akka,
 "io.gatling.highcharts" % "gatling-charts-highcharts" % "2.1.6"
 //Spray
 //"io.spray" %% "spray-can" % spray,

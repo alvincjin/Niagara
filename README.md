@@ -46,8 +46,9 @@ The ingested data are persisted in Cassandra.
 
 ## Data-as-a-Service
 
-The service layer provides RESTful APIs built by Spray for users to easily interact with data for ad-hoc analytics.
-Under the hood, the API triggers a Spark SQL query to run spark jobs on data stored in Cassandra.
+The service layer provides RESTful APIs built by Akka-Http for users to easily interact with data for ad-hoc analytics.
+Under the hood, the API triggers either Spark SQL query for analytic on data stored in Cassandra or call Cassandra
+CQL API for ad-hoc queries.
 
 ### Tech Stack
 
@@ -55,7 +56,7 @@ Under the hood, the API triggers a Spark SQL query to run spark jobs on data sto
 
 * Storage Systems: Cassandra
 
-* Frameworks: Spray, Spark, Akka
+* Frameworks: Akka-Http, Spark SQL, CQL
 
 
 ## Dataset used in the project:

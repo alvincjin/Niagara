@@ -42,11 +42,11 @@ object SparkService extends Setting {
   //Register a SparkSQL UDF
   sqlContext.udf.register("convertYM", Util.getYearMonth _)
 
-  def searchPostsById(postid: Long): Future[List[Post]] = {
+  def searchPostById(postid: Long): Future[Post] = {
 
     Future{
       val df = sqlContext.sql(s"SELECT * FROM posts where postid = $postid")
-      getPosts(df)
+      getPosts(df).head
     }
   }
 
