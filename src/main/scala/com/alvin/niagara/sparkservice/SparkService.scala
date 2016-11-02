@@ -72,10 +72,12 @@ object SparkService extends Setting {
 
   private def getPosts(df: DataFrame): List[Post] = {
 
-    df.map {row => Post(row.getAs[Long]("postid"), row.getAs[Int]("typeid"),
+    /*df.map {row => Post(row.getAs[Long]("postid"), row.getAs[Int]("typeid"),
       row.getAs[Seq[String]]("tags"), row.getAs[Long]("creationdate"))}
       .collect()
       .toList
+      */
+    List[Post]()
   }
 
 

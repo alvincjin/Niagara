@@ -1,7 +1,7 @@
-package com.alvin.niagara.sparkstreaming
+package com.alvin.niagara.common
 
 import java.util.Properties
-import com.alvin.niagara.common.{Post, Setting}
+
 import org.apache.kafka.clients.producer._
 
 /**

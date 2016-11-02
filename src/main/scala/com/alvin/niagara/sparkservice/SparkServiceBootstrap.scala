@@ -27,7 +27,7 @@ object SparkServiceBootstrap extends App with RouteService{
   StdIn.readLine() // let it run until user presses return
   bindingFuture
       .flatMap(_.unbind()) // trigger unbinding from the port
-      .onComplete(_ => actorSystem.shutdown()) // and shutdown when done
+      .onComplete(_ => actorSystem.terminate()) // and shutdown when done
 
 
 }

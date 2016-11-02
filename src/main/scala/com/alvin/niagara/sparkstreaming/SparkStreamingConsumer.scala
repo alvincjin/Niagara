@@ -15,8 +15,8 @@ import org.apache.spark.streaming.{StreamingContext, Seconds}
 /**
  * Created by JINC4 on 6/2/2016.
  *
- * A Spark streaming counsumer app connects to Kafka
- * Consumes avro messages from Kafka and deserialized to Post object
+ * A Spark streaming consumer app connects to Kafka
+ * Consumes avro messages from Kafka and deserialize them to Post object
  * Runs real-time queries to incrementally update the (tag, count) pairs.
  * Persists post data into Cassandra table
  */
