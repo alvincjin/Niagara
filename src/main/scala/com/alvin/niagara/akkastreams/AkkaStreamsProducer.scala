@@ -35,6 +35,7 @@ object AkkaStreamsProducer extends App with Setting {
       .map(_.utf8String)
       .filter(_.contains("<row"))
       .mapConcat{line => Util.parseXml(line, sdf).toList}
+      ///.runWith(Sink.foreach(println))
       .runWith(Sink.foreach(producer.send(_)))
       .onComplete(_ => system.terminate())
 

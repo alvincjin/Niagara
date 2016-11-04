@@ -7,11 +7,14 @@ import com.datastax.spark.connector.streaming._
 import kafka.serializer.DefaultDecoder
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.spark.storage.StorageLevel
-import org.apache.spark.streaming.kafka.KafkaUtils
+//import org.apache.spark.streaming.kafka.KafkaUtils
 import org.apache.spark.streaming.{State, StateSpec, Time}
 import org.apache.spark.SparkConf
-import org.apache.spark.streaming.{StreamingContext, Seconds}
-
+import org.apache.spark.streaming.kafka010.KafkaUtils
+import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent
+import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
+import org.apache.spark.streaming.{Seconds, StreamingContext}
+import org.apache.kafka.common.serialization.{StringDeserializer, ByteArrayDeserializer}
 /**
  * Created by JINC4 on 6/2/2016.
  *
@@ -28,11 +31,26 @@ object SparkStreamingConsumer extends App with Setting {
     .set("spark.cassandra.connection.host", cassHost)
     .set("spark.cassandra.connection.keep_alive_ms", "60000")
 
+  /*
   val kafkaConf = Map(
     ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG -> brokerList,
-    "zookeeper.connect" -> zookeeperHost,
+    //"zookeeper.connect" -> zookeeperHost,
     ConsumerConfig.GROUP_ID_CONFIG -> "SparkStreamingConsumer",
-    "zookeeper.connection.timeout.ms" -> "1000"
+    //"zookeeper.connection.timeout.ms" -> "1000",
+    "key.deserializer" -> classOf[StringDeserializer],
+    "value.deserializer" -> classOf[ByteArrayDeserializer],
+    "auto.offset.reset" -> "latest",
+    "enable.auto.commit" -> (false: java.lang.Boolean)
+
+  )*/
+
+  val kafkaParams = Map[String, Object](
+    "bootstrap.servers" -> "localhost:9092",
+    "key.deserializer" -> classOf[StringDeserializer],
+    "value.deserializer" -> classOf[ByteArrayDeserializer],
+    "group.id" -> "SparkStreamingConsumer",
+    "auto.offset.reset" -> "latest",
+    "enable.auto.commit" -> (true: java.lang.Boolean)
   )
 
   Util.createTables(CassandraConnector(sparkConf), keyspace, table)
@@ -59,13 +77,13 @@ object SparkStreamingConsumer extends App with Setting {
 
   def consumeEventsFromKafka(ssc: StreamingContext) = {
 
-    val messages = KafkaUtils
-            .createStream[String, Array[Byte], DefaultDecoder, DefaultDecoder](
-            ssc,
-            kafkaConf,
-            Map(topic -> 1),
-            StorageLevel.MEMORY_AND_DISK)
-            .map {case (key, record: Array[Byte]) => Post.deserializeToClass(record)}
+    val messages = KafkaUtils.createDirectStream(
+      ssc,
+      PreferConsistent,
+      Subscribe[String, Array[Byte]](Array(topic), kafkaParams)
+    ).map {record => Post.deserializeToClass(record.value())}
+
+    //messages.map(post => println(post.toString))
 
     val tagCounts = messages.flatMap(post => post.tags)
       .map { tag => (tag, 1) }
@@ -85,8 +103,9 @@ object SparkStreamingConsumer extends App with Setting {
       .filter { case (tag, count) => count > 30 }
       .print()
 
-    messages.saveToCassandra(keyspace, table,
-              SomeColumns("postid", "typeid", "tags", "creationdate"))
+
+    //messages.saveToCassandra(keyspace, table,
+      //        SomeColumns("postid", "typeid", "tags","creationdate"))
   }
 
 

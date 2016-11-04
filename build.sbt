@@ -9,7 +9,7 @@ val spark = "2.0.1"
 
 val akka = "2.4.11"
 
-val kafka = "0.10.0.1"
+val kafka = "0.10.1.0"
 
 scalaVersion := "2.11.8"
 
@@ -21,8 +21,9 @@ libraryDependencies ++= Seq(
 "org.apache.spark" %% "spark-streaming" % spark,
 "org.apache.spark" %% "spark-core" % spark,
 "org.apache.spark" %% "spark-sql" % spark,
-"org.apache.spark" %% "spark-streaming-kafka" % "1.6.2",
-//Avro
+//"org.apache.spark" %% "spark-streaming-kafka" % "1.6.2",
+  "org.apache.spark" % "spark-streaming-kafka-0-10_2.11" % spark,
+  //Avro
   "com.databricks" % "spark-avro_2.10" % "3.0.1",
 "org.apache.avro" % "avro" % "1.8.1",
 "com.databricks" %% "spark-xml" % "0.3.3",
@@ -38,6 +39,7 @@ libraryDependencies ++= Seq(
 "org.scalatest" %% "scalatest" % "2.2.6" % "test",
 //Cassandra
 "com.datastax.spark" %% "spark-cassandra-connector" % "2.0.0-M3",
+  "com.datastax.cassandra" % "cassandra-driver-core" % "3.1.2",
 //Akka
 "com.typesafe.akka" %% "akka-stream" % akka,
 "com.typesafe.akka" %% "akka-http-experimental" % akka,
