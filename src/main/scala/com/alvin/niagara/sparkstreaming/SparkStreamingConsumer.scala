@@ -4,10 +4,7 @@ import com.alvin.niagara.common.{Post, Setting, Util}
 import com.datastax.spark.connector.SomeColumns
 import com.datastax.spark.connector.cql.CassandraConnector
 import com.datastax.spark.connector.streaming._
-import kafka.serializer.DefaultDecoder
 import org.apache.kafka.clients.consumer.ConsumerConfig
-import org.apache.spark.storage.StorageLevel
-//import org.apache.spark.streaming.kafka.KafkaUtils
 import org.apache.spark.streaming.{State, StateSpec, Time}
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.kafka010.KafkaUtils
@@ -31,24 +28,12 @@ object SparkStreamingConsumer extends App with Setting {
     .set("spark.cassandra.connection.host", cassHost)
     .set("spark.cassandra.connection.keep_alive_ms", "60000")
 
-  /*
-  val kafkaConf = Map(
-    ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG -> brokerList,
-    //"zookeeper.connect" -> zookeeperHost,
-    ConsumerConfig.GROUP_ID_CONFIG -> "SparkStreamingConsumer",
-    //"zookeeper.connection.timeout.ms" -> "1000",
-    "key.deserializer" -> classOf[StringDeserializer],
-    "value.deserializer" -> classOf[ByteArrayDeserializer],
-    "auto.offset.reset" -> "latest",
-    "enable.auto.commit" -> (false: java.lang.Boolean)
-
-  )*/
 
   val kafkaParams = Map[String, Object](
-    "bootstrap.servers" -> "localhost:9092",
+    ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG -> brokerList,
     "key.deserializer" -> classOf[StringDeserializer],
     "value.deserializer" -> classOf[ByteArrayDeserializer],
-    "group.id" -> "SparkStreamingConsumer",
+    ConsumerConfig.GROUP_ID_CONFIG -> "SparkStreamingConsumer",
     "auto.offset.reset" -> "latest",
     "enable.auto.commit" -> (true: java.lang.Boolean)
   )
@@ -83,7 +68,6 @@ object SparkStreamingConsumer extends App with Setting {
       Subscribe[String, Array[Byte]](Array(topic), kafkaParams)
     ).map {record => Post.deserializeToClass(record.value())}
 
-    //messages.map(post => println(post.toString))
 
     val tagCounts = messages.flatMap(post => post.tags)
       .map { tag => (tag, 1) }
@@ -103,9 +87,8 @@ object SparkStreamingConsumer extends App with Setting {
       .filter { case (tag, count) => count > 30 }
       .print()
 
-
-    //messages.saveToCassandra(keyspace, table,
-      //        SomeColumns("postid", "typeid", "tags","creationdate"))
+    messages.saveToCassandra(keyspace, table,
+              SomeColumns("postid", "typeid", "tags","creationdate"))
   }
 
 

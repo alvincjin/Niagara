@@ -38,7 +38,7 @@ libraryDependencies ++= Seq(
 //"org.specs2" %% "specs2" % "2.4.7",
 "org.scalatest" %% "scalatest" % "2.2.6" % "test",
 //Cassandra
-"com.datastax.spark" %% "spark-cassandra-connector" % "2.0.0-M3",
+  "com.datastax.spark" % "spark-cassandra-connector_2.11" % "2.0.0-M1",
   "com.datastax.cassandra" % "cassandra-driver-core" % "3.1.2",
 //Akka
 "com.typesafe.akka" %% "akka-stream" % akka,
