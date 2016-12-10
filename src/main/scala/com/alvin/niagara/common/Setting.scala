@@ -22,10 +22,10 @@ trait Setting {
   val zookeeperHost = kafkaConfig.getString("zookeeper")
   val topic = kafkaConfig.getString("topic")
 
-  val cassConfig = appConfig.getConfig("cassandra")
-  val cassHost = cassConfig.getString("hostList")
-  val keyspace = cassConfig.getString("keyspace")
-  val table = cassConfig.getString("table")
+  val cassandraConfig = appConfig.getConfig("cassandra")
+  val cassHost = cassandraConfig.getString("hostList")
+  val keyspace = cassandraConfig.getString("keyspace")
+  val table = cassandraConfig.getString("table")
 
   val inputPath = appConfig.getString("inputPath")
   val outputPath = appConfig.getString("outputPath")
