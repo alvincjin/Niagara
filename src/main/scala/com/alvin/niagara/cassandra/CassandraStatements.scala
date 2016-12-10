@@ -6,7 +6,7 @@ package com.alvin.niagara.cassandra
   */
 trait CassandraStatements {
 
-  def config: CassandraConfig = new CassandraConfig
+  val config= CassandraConfig
 
   def createKeyspace =
     s"""
