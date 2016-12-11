@@ -24,7 +24,7 @@ trait CassandraStatements {
        |         creationdate bigint
        |         )
    """.stripMargin
-
+/*
   def writeTable(post: Post) =
     s"""
       INSERT INTO ${tableName} (postid, typeid, tags, creationdate)
@@ -40,6 +40,6 @@ trait CassandraStatements {
     s"""
       SELECT * FROM ${tableName} WHERE postid = ${postid}
     """
-
+*/
   private def tableName = s"${config.keyspace}.${config.table}"
 }
