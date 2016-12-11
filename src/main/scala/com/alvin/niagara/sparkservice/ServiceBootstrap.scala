@@ -14,14 +14,14 @@ import scala.io.StdIn
  *
  * An Akka-Http server starts Spark service
  */
-object SparkServiceBootstrap extends App with RouteService{
+object ServiceBootstrap extends App with Routes{
 
   implicit val actorSystem = ActorSystem("spark-services")
   implicit val materializer = ActorMaterializer()
 
   import actorSystem.dispatcher //ExecutionContext
   // start the server
-  val bindingFuture = Http().bindAndHandle(sparkRoutes, "localhost", 8080)
+  val bindingFuture = Http().bindAndHandle(route, "localhost", 8080)
 
   println(s"Server online at http://localhost:8080/\nPress RETURN to stop...")
   StdIn.readLine() // let it run until user presses return

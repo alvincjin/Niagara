@@ -1,5 +1,7 @@
 package com.alvin.niagara.cassandra
 
+import com.alvin.niagara.common.Post
+
 
 /**
   * Created by alvinjin on 2016-12-09.
@@ -23,22 +25,20 @@ trait CassandraStatements {
        |         )
    """.stripMargin
 
-  def writeTable =
+  def writeTable(post: Post) =
     s"""
       INSERT INTO ${tableName} (postid, typeid, tags, creationdate)
-      VALUES (?, ?, ?, ?)
+      VALUES (${post.postid}, ${post.typeid}, ${post.tags}, ${post.creationdate})
     """
 
   def deleteTable(postid: Long) =
     s"""
-      DELETE FROM ${tableName} WHERE postid = ?
+      DELETE FROM ${tableName} WHERE postid = ${postid}
     """
 
-  def selectTable =
+  def selectTable(postid: Long) =
     s"""
-      SELECT * FROM ${tableName} WHERE
-        persistence_id = ? AND
-        sequence_nr = ?
+      SELECT * FROM ${tableName} WHERE postid = ${postid}
     """
 
   private def tableName = s"${config.keyspace}.${config.table}"

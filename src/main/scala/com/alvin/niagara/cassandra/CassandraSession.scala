@@ -18,4 +18,6 @@ object CassandraSession {
     session
   }
 
+
+
 }
