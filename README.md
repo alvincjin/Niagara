@@ -1,4 +1,12 @@
-# Niagara
+<pre>
+ ____  _____   _
+|_   \|_   _| (_)
+  |   \ | |   __   ,--.   .--./) ,--.   _ .--.  ,--.
+  | |\ \| |  [  | `'_\ : / /'`\;`'_\ : [ `/'`\]`'_\ :
+ _| |_\   |_  | | // | |,\ \._//// | |, | |    // | |,
+|_____|\____|[___]\'-;__/.',__` \'-;__/[___]   \'-;__/
+                        ( ( __))
+</pre>
 
 Niagara is a open-source a DaaS platform written in Scala for evaluating cutting-edge
 distributed systems, e.g. Spark, Akka, Cassandra, Kafka, etc.

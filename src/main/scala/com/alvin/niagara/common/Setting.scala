@@ -1,7 +1,7 @@
 package com.alvin.niagara.common
 
 import com.typesafe.config.ConfigFactory
-
+import collection.JavaConversions._
 /**
  * Created by jinc4 on 5/29/2016.
  *
@@ -22,10 +22,10 @@ trait Setting {
   val zookeeperHost = kafkaConfig.getString("zookeeper")
   val topic = kafkaConfig.getString("topic")
 
-  val cassConfig = appConfig.getConfig("cassandra")
-  val cassHost = cassConfig.getString("hostList")
-  val keyspace = cassConfig.getString("keyspace")
-  val table = cassConfig.getString("table")
+  val cassandraConfig = appConfig.getConfig("cassandra")
+  val cassHost: List[String] = cassandraConfig.getStringList("hostList").toList
+  val keyspace = cassandraConfig.getString("keyspace")
+  val table = cassandraConfig.getString("table")
 
   val inputPath = appConfig.getString("inputPath")
   val outputPath = appConfig.getString("outputPath")

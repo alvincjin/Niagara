@@ -1,11 +1,11 @@
 package com.alvin.niagara.sparkservice
 
 import com.alvin.niagara.common.{Post, Setting}
-import org.apache.spark.sql.{DataFrame, SQLContext}
-import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.spark.sql.{DataFrame, SparkSession}
 import scala.concurrent.Future
 import org.apache.spark.sql.functions._
 import com.alvin.niagara.common.Util
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
@@ -17,18 +17,15 @@ import scala.concurrent.ExecutionContext.Implicits.global
  */
 object SparkService extends Setting {
 
-  val sparkConf: SparkConf = new SparkConf()
-    .setAppName("spark-spray-starter")
-    .setMaster(sparkMaster)
-    .set("spark.cassandra.connection.host", cassHost)
-    .set("spark.cassandra.connection.keep_alive_ms", "60000")
-
-  val sc: SparkContext = new SparkContext(sparkConf)
-
-  val sqlContext: SQLContext = new SQLContext(sc)
+  val sparkSession = SparkSession.builder
+    .master(sparkMaster)
+    .appName("Spark-Service")
+    .config("spark.cassandra.connection.host", cassHost.toString())
+    .config("spark.cassandra.connection.keep_alive_ms", "60000")
+    .getOrCreate()
 
   //Register a tmp spark table
-  sqlContext.sql( """
+  sparkSession.sql( """
   |CREATE TEMPORARY TABLE posts
   |USING org.apache.spark.sql.cassandra
   |OPTIONS (
@@ -40,12 +37,12 @@ object SparkService extends Setting {
   )
 
   //Register a SparkSQL UDF
-  sqlContext.udf.register("convertYM", Util.getYearMonth _)
+  sparkSession.udf.register("convertYM", Util.getYearMonth _)
 
   def searchPostById(postid: Long): Future[Post] = {
 
     Future{
-      val df = sqlContext.sql(s"SELECT * FROM posts where postid = $postid")
+      val df = sparkSession.sql(s"SELECT * FROM posts where postid = $postid")
       getPosts(df).head
     }
   }
@@ -54,7 +51,7 @@ object SparkService extends Setting {
   def searchPostsByDate(date: String): Future[List[Post]] = {
 
     Future{
-      val df = sqlContext.sql(s"SELECT count(*) FROM posts WHERE convertYM(creationdate) = $date")
+      val df = sparkSession.sql(s"SELECT count(*) FROM posts WHERE convertYM(creationdate) = $date")
       getPosts(df).take(5)
     }
   }
@@ -63,7 +60,7 @@ object SparkService extends Setting {
   def searchPostsByTag(tag: String): Future[List[Post]] = {
 
     Future {
-      val df = sqlContext.sql(s"SELECT * FROM posts")
+      val df = sparkSession.sql(s"SELECT * FROM posts")
       val tagDf = df.select("*")
         .where(array_contains(df("tags"), tag))
       getPosts(tagDf).take(5)
@@ -72,12 +69,11 @@ object SparkService extends Setting {
 
   private def getPosts(df: DataFrame): List[Post] = {
 
-    /*df.map {row => Post(row.getAs[Long]("postid"), row.getAs[Int]("typeid"),
+    import sparkSession.implicits._
+    df.map {row => Post(row.getAs[Long]("postid"), row.getAs[Int]("typeid"),
       row.getAs[Seq[String]]("tags"), row.getAs[Long]("creationdate"))}
       .collect()
       .toList
-      */
-    List[Post]()
   }
 
 

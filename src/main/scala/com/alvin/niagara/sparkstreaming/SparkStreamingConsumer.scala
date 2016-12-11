@@ -25,7 +25,7 @@ object SparkStreamingConsumer extends App with Setting {
   val sparkConf = new SparkConf()
     .setAppName("SparkStreamingConsumerApp")
     .setMaster(sparkMaster)
-    .set("spark.cassandra.connection.host", cassHost)
+    .set("spark.cassandra.connection.host", cassHost.toString())
     .set("spark.cassandra.connection.keep_alive_ms", "60000")
 
 
