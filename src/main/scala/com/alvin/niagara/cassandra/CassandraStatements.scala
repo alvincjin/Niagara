@@ -2,7 +2,7 @@ package com.alvin.niagara.cassandra
 
 import com.alvin.niagara.common.Post
 
-
+import scala.collection.JavaConversions.seqAsJavaList
 /**
   * Created by alvinjin on 2016-12-09.
   */
@@ -28,7 +28,7 @@ trait CassandraStatements {
   def writeTable(post: Post) =
     s"""
       INSERT INTO ${tableName} (postid, typeid, tags, creationdate)
-      VALUES (${post.postid}, ${post.typeid}, ['f@baggins.com', 'baggins@gmail.com'], ${post.creationdate})
+      VALUES (${post.postid}, ${post.typeid}, ${seqAsJavaList(post.tags)}, ${post.creationdate})
     """
 
   def deleteTable(postid: Long) =

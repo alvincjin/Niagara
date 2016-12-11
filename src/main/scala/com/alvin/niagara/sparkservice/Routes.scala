@@ -6,7 +6,7 @@ import akka.http.scaladsl.model.headers.HttpCookie
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.MethodRejection
 import akka.stream.ActorMaterializer
-import com.alvin.niagara.common.{Post, Response}
+import com.alvin.niagara.common.{Post, Response, Tags}
 import spray.json.DefaultJsonProtocol
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 
@@ -22,6 +22,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 trait AkkaJSONProtocol extends DefaultJsonProtocol {
   implicit val postFormat = jsonFormat4(Post.apply)
   implicit val responseFormat = jsonFormat3(Response.apply)
+  implicit val tagFormat = jsonFormat1(Tags.apply)
 }
 
 trait Routes extends AkkaJSONProtocol {
@@ -30,12 +31,18 @@ trait Routes extends AkkaJSONProtocol {
   val route =
     path("postid" / LongNumber) { id =>
       get {
-        onSuccess(CassandraService.searchPostById(id)){
+        onSuccess(CassandraService.queryPostById(id)) {
           case result: List[Response] =>
             complete(result)
         }
 
-      } ~ {
+      } ~
+        (post & entity(as[Tags])) { t =>
+          onSuccess(CassandraService.updatePost(id, t.tags)) {
+            case result: String =>
+              complete(HttpEntity(ContentTypes.`application/json`, result))
+          }
+        } ~ {
         reject(MethodRejection(HttpMethods.GET))
       }
     } ~
@@ -52,14 +59,14 @@ trait Routes extends AkkaJSONProtocol {
       } ~
       path("post") {
         (post & entity(as[Post])) { p =>
-          onSuccess(CassandraService.insertNewPost(p)){
+          onSuccess(CassandraService.insertPost(p)) {
             case result: String =>
-            complete(HttpEntity(ContentTypes.`application/json`,result))
+              complete(HttpEntity(ContentTypes.`application/json`, result))
           }
 
 
-          }
         }
+      }
 
 
 }

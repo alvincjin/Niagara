@@ -21,6 +21,8 @@ case class Response(postid: Long, typeid: Int, creationdate: Long)
 
 case class Post(postid: Long, typeid: Int, tags: Seq[String], creationdate: Long)
 
+case class Tags(tags: List[String])
+
 object Post extends Setting {
 
   val avroSchema = Source.fromInputStream(getClass.getResourceAsStream("/post.avsc")).mkString
