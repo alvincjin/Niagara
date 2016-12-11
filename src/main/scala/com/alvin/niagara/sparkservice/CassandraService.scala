@@ -34,7 +34,7 @@ object CassandraService extends CassandraStatements {
 
     Future {
       session.execute(query)
-      "Inserted"
+      "Inserted: "+post.tags.toString()
     }
   }
 

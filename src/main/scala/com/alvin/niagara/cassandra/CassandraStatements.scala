@@ -28,7 +28,7 @@ trait CassandraStatements {
   def writeTable(post: Post) =
     s"""
       INSERT INTO ${tableName} (postid, typeid, tags, creationdate)
-      VALUES (${post.postid}, ${post.typeid}, ${post.tags}, ${post.creationdate})
+      VALUES (${post.postid}, ${post.typeid}, ['f@baggins.com', 'baggins@gmail.com'], ${post.creationdate})
     """
 
   def deleteTable(postid: Long) =

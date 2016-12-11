@@ -30,7 +30,11 @@ trait Routes extends AkkaJSONProtocol {
   val route =
     path("postid" / LongNumber) { id =>
       get {
-        complete(CassandraService.searchPostById(id))
+        onSuccess(CassandraService.searchPostById(id)){
+          case result: List[Response] =>
+            complete(result)
+        }
+
       } ~ {
         reject(MethodRejection(HttpMethods.GET))
       }
@@ -48,7 +52,12 @@ trait Routes extends AkkaJSONProtocol {
       } ~
       path("post") {
         (post & entity(as[Post])) { p =>
-            complete(CassandraService.insertNewPost(p))
+          onSuccess(CassandraService.insertNewPost(p)){
+            case result: String =>
+            complete(HttpEntity(ContentTypes.`application/json`,result))
+          }
+
+
           }
         }
 
