@@ -53,8 +53,10 @@ trait Routes extends AkkaJSONProtocol {
       } ~
       path("tag" / Segment) { (tag: String) =>
         get {
-          complete(SparkService.searchPostsByTag(tag))
-
+          onSuccess(CassandraService.queryPostByTag(tag)) {
+            case result: List[Response] =>
+              complete(result)
+          }
         }
       } ~
       path("post") {
