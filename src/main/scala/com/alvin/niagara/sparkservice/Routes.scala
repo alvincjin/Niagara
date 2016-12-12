@@ -30,13 +30,14 @@ trait Routes extends AkkaJSONProtocol {
 
   val route =
     path("postid" / LongNumber) { id =>
+      //Query posts by specific postid
       get {
         onSuccess(CassandraService.queryPostById(id)) {
           case result: List[Response] =>
             complete(result)
         }
-
       } ~
+      //Update the tag list by looking up the postid
         (post & entity(as[Tags])) { t =>
           onSuccess(CassandraService.updatePost(id, t.tags)) {
             case result: String =>
@@ -46,11 +47,7 @@ trait Routes extends AkkaJSONProtocol {
         reject(MethodRejection(HttpMethods.GET))
       }
     } ~
-      path("createdate" / Segment) { (date: String) =>
-        get {
-          complete(SparkService.searchPostsByDate(date))
-        }
-      } ~
+  //Query posts containing a specific element in its tags
       path("tag" / Segment) { (tag: String) =>
         get {
           onSuccess(CassandraService.queryPostByTag(tag)) {
@@ -59,6 +56,7 @@ trait Routes extends AkkaJSONProtocol {
           }
         }
       } ~
+      //Create a new post by the payload
       path("post") {
         (post & entity(as[Post])) { p =>
           onSuccess(CassandraService.insertPost(p)) {
