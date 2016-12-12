@@ -1,14 +1,15 @@
 package com.alvin.niagara.sparkservice
 
+import java.nio.ByteBuffer
+
 import com.alvin.niagara.cassandra.{CassandraConfig, CassandraSession}
 import com.alvin.niagara.common.{Post, Response}
-import com.datastax.driver.core.ResultSet
+import com.datastax.driver.core.{ResultSet, Row}
 import com.datastax.driver.core.querybuilder.QueryBuilder
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import collection.JavaConversions._
-
+import scala.collection.JavaConversions._
+import org.apache.cassandra.utils.ByteBufferUtil
 /**
   * Created by JINC4 on 6/14/2016.
   */
@@ -28,7 +29,37 @@ object CassandraService {
     Future {
       val resultSet: ResultSet = session.execute(query)
       resultSet.map { row =>
-        Response(row.getLong("postid"), row.getInt("typeid"), row.getLong("creationdate"))
+        Response(row.getLong("postid"), row.getInt("typeid"),  row.getLong("creationdate"))
+      }.toList
+    }
+    /*
+    Future {
+      val resultSet: ResultSet = session.execute(query)
+
+      val row: Row = resultSet.one()
+      val columnValue = row.getBytesUnsafe(1)//get[Vector[String]]("subscriptions")
+      val columnType = row.getColumnDefinitions.getType(1)
+      convert(columnType.deserialize(columnValue))
+
+      resultSet.map { row =>
+        Post(row.getLong("postid"), row.getInt("typeid"), row.getList("subscriptions", ByteBuffer.class), row.getLong("creationdate"))
+      }.toList
+    }
+    */
+
+  }
+
+  def queryPostByTag(tag: String): Future[List[Response]] = {
+
+    val query = QueryBuilder.select("postid", "typeid", "creationdate")
+      .from(keyspace, table)
+      .where(QueryBuilder.contains("tags", tag))
+      .limit(100)
+
+    Future {
+      val resultSet: ResultSet = session.execute(query)
+      resultSet.map { row =>
+        Response(row.getLong("postid"), row.getInt("typeid"),  row.getLong("creationdate"))
       }.toList
     }
 
@@ -61,6 +92,17 @@ object CassandraService {
     Future {
       session.execute(query)
       "Updated: " + tags.toString()
+    }
+  }
+
+
+  private def convert(obj: Any): AnyRef = {
+    obj match {
+      case bb: ByteBuffer => ByteBufferUtil.getArray(bb)
+      case list: java.util.List[_] => list.view.map(convert).toList
+      case set: java.util.Set[_] => set.view.map(convert).toSet
+      case map: java.util.Map[_, _] => map.view.map { case (k, v) => (convert(k), convert(v)) }.toMap
+      case other => other.asInstanceOf[AnyRef]
     }
   }
 
