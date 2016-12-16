@@ -36,18 +36,23 @@ trait Routes extends AkkaJSONProtocol {
           case result: List[Response] =>
             complete(result)
         }
+      } ~ delete {
+        onSuccess(CassandraService.deletePostById(id)) {
+          case result: Long =>
+            complete(HttpEntity(ContentTypes.`application/json`, result.toString))
+        }
       } ~
-      //Update the tag list by looking up the postid
+        //Update the tag list by looking up the postid
         (post & entity(as[Tags])) { t =>
           onSuccess(CassandraService.updatePost(id, t.tags)) {
             case result: String =>
-              complete(HttpEntity(ContentTypes.`application/json`, result))
+            complete(HttpEntity(ContentTypes.`application/json`, result))
           }
         } ~ {
         reject(MethodRejection(HttpMethods.GET))
       }
     } ~
-  //Query posts containing a specific element in its tags
+      //Query posts containing a specific element in its tags
       path("tag" / Segment) { (tag: String) =>
         get {
           onSuccess(CassandraService.queryPostByTag(tag)) {

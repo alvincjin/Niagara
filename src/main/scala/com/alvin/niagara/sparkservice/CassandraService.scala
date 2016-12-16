@@ -65,6 +65,20 @@ object CassandraService {
 
   }
 
+
+  def deletePostById(postId: Long): Future[Long] = {
+
+    val query = QueryBuilder.delete()
+      .from(keyspace, table)
+      .where(QueryBuilder.eq("postid",postId))
+
+    Future {
+      session.execute(query)
+      postId
+    }
+
+  }
+
   def insertPost(post: Post): Future[String] = {
 
     val query = QueryBuilder.insertInto(keyspace, table)
@@ -75,7 +89,7 @@ object CassandraService {
 
     Future {
       session.execute(query)
-      "Inserted: " + post.tags.toString()
+      post.tags.toString()
     }
   }
 
@@ -91,7 +105,7 @@ object CassandraService {
 
     Future {
       session.execute(query)
-      "Updated: " + tags.toString()
+      tags.toString()
     }
   }
 
