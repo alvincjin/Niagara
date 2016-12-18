@@ -18,7 +18,7 @@ import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 
 
 class RouteServiceSpec extends WordSpec with Matchers
-                    with ScalatestRouteTest with RouteService {
+                    with ScalatestRouteTest with Routes {
 
   "The Route service" should {
 
@@ -28,21 +28,21 @@ class RouteServiceSpec extends WordSpec with Matchers
 
       val expect = com.alvin.niagara.common.Post(24698610L, 1, tags, 1405098721353L)
 
-      Get("/postid/24698610") ~> sparkRoutes ~> check {
+      Get("/postid/24698610") ~> route ~> check {
         responseAs[Post] shouldEqual expect
       }
     }
 
     "leave GET requests to other paths unhandled" in {
       // tests:
-      Get("/id") ~> sparkRoutes ~> check {
+      Get("/id") ~> route ~> check {
         handled shouldBe false
       }
     }
 
     "return a MethodNotAllowed error for PUT requests to the root path" in {
       // tests:
-      Put("/postid/1223333") ~> Route.seal(sparkRoutes) ~> check {
+      Put("/postid/1223333") ~> Route.seal(route) ~> check {
         status === StatusCodes.MethodNotAllowed
         responseAs[String] shouldEqual "HTTP method not allowed, supported methods: GET"
       }

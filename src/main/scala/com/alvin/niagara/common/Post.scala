@@ -17,7 +17,11 @@ import scala.io.Source
  * Post case class object serializes/deserializes Object<->Avro
  */
 
+case class Response(postid: Long, typeid: Int, creationdate: Long)
+
 case class Post(postid: Long, typeid: Int, tags: Seq[String], creationdate: Long)
+
+case class Tags(tags: List[String])
 
 object Post extends Setting {
 

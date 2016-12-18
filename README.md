@@ -1,4 +1,12 @@
-# Niagara
+<pre>
+ ____  _____   _
+|_   \|_   _| (_)
+  |   \ | |   __   ,--.   .--./) ,--.   _ .--.  ,--.
+  | |\ \| |  [  | `'_\ : / /'`\;`'_\ : [ `/'`\]`'_\ :
+ _| |_\   |_  | | // | |,\ \._//// | |, | |    // | |,
+|_____|\____|[___]\'-;__/.',__` \'-;__/[___]   \'-;__/
+                        ( ( __))
+</pre>
 
 Niagara is a open-source a DaaS platform written in Scala for evaluating cutting-edge
 distributed systems, e.g. Spark, Akka, Cassandra, Kafka, etc.
@@ -47,8 +55,7 @@ The ingested data are persisted in Cassandra.
 ## Data-as-a-Service
 
 The service layer provides RESTful APIs built by Akka-Http for users to easily interact with data for ad-hoc analytics.
-Under the hood, the API triggers either Spark SQL query for analytic on data stored in Cassandra or call Cassandra
-CQL API for ad-hoc queries.
+Under the hood, the service calls Cassandra APIs to implement CRUD operations.
 
 ### Tech Stack
 
@@ -56,7 +63,7 @@ CQL API for ad-hoc queries.
 
 * Storage Systems: Cassandra
 
-* Frameworks: Akka-Http, Spark SQL, CQL
+* Frameworks: Akka-Http, Cassandra CQL
 
 
 ## Dataset used in the project:
