@@ -42,16 +42,12 @@ libraryDependencies ++= Seq(
 "com.typesafe.akka" %% "akka-stream" % akka,
 "com.typesafe.akka" %% "akka-http-experimental" % akka,
 "com.typesafe.akka" %% "akka-http-spray-json-experimental" % akka,
-"com.typesafe.akka" %% "akka-http-testkit-experimental" % "2.4.2-RC3"
-//"io.gatling.highcharts" % "gatling-charts-highcharts" % "2.1.6"
-//Spray
-//"io.spray" %% "spray-can" % spray,
-//"io.spray" %% "spray-client" % spray,
-//"io.spray" %% "spray-routing" % spray,
-//"io.spray" %% "spray-testkit" % spray,
-//"io.spray" %% "spray-json" % "1.3.1",
-//Json
-//"org.codehaus.jackson" % "jackson-mapper-asl" % "1.9.13"
+"com.typesafe.akka" %% "akka-http-testkit-experimental" % "2.4.2-RC3",
+"com.typesafe.slick" %% "slick" % "3.1.0",
+  "mysql" % "mysql-connector-java" % "5.1.34",
+  "com.github.t3hnar" %% "scala-bcrypt" % "2.4",
+  "com.jason-goodwin" %% "authentikat-jwt" % "0.4.3",
+  "com.github.nscala-time" %% "nscala-time" % "2.4.0"
 )
 
 resolvers += "Typesafe Simple Repository" at
