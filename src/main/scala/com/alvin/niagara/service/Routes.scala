@@ -1,4 +1,4 @@
-package com.alvin.niagara.sparkservice
+package com.alvin.niagara.service
 
 import akka.http.scaladsl.model.HttpHeader.ParsingResult
 import akka.http.scaladsl.model.{HttpEntity, _}
@@ -9,6 +9,8 @@ import akka.stream.ActorMaterializer
 import com.alvin.niagara.common.{Post, Response, Tags}
 import spray.json.DefaultJsonProtocol
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
+import com.alvin.niagara.mysql.model.UserDAO
+import com.alvin.niagara.mysql.model.UserDAO.User
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -23,6 +25,7 @@ trait AkkaJSONProtocol extends DefaultJsonProtocol {
   implicit val postFormat = jsonFormat4(Post.apply)
   implicit val responseFormat = jsonFormat3(Response.apply)
   implicit val tagFormat = jsonFormat1(Tags.apply)
+  implicit val userFormat = jsonFormat6(User.apply)
 }
 
 trait Routes extends AkkaJSONProtocol {
@@ -46,7 +49,7 @@ trait Routes extends AkkaJSONProtocol {
         (post & entity(as[Tags])) { t =>
           onSuccess(CassandraService.updatePost(id, t.tags)) {
             case result: String =>
-            complete(HttpEntity(ContentTypes.`application/json`, result))
+              complete(HttpEntity(ContentTypes.`application/json`, result))
           }
         } ~ {
         reject(MethodRejection(HttpMethods.GET))
@@ -72,6 +75,33 @@ trait Routes extends AkkaJSONProtocol {
 
         }
       }
+
+  val authRoute = path("users" / Segment) { email =>
+    get {
+      onSuccess(UserDAO.queryUserByEmail(email)) {
+        case result: Some[User] =>
+          complete(result)
+      }
+
+    }
+  } ~
+    path("user") {
+      (post & entity(as[User])) { user =>
+
+        onSuccess(UserDAO.insertUser(user.email, user.username, user.password)) {
+          case result: Some[User] =>
+            complete(result)
+        }
+      }
+    } ~
+    path("user" / Segment) { userid =>
+      get {
+        onSuccess(UserDAO.queryUserById(userid)) {
+          case result: Some[User] =>
+            complete(result)
+        }
+      }
+    }
 
 
 }
