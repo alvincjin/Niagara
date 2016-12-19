@@ -1,4 +1,4 @@
-package com.alvin.niagara.sparkservice
+package com.alvin.niagara.service
 
 import akka.http.scaladsl.server.Directives._
 import akka.actor.ActorSystem
@@ -21,7 +21,7 @@ object ServiceBootstrap extends App with Routes{
 
   import actorSystem.dispatcher //ExecutionContext
   // start the server
-  val bindingFuture = Http().bindAndHandle(route, "localhost", 8080)
+  val bindingFuture = Http().bindAndHandle(route~authRoute, "localhost", 8080)
 
   println(s"Server online at http://localhost:8080/\nPress RETURN to stop...")
   StdIn.readLine() // let it run until user presses return

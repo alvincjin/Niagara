@@ -15,13 +15,16 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 object UserDAO extends DBManager {
 
-  case class User( id: Option[Int] = None,
+  case class User(
+                   id: Option[Int] = None,
                    userid: String,
                    username: String,
                    password: String,
                    email: String,
                    verified: Boolean = false
                  )
+
+  //case class UserPayload(username: String, password: String, email: String)
 
   class Users(tag: Tag) extends Table[User](tag, "users") {
 
@@ -68,8 +71,23 @@ object UserDAO extends DBManager {
 
   def queryUserByEmail(email: String): Future[Option[User]] = {
     val action = users.filter(_.email === email).result.headOption
-    db.run(action)
+    db.run(action.asTry).map { result =>
+      result match {
+        case Success(res) => res
+        case Failure(e: Exception) => None
+      }
+    }
+  }
 
+
+  def queryUserById(id: String): Future[Option[User]] = {
+    val action = users.filter(_.userid === id).result.headOption
+    db.run(action.asTry).map { result =>
+       result match {
+         case Success(res) => res
+         case Failure(e: Exception) => None
+       }
+     }
   }
 
   def generateUserId(): String = {

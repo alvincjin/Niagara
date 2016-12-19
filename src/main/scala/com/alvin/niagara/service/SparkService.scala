@@ -1,4 +1,4 @@
-package com.alvin.niagara.sparkservice
+package com.alvin.niagara.service
 
 import com.alvin.niagara.common.{Post, Setting}
 import org.apache.spark.sql.{DataFrame, SparkSession}

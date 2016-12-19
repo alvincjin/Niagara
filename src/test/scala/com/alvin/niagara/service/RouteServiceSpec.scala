@@ -1,4 +1,4 @@
-package com.alvin.niagara.sparkservice
+package com.alvin.niagara.service
 
 
 
