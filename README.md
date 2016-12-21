@@ -8,7 +8,7 @@
                         ( ( __))
 </pre>
 
-Niagara is a open-source a DaaS platform written in Scala for evaluating cutting-edge
+Niagara is a open-source DaaS platform written in Scala for evaluating cutting-edge
 distributed systems, e.g. Spark, Akka, Cassandra, Kafka, etc.
 
 # Modules
@@ -61,9 +61,9 @@ Under the hood, the service calls Cassandra APIs to implement CRUD operations.
 
 * Data Formats: Json
 
-* Storage Systems: Cassandra
+* Storage Systems: Cassandra, MySQL
 
-* Frameworks: Akka-Http, Cassandra CQL
+* Frameworks: Akka-Http, Slick
 
 
 ## Dataset used in the project:

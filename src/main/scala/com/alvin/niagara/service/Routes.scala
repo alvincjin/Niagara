@@ -78,8 +78,8 @@ trait Routes extends AkkaJSONProtocol {
 
   val authRoute = path("users" / Segment) { email =>
     get {
-      onSuccess(UserDAO.queryUserByEmail(email)) {
-        case result: Some[User] =>
+      onSuccess(UserDAO.queryUsersByEmail(email)) {
+        case result: Seq[User] =>
           complete(result)
       }
 

@@ -69,8 +69,17 @@ object UserDAO extends DBManager {
     }
   }
 
-  def queryUserByEmail(email: String): Future[Option[User]] = {
-    val action = users.filter(_.email === email).result.headOption
+
+  def queryUsersByEmail(email: String): Future[Seq[User]] = {
+    val action = users.filter(_.email === email)
+
+    db.run(action.result)
+
+  }
+
+
+  def queryUserById(id: String): Future[Option[User]] = {
+    val action = users.filter(_.userid === id).result.headOption
     db.run(action.asTry).map { result =>
       result match {
         case Success(res) => res
@@ -79,16 +88,6 @@ object UserDAO extends DBManager {
     }
   }
 
-
-  def queryUserById(id: String): Future[Option[User]] = {
-    val action = users.filter(_.userid === id).result.headOption
-    db.run(action.asTry).map { result =>
-       result match {
-         case Success(res) => res
-         case Failure(e: Exception) => None
-       }
-     }
-  }
 
   def generateUserId(): String = {
 
