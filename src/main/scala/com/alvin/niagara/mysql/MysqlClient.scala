@@ -14,7 +14,7 @@ object MysqlClient extends App {
 
   UserDAO.insertUser("bog3@gmail.com", "bog3", "1234567")
 
-  val returnUser = UserDAO.queryUserByEmail("bog3@gmail.com")
+  val returnUser = UserDAO.queryUsersByEmail("bog3@gmail.com")
 
   println("Returned User: " + Await.result(returnUser, 10.seconds))
 
