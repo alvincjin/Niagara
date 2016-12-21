@@ -8,9 +8,10 @@ import org.scalatest._
  */
 
 class QueryTest extends FunSuite with ShouldMatchers
-                with DatasetSuite with SparkBase {
+  with DatasetSuite with SparkBase {
 
-  import sqlContext.implicits._
+
+  import spark.implicits._
   val postDS = Seq(
     Post(11111L, 1, List("storm", "java"), 1407546091050L),
     Post(11112L, 1, List("storm", "java"), 1407513696417L),
@@ -21,7 +22,7 @@ class QueryTest extends FunSuite with ShouldMatchers
   test("CollectTagOverMonth should return a list of (month, count) for a specific tag")({
 
     val expect = Seq(("2014-08", 4)).toDF()
-    val result = Query.countTagOverMonth(postDS)(sqlContext).toDF()
+    val result = Query.countTagOverMonth(postDS, spark).toDF()
 
     equalDataFrames(setNullableFields(expect,true), setNullableFields(result,true))
   })
@@ -44,7 +45,7 @@ class QueryTest extends FunSuite with ShouldMatchers
   test("findPopularMonth should return a tuple (month, count), which month with the most posts")({
 
     val expect = ("2014-08", 4)
-    val result = Query.findPopularMonth(postDS)(sqlContext)
+    val result = Query.findPopularMonth(postDS, spark)
     assert(result === expect)
   })
 

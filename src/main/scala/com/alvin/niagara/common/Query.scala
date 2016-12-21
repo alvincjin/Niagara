@@ -1,7 +1,7 @@
 package com.alvin.niagara.common
 
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.{Dataset, SQLContext}
+import org.apache.spark.sql.{Dataset, SQLContext, SparkSession}
 import org.apache.spark.streaming.Seconds
 import org.apache.spark.streaming.dstream.DStream
 
@@ -26,13 +26,12 @@ object Query {
   /**
    * Count the number of tags for each month
    * @param postDS the given Post dataset
-   * @param sqlContext
+   * @param sparkSession
    * @return  a RDD contains tuple(month, count)
    */
-  def countTagOverMonth(postDS: Dataset[Post])
-                       (implicit sqlContext: SQLContext): RDD[(String, Int)] = {
+  def countTagOverMonth(postDS: Dataset[Post], sparkSession: SparkSession): RDD[(String, Int)] = {
 
-    import sqlContext.implicits._
+    import sparkSession.implicits._
 
     postDS
       .map(post => (Util.getYearMonth(post.creationdate), 1))
@@ -59,12 +58,11 @@ object Query {
   /**
    * Find the month with the most posts
    * @param postDS the given post dataset
-   * @param sqlContext
+   * @param sparkSession
    * @return the (month, count) pair
    */
-  def findPopularMonth(postDS: Dataset[Post])
-                      (implicit sqlContext: SQLContext): (String, Int) = {
-    import sqlContext.implicits._
+  def findPopularMonth(postDS: Dataset[Post], sparkSession: SparkSession): (String, Int) = {
+    import sparkSession.implicits._
 
     if (postDS.count() == 0)
       ("No posts with this tag", 0)

@@ -5,7 +5,7 @@ version := "1.0.1"
 
 //val spray = "1.3.3"
 
-val spark = "2.0.1"
+val spark = "2.0.2"
 
 val akka = "2.4.11"
 
