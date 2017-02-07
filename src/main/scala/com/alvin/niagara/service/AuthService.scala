@@ -15,11 +15,10 @@ import akka.stream.ActorMaterializer
 import com.alvin.niagara.common.{Post, Response, Tags}
 import spray.json.DefaultJsonProtocol
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-import akka.http.scaladsl.server.directives.Credentials
+import akka.http.scaladsl.server.directives.{Credentials, SecurityDirectives}
 import akka.http.scaladsl.settings.RoutingSettings._
 import akka.http.scaladsl.server._
 import Directives._
-import akka.http.scaladsl.settings.RoutingSettings
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -27,7 +26,7 @@ import scala.concurrent.Future
 /**
   * Created by alvinjin on 2016-12-18.
   */
-object AuthService  {
+object AuthService extends SecurityDirectives {
 
 
   def myUserPassAuthenticator(credentials: Credentials): Future[Option[String]] =
@@ -44,8 +43,9 @@ object AuthService  {
   val route =
 
       path("basicAsyncAuth") {
-        authenticateBasicAsync(realm = "secure site", myUserPassAuthenticator) { userName =>
-          complete(s"The user is '$userName'")
+
+        authenticateBasicAsync(realm = "secure site", myUserPassAuthenticator) { user =>
+          complete(s"The user is '$user'")
         }
       }
 
