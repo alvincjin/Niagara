@@ -1,1 +1,1 @@
-./bin/zookeeper-server-start.sh config/zookeeper.properties
+./bin/zookeeper-server-start.sh ./etc/kafka/zookeeper.properties
