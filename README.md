@@ -9,7 +9,7 @@
 </pre>
 
 Niagara is a open-source DaaS platform written in Scala for evaluating cutting-edge
-distributed systems, e.g. Spark, Akka, Cassandra, Kafka, etc.
+distributed systems on Real-time data processing, e.g. Spark, Akka, Kafka, Cassandra, etc.
 
 # Modules
 
@@ -38,7 +38,7 @@ Finally, persists the dataset on HDFS in Parquet format.
 
 The real-time layer utilizes Akka Streams to simulate an infinite streaming producer.
 Akka streams in the Xml files and emits Avro messages to Kafka simultaneously.
-The consumer is implemented by Spark streaming, which consumes Avro messages from Kafka,
+The consumers are implemented by Spark streaming and Kafka Streams. Both of them consume Avro messages from Kafka,
 then executes the real-time data analytics.
 The ingested data are persisted in Cassandra.
 
@@ -50,7 +50,7 @@ The ingested data are persisted in Cassandra.
 
 * Messaging Systems: Kafka
 
-* Frameworks: Akka Streams, Spark Streaming/SQL,
+* Frameworks: Akka Streams, Kafka Streams Spark Streaming/SQL,
 
 ## Data-as-a-Service
 

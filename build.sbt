@@ -1,7 +1,7 @@
 
 name := "Niagara"
 
-version := "1.0.1"
+version := "1.0.2"
 
 //val spray = "1.3.3"
 
@@ -9,7 +9,7 @@ val spark = "2.0.2"
 
 val akka = "2.4.11"
 
-val kafka = "0.10.1.0"
+val kafka = "0.10.1.1"
 
 scalaVersion := "2.11.8"
 
@@ -31,6 +31,7 @@ libraryDependencies ++= Seq(
   //Kafka
   "org.apache.kafka" % "kafka-clients" % kafka,
   "org.apache.kafka" %% "kafka" % kafka,
+  "org.apache.kafka" % "kafka-streams" % kafka,
   //"io.confluent" % "kafka-avro-serializer" % "1.0.1",
   //Test
   "org.specs2" %% "specs2-core" % "3.6.4" % "test",
@@ -40,6 +41,7 @@ libraryDependencies ++= Seq(
   //Cassandra
   "com.datastax.spark" % "spark-cassandra-connector_2.11" % "2.0.0-M1",
   "com.datastax.cassandra" % "cassandra-driver-core" % "3.1.2",
+  "com.tuplejump" %% "kafka-connect-cassandra" % "0.0.7",
   //Akka
   "com.typesafe.akka" %% "akka-stream" % akka,
   "com.typesafe.akka" %% "akka-http-experimental" % akka,
@@ -51,6 +53,16 @@ libraryDependencies ++= Seq(
   "com.jason-goodwin" %% "authentikat-jwt" % "0.4.3",
   "com.github.nscala-time" %% "nscala-time" % "2.4.0"
 )
+
+assemblyJarName in assembly := s"${name.value}-${version.value}.jar"
+
+test in assembly := {}
+
+assemblyMergeStrategy in assembly := {
+  case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+  case "application.conf"            => MergeStrategy.concat
+  case x => MergeStrategy.first
+}
 
 resolvers += "Typesafe Simple Repository" at
   "http://repo.typesafe.com/typesafe/simple/maven-releases/"
