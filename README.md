@@ -8,8 +8,8 @@
                         ( ( __))
 </pre>
 
-Niagara is a open-source DaaS platform written in Scala for evaluating cutting-edge
-distributed systems on Real-time data processing, e.g. Spark, Akka, Kafka, Cassandra, etc.
+Niagara is a open-source DaaS platform written in Scala built on top of SMACK(Spark, Mesos, Akka, Cassandra and Kafka) stack.
+It is a MVP to evaluate real-time processing frameworks, e.g. Spark Streaming, Akka Stream, Kafka Streams, etc.
 
 # Modules
 

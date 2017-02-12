@@ -31,8 +31,8 @@ object SparkBatchApp extends App with Setting {
     val sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
 
     val totalPosts: Dataset[Post] = spark.read.textFile(inputPath)
-      .filter(_.contains("<row "))
-      .flatMap { line => Util.parseXml(line, sdf) }
+      .filter{ l:String => l.contains("<row ")}
+      .flatMap{ line:String => Util.parseXml(line, sdf) }
 
     val postsOfMonth = Query.collectPostsByMonth(totalPosts, "2014-07")
     println(s"Total posts in July 2014 : ${postsOfMonth.count()}")

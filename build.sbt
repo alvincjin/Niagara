@@ -3,8 +3,6 @@ name := "Niagara"
 
 version := "1.0.2"
 
-//val spray = "1.3.3"
-
 val spark = "2.0.2"
 
 val akka = "2.4.11"
@@ -21,8 +19,8 @@ libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-streaming" % spark,
   "org.apache.spark" %% "spark-core" % spark,
   "org.apache.spark" %% "spark-sql" % spark,
-  //"org.apache.spark" %% "spark-streaming-kafka" % "1.6.2",
   "org.apache.spark" % "spark-streaming-kafka-0-10_2.11" % spark,
+
   //Avro
   "com.databricks" % "spark-avro_2.10" % "3.0.1",
   "org.apache.avro" % "avro" % "1.8.1",
@@ -30,13 +28,12 @@ libraryDependencies ++= Seq(
 
   //Kafka
   "org.apache.kafka" % "kafka-clients" % kafka,
-  "org.apache.kafka" %% "kafka" % kafka,
+  //"org.apache.kafka" %% "kafka" % kafka,
   "org.apache.kafka" % "kafka-streams" % kafka,
   //"io.confluent" % "kafka-avro-serializer" % "1.0.1",
   //Test
   "org.specs2" %% "specs2-core" % "3.6.4" % "test",
   "org.specs2" %% "specs2-junit" % "3.6.4" % "test",
-  //"org.specs2" %% "specs2" % "2.4.7",
   "org.scalatest" %% "scalatest" % "2.2.6" % "test",
   //Cassandra
   "com.datastax.spark" % "spark-cassandra-connector_2.11" % "2.0.0-M1",
@@ -63,6 +60,8 @@ assemblyMergeStrategy in assembly := {
   case "application.conf"            => MergeStrategy.concat
   case x => MergeStrategy.first
 }
+
+scalacOptions := Seq("-unchecked", "-deprecation", "-Xexperimental")
 
 resolvers += "Typesafe Simple Repository" at
   "http://repo.typesafe.com/typesafe/simple/maven-releases/"
