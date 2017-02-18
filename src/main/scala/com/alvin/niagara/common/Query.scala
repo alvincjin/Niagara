@@ -20,7 +20,7 @@ object Query {
    * @return another Post dataset
    */
   def collectPostsByTag(postDS: Dataset[Post], tag: String): Dataset[Post] =
-    postDS.filter { post => post.typeid == 1 && post.tags.contains(tag) }.cache()
+    postDS.filter { post:Post => post.typeid == 1 && post.tags.contains(tag) }.cache()
 
 
   /**
@@ -49,7 +49,7 @@ object Query {
    * @return  another Post dataset
    */
   def collectPostsByMonth(postDS: Dataset[Post], month: String): Dataset[Post] =
-    postDS.filter(post => Util.getYearMonth(post.creationdate) == month)
+    postDS.filter{post:Post => Util.getYearMonth(post.creationdate) == month}
 
 
 
