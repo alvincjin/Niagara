@@ -25,7 +25,7 @@ import scala.util.{Failure, Success}
 
 trait AkkaProducer extends Setting {
 
-  val system = ActorSystem("example")
+  val system = ActorSystem("AkkaProducer")
 
   val producerSettings = ProducerSettings(system, new StringSerializer, new ByteArraySerializer)
     .withBootstrapServers(brokerList)
