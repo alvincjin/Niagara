@@ -44,6 +44,8 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-http-experimental" % akka,
   "com.typesafe.akka" %% "akka-http-spray-json-experimental" % akka,
   "com.typesafe.akka" %% "akka-http-testkit-experimental" % "2.4.2-RC3",
+  "com.typesafe.akka" %% "akka-stream-kafka" % "0.13",
+
   "com.typesafe.slick" %% "slick" % "3.1.0",
   "mysql" % "mysql-connector-java" % "5.1.34",
   "com.github.t3hnar" %% "scala-bcrypt" % "2.4",
