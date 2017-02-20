@@ -8,8 +8,10 @@
                         ( ( __))
 </pre>
 
-Niagara is a open-source DaaS platform written in Scala built on top of SMACK(Spark, Mesos, Akka, Cassandra and Kafka) stack.
-It is a MVP to evaluate real-time processing frameworks, e.g. Spark Streaming, Akka Stream, Kafka Streams, etc.
+Niagara is a open-source Data-as-a-Service platform implemented in Scala and built by SMACK(Spark, Mesos, Akka, Cassandra and Kafka) stack.
+It is a MVP project to evaluate cutting-edge real-time processing frameworks, e.g. Spark Streaming, Akka Stream, Kafka Streams, Apache Beam, etc.
+It utilizes HDFS, MySQL and Cassandra as storage systems, and Kafka as a Pub-Sub system.
+
 
 # Modules
 
@@ -22,9 +24,9 @@ It is a MVP to evaluate real-time processing frameworks, e.g. Spark Streaming, A
 ## Batch Processing
 
 The batch layer streams the xml files by Spark textfile API.
-It parses the xml file line by line into a DataSet.
-Queries the dataset by either Dataset API or Spark SQL.
-Finally, persists the dataset on HDFS in Parquet format.
+Then, parses the xml file line by line into a DataSet data structure.
+Analyzes the data set by either Dataset API or Spark SQL.
+Finally, persists the request on HDFS in Parquet format.
 
 ### Tech Stack
 
@@ -36,10 +38,16 @@ Finally, persists the dataset on HDFS in Parquet format.
 
 ## Real-time Processing
 
-The real-time layer utilizes Akka Streams to simulate an infinite streaming producer.
-Akka streams in the Xml files and emits Avro messages to Kafka simultaneously.
-The consumers are implemented by Spark streaming and Kafka Streams. Both of them consume Avro messages from Kafka,
-then executes the real-time data analytics.
+
+The real-time layer utilizes Akka Streams to simulate an infinite streaming source.
+Akka streams parses Xml files and converts to Avro messages to a Kafka topic simultaneously.
+Three different frameworks are used to build consumers.
+1. Spark streaming
+2. Kafka Streams
+3. Akka Streams
+
+The consumers consume Avro messages from Kafka topic.
+Then executes the real-time data analytics.
 The ingested data are persisted in Cassandra.
 
 ### Tech Stack
@@ -50,7 +58,7 @@ The ingested data are persisted in Cassandra.
 
 * Messaging Systems: Kafka
 
-* Frameworks: Akka Streams, Kafka Streams Spark Streaming/SQL,
+* Frameworks: Akka Streams, Kafka Streams Spark Streaming
 
 ## Data-as-a-Service
 
