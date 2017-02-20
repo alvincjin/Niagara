@@ -21,7 +21,10 @@ import scala.concurrent.duration._
 import scala.util.{Failure, Success}
 import java.util.concurrent.atomic.AtomicLong
 
+import akka.stream.alpakka.cassandra.scaladsl.CassandraSink
+import com.alvin.niagara.cassandra.CassandraConfig
 import com.alvin.niagara.common.{Post, Setting}
+import com.datastax.driver.core.{Cluster, PreparedStatement}
 
 trait AkkaConsumer extends Setting {
 
@@ -42,6 +45,8 @@ trait AkkaConsumer extends Setting {
     .withBootstrapServers(brokerList)
 
   val kafkaProducer = producerSettings.createKafkaProducer()
+
+  implicit val session = Cluster.builder.addContactPoint(CassandraConfig.hosts(0)).withPort(CassandraConfig.port).build.connect()
 
   def business[T] = Flow[T]
 
@@ -90,28 +95,52 @@ trait AkkaConsumer extends Setting {
 // Consume messages and store a representation, including offset, in DB
 object ExternalOffsetStorageAkka extends AkkaConsumer {
   def main(args: Array[String]): Unit = {
-    // #plainSource
-    val db = new DB
 
+
+    val preparedStatement = session.prepare("INSERT INTO test.post5(typeid) VALUES (?)")
+    val statementBinder = (typeId: Integer, statement: PreparedStatement) => statement.bind(typeId)
+    val cassandraSink = CassandraSink[Integer](parallelism = 2, preparedStatement, statementBinder)
+
+    /*
+    val db = new DB
     db.loadOffset().foreach { fromOffset =>
                 val partition = 0
                 val subscription = Subscriptions.assignmentWithOffset(new TopicPartition(topic, partition) -> fromOffset)
                 val done = Consumer.plainSource(consumerSettings, subscription)
-                    .map(msg => (Post.deserializeToClass(msg.value()), msg.offset()))
-                    .mapAsync(1){case (post, offset) =>
-                            db.save(offset, post)
-                    }
-                    .runWith(Sink.ignore)
+                   .map(msg => (Post.deserializeToClass(msg.value()), msg.offset()))
+               .mapAsync(1){case (post, offset) =>
+                         db.save(offset, post)
+                 }
+
+                  .map(msg => Post.deserializeToClass(msg.value()))
+                  .map(post => post.typeid:Integer)
+                //  .runWith(Sink.ignore)
+                  .runWith(sink)
 
                 terminateWhenDone(done)
-    }
+    }*/
+
+
+    val done = Consumer.committableSource(consumerSettings, Subscriptions.topics(topic))
+        .map(msg => Post.deserializeToClass(msg.record.value()))
+        .map{post =>  println(post.typeid)
+          post.typeid: Integer}
+        .runWith(cassandraSink)
+
+    terminateWhenDone(done)
   }
 }
 
 
-
+/*
 object AkkaConsumerToProducerFlow extends AkkaConsumer {
   def main(args: Array[String]): Unit = {
+
+
+    val preparedStatement = session.prepare("INSERT INTO akka_stream_scala_test.test(id) VALUES (?)")
+    val statementBinder = (myInteger: Integer, statement: PreparedStatement) => statement.bind(myInteger)
+    val sink = CassandraSink[Integer](parallelism = 2,preparedStatement, statementBinder)
+
     // #consumerToProducerFlow
     val done =
       Consumer.committableSource(consumerSettings, Subscriptions.topics(topic))
@@ -123,12 +152,12 @@ object AkkaConsumerToProducerFlow extends AkkaConsumer {
         .mapAsync(1) { msg =>
           msg.message.passThrough.commitScaladsl()
         }
-        .runWith(Sink.ignore)
+        .runWith(sink)
 
     terminateWhenDone(done)
   }
 }
-
+*/
 
 /*
 // Consume messages at-most-once
