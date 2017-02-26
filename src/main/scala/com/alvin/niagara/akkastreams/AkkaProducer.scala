@@ -11,7 +11,6 @@ import akka.actor.ActorSystem
 import akka.kafka.ProducerSettings
 import akka.kafka.scaladsl.Producer
 import akka.stream.alpakka.file.scaladsl.FileTailSource
-import akka.stream.scaladsl.{FileIO, Framing, Source}
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.serialization.ByteArraySerializer
 import org.apache.kafka.common.serialization.StringSerializer
@@ -19,7 +18,6 @@ import akka.stream.{ActorMaterializer, scaladsl}
 
 import scala.concurrent.Future
 import akka.{Done, NotUsed}
-import akka.util.ByteString
 
 import scala.concurrent.duration._
 import com.alvin.niagara.common.{Post, Setting, Util}
@@ -50,15 +48,9 @@ trait AkkaProducer extends Setting {
 }
 
 
-object PlainSinkWithAkkaProducer extends App with AkkaProducer {
+object XMLFileAkkaProducer extends App with AkkaProducer {
 
   val sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-  /*
-  val filePath = Paths.get(inputPath)
-  FileIO.fromPath(filePath)
-    .via(Framing.delimiter(ByteString("\n"), maximumFrameLength = Int.MaxValue, allowTruncation = true))
-    .map(_.utf8String)
-  */
 
   val done = FileTailSource.lines(
     path = FileSystems.getDefault.getPath(inputPath),

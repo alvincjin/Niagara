@@ -25,6 +25,7 @@ import akka.stream.alpakka.cassandra.scaladsl.CassandraSink
 import com.alvin.niagara.cassandra.CassandraConfig
 import com.alvin.niagara.common.{Post, Setting}
 import com.datastax.driver.core.{Cluster, PreparedStatement}
+import java.lang.{Long => JLong}
 
 trait AkkaConsumer extends Setting {
 
@@ -46,7 +47,11 @@ trait AkkaConsumer extends Setting {
 
   val kafkaProducer = producerSettings.createKafkaProducer()
 
-  implicit val session = Cluster.builder.addContactPoint(CassandraConfig.hosts(0)).withPort(CassandraConfig.port).build.connect()
+  implicit val session = Cluster.builder
+    .addContactPoint(CassandraConfig.hosts(0))
+    .withPort(CassandraConfig.port)
+    .build
+    .connect()
 
   def business[T] = Flow[T]
 
@@ -92,14 +97,17 @@ trait AkkaConsumer extends Setting {
   }
 }
 
-// Consume messages and store a representation, including offset, in DB
-object ExternalOffsetStorageAkka extends AkkaConsumer {
+
+object Akka2CassandraConsumer extends AkkaConsumer {
+
+  type postType = (JLong, Integer, JLong)
+
   def main(args: Array[String]): Unit = {
 
 
-    val preparedStatement = session.prepare("INSERT INTO test.post5(typeid) VALUES (?)")
-    val statementBinder = (typeId: Integer, statement: PreparedStatement) => statement.bind(typeId)
-    val cassandraSink = CassandraSink[Integer](parallelism = 2, preparedStatement, statementBinder)
+    val preparedStatement = session.prepare("INSERT INTO test.post8(postid, typeid, tags, creationdate) VALUES (?,?,?)")
+    val statementBinder = (post: postType, statement: PreparedStatement) => statement.bind(post._1, post._2, post._3)
+    val cassandraSink = CassandraSink[postType](parallelism = 2, preparedStatement, statementBinder)
 
     /*
     val db = new DB
@@ -122,10 +130,9 @@ object ExternalOffsetStorageAkka extends AkkaConsumer {
 
 
     val done = Consumer.committableSource(consumerSettings, Subscriptions.topics(topic))
-        .map(msg => Post.deserializeToClass(msg.record.value()))
-        .map{post =>  println(post.typeid)
-          post.typeid: Integer}
-        .runWith(cassandraSink)
+      .map(msg => Post.deserializeToClass(msg.record.value()))
+      .map { p => (p.postid: JLong, p.typeid: Integer, p.creationdate: JLong) }
+      .runWith(cassandraSink)
 
     terminateWhenDone(done)
   }
