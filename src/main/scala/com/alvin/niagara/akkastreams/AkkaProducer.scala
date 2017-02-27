@@ -4,21 +4,22 @@ package com.alvin.niagara.akkastreams
   * Created by alvinjin on 2017-02-17.
   */
 
-import java.nio.file.Paths
+import java.nio.file.{FileSystems, Paths}
 import java.text.SimpleDateFormat
 
 import akka.actor.ActorSystem
 import akka.kafka.ProducerSettings
 import akka.kafka.scaladsl.Producer
-import akka.stream.scaladsl.{FileIO, Framing}
+import akka.stream.alpakka.file.scaladsl.FileTailSource
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.serialization.ByteArraySerializer
 import org.apache.kafka.common.serialization.StringSerializer
-import akka.stream.ActorMaterializer
+import akka.stream.{ActorMaterializer, scaladsl}
 
 import scala.concurrent.Future
-import akka.Done
-import akka.util.ByteString
+import akka.{Done, NotUsed}
+
+import scala.concurrent.duration._
 import com.alvin.niagara.common.{Post, Setting, Util}
 
 import scala.util.{Failure, Success}
@@ -47,15 +48,15 @@ trait AkkaProducer extends Setting {
 }
 
 
-object PlainSinkWithAkkaProducer extends App with AkkaProducer {
+object XMLFileAkkaProducer extends App with AkkaProducer {
 
   val sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-  val filePath = Paths.get(inputPath)
 
-  val done = FileIO.fromPath(filePath)
-    .via(Framing.delimiter(ByteString("\n"), maximumFrameLength = Int.MaxValue, allowTruncation = true))
-    .map(_.utf8String)
-    .filter(_.contains("<row"))
+  val done = FileTailSource.lines(
+    path = FileSystems.getDefault.getPath(inputPath),
+    maxLineSize = 88192,
+    pollingInterval = 250.millis
+  ).filter(_.contains("<row"))
     .mapConcat { line => Util.parseXml(line, sdf).toList }
     .map(post => new ProducerRecord[String, Array[Byte]](topic, Post.serializeToAvro(post)))
     .runWith(Producer.plainSink(producerSettings, kafkaProducer))

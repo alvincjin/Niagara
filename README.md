@@ -9,7 +9,7 @@
 </pre>
 
 Niagara is a open-source Data-as-a-Service platform implemented in Scala and built by SMACK(Spark, Mesos, Akka, Cassandra and Kafka) stack.
-It is a MVP project to evaluate cutting-edge real-time processing frameworks, e.g. Spark Streaming, Akka Stream, Kafka Streams, Apache Beam, etc.
+It is a MVP project to evaluate cutting-edge real-time processing frameworks, e.g. Spark Streaming, Akka Stream, Kafka Streams, etc.
 It utilizes HDFS, MySQL and Cassandra as storage systems, and Kafka as a Pub-Sub system.
 
 
@@ -58,7 +58,7 @@ The ingested data are persisted in Cassandra.
 
 * Messaging Systems: Kafka
 
-* Frameworks: Akka Streams, Kafka Streams Spark Streaming
+* Frameworks: Akka Streams, Alpakka, Kafka Streams Spark Streaming
 
 ## Data-as-a-Service
 
