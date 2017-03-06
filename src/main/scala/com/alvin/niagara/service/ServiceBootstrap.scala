@@ -16,7 +16,7 @@ import scala.io.StdIn
  */
 object ServiceBootstrap extends App with Routes{
 
-  implicit val actorSystem = ActorSystem("spark-services")
+  implicit val actorSystem = ActorSystem("REST-service")
   implicit val materializer = ActorMaterializer()
 
   import actorSystem.dispatcher //ExecutionContext

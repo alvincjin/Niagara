@@ -25,7 +25,7 @@ object SparkStreamingConsumer extends App with Setting {
   val sparkConf = new SparkConf()
     .setAppName("SparkStreamingConsumerApp")
     .setMaster(sparkMaster)
-    .set("spark.cassandra.connection.host", cassHost.toString())
+    .set("spark.cassandra.connection.host", hosts.toString())
     .set("spark.cassandra.connection.keep_alive_ms", "60000")
 
 
@@ -66,7 +66,7 @@ object SparkStreamingConsumer extends App with Setting {
       ssc,
       PreferConsistent,
       Subscribe[String, Array[Byte]](Array(topic), kafkaParams)
-    ).map {record => Post.deserializeToClass(record.value())}
+    ).map {record => Post.deserialize(record.value())}
 
 
     val tagCounts = messages.flatMap(post => post.tags)

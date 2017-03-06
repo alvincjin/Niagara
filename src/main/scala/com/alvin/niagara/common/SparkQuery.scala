@@ -1,7 +1,7 @@
 package com.alvin.niagara.common
 
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.{Dataset, SQLContext, SparkSession}
+import org.apache.spark.sql.{Dataset, SparkSession}
 import org.apache.spark.streaming.Seconds
 import org.apache.spark.streaming.dstream.DStream
 
@@ -11,7 +11,7 @@ import org.apache.spark.streaming.dstream.DStream
  *
  * Contains a bunch of queries for aggregations, filtering on Post dataset
  */
-object Query {
+object SparkQuery {
 
   /**
    * Collect all posts contain a specific tag in their tags field

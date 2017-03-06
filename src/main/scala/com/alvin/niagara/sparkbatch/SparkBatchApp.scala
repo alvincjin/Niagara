@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat
 
 import org.apache.spark.sql.{Dataset, SQLContext, SparkSession}
 import org.apache.spark.{SparkConf, SparkContext}
-import com.alvin.niagara.common.{Post, Query, Setting, Util}
+import com.alvin.niagara.common.{Post, SparkQuery, Setting, Util}
 
 
 /**
@@ -34,13 +34,13 @@ object SparkBatchApp extends App with Setting {
       .filter{ l:String => l.contains("<row ")}
       .flatMap{ line:String => Util.parseXml(line, sdf) }
 
-    val postsOfMonth = Query.collectPostsByMonth(totalPosts, "2014-07")
+    val postsOfMonth = SparkQuery.collectPostsByMonth(totalPosts, "2014-07")
     println(s"Total posts in July 2014 : ${postsOfMonth.count()}")
 
-    val stormPosts = Query.collectPostsByTag(totalPosts, "storm")
+    val stormPosts = SparkQuery.collectPostsByTag(totalPosts, "storm")
     println(s"Total Apache Storm posts: ${stormPosts.count()}")
 
-    val postsByMonth = Query.countTagOverMonth(stormPosts, spark)
+    val postsByMonth = SparkQuery.countTagOverMonth(stormPosts, spark)
     postsByMonth.foreach { case (month, times) => println(month + " has Apache Storm posts " + times) }
 
     val popularMonth = postsByMonth

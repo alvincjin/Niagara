@@ -18,7 +18,7 @@ object KStreamApp extends App with Setting {
   val settings = new Properties()
   settings.put(APPLICATION_ID_CONFIG, "Kstream App")
   settings.put(BOOTSTRAP_SERVERS_CONFIG, brokerList)
-  settings.put(ZOOKEEPER_CONNECT_CONFIG, zookeeperHost)
+  //settings.put(ZOOKEEPER_CONNECT_CONFIG, zookeeperHost)
   settings.put(KEY_SERDE_CLASS_CONFIG, Serdes.ByteArray.getClass.getName)
   settings.put(VALUE_SERDE_CLASS_CONFIG, Serdes.String.getClass.getName)
 
