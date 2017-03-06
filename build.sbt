@@ -53,6 +53,7 @@ libraryDependencies ++= Seq(
   "com.lightbend.akka" %% "akka-stream-alpakka-cassandra" % "0.6",
   "com.lightbend.akka" %% "akka-stream-alpakka-file" % "0.6",
 
+  "org.scala-lang.modules" % "scala-xml_2.11" % "1.0.6",
   "com.typesafe.slick" %% "slick" % "3.1.0",
   "mysql" % "mysql-connector-java" % "5.1.34",
   "com.github.t3hnar" %% "scala-bcrypt" % "2.4",

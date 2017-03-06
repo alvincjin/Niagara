@@ -19,7 +19,7 @@ class PostTest extends FunSuite with ShouldMatchers with SparkBase{
   test("serializeToAvro should return a byte array")({
 
     val post = Post(11111L, 1, List("storm", "java"), 1407546091050L)
-    val result: Array[Byte] = Post.serializeToAvro(post)
+    val result: Array[Byte] = Post.serialize(post)
 
     assert(result === avroMessage)
   })
@@ -27,7 +27,7 @@ class PostTest extends FunSuite with ShouldMatchers with SparkBase{
   test("deserializeToClass should return a case class object")({
 
     val expect = Post(11111L, 1, List("storm", "java"), 1407546091050L)
-    val result: Post = Post.deserializeToClass(avroMessage)
+    val result: Post = Post.deserialize(avroMessage)
 
     assert(expect === result)
   })

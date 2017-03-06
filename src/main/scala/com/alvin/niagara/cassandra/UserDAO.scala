@@ -1,4 +1,4 @@
-package com.alvin.niagara.mysql.model
+package com.alvin.niagara.cassandra
 
 /**
   * Created by alvinjin on 2016-12-17.
@@ -9,9 +9,10 @@ import com.alvin.niagara.mysql.DBManager
 import com.github.t3hnar.bcrypt._
 import org.joda.time.{DateTime, DateTimeZone}
 import slick.driver.MySQLDriver.api._
+
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Failure, Random, Success}
-import scala.concurrent.ExecutionContext.Implicits.global
 
 object UserDAO extends DBManager {
 

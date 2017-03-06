@@ -1,7 +1,7 @@
 package com.alvin.niagara.mysql
 
+import com.alvin.niagara.cassandra.UserDAO
 
-import com.alvin.niagara.mysql.model.UserDAO
 import scala.concurrent.{Await, Promise}
 import scala.concurrent.duration._
 

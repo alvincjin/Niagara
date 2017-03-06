@@ -6,8 +6,6 @@ import org.apache.avro.Schema
 import org.apache.avro.generic.GenericData.Record
 import org.apache.avro.generic.{GenericDatumReader, GenericRecord, GenericDatumWriter}
 import org.apache.avro.io.{DecoderFactory, EncoderFactory}
-
-
 import scala.collection.JavaConversions._
 import scala.io.Source
 
@@ -36,7 +34,7 @@ object Post extends Setting {
    * @param post the given case class
    * @return An array byte to send
    */
-  def serializeToAvro(post: Post): Array[Byte] = {
+  def serialize(post: Post): Array[Byte] = {
 
     val out = new ByteArrayOutputStream()
     val encoder = EncoderFactory.get.binaryEncoder(out, null)
@@ -58,7 +56,7 @@ object Post extends Setting {
    * @param post the received byte array
    * @return  a case class object
    */
-  def deserializeToClass(post: Array[Byte]): Post = {
+  def deserialize(post: Array[Byte]): Post = {
 
     val decoder = DecoderFactory.get.binaryDecoder(post, null)
     val record = reader.read(null, decoder)

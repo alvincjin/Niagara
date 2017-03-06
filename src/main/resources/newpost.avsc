@@ -1,0 +1,23 @@
+{
+    "name": "NewPostEvent",
+    "namespace": "newposts.avro",
+    "type": "record",
+    "fields": [
+        {
+            "name": "postid",
+            "type": "long"
+        },
+        {
+            "name": "posttype",
+            "type": "string"
+        },
+        {
+            "name": "title",
+            "type": "string"
+        },
+        {
+            "name": "creationdate",
+            "type": "long"
+        }
+    ]
+}

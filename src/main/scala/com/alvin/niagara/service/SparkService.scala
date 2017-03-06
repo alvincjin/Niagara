@@ -20,7 +20,7 @@ object SparkService extends Setting {
   val sparkSession = SparkSession.builder
     .master(sparkMaster)
     .appName("Spark-Service")
-    .config("spark.cassandra.connection.host", cassHost.toString())
+    .config("spark.cassandra.connection.host", hosts.toString())
     .config("spark.cassandra.connection.keep_alive_ms", "60000")
     .getOrCreate()
 

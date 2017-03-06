@@ -29,10 +29,8 @@ class AvroProducer extends Setting {
    * @return A sequence of FutureRecordMetadata instances
    */
   def send(post: Post) = {
-    val message = new ProducerRecord[String, Array[Byte]](topic, Post.serializeToAvro(post))
+    val message = new ProducerRecord[String, Array[Byte]](topic, Post.serialize(post))
     producer.send(message)
-    //println("Sent post: "+post.postid)
-
   }
 
   def close() = producer.close()

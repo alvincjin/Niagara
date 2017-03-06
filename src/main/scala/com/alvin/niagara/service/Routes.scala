@@ -1,16 +1,12 @@
 package com.alvin.niagara.service
 
-import akka.http.scaladsl.model.HttpHeader.ParsingResult
-import akka.http.scaladsl.model.{HttpEntity, _}
-import akka.http.scaladsl.model.headers.HttpCookie
+
 import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.server.MethodRejection
-import akka.stream.ActorMaterializer
-import com.alvin.niagara.common.{Post, Response, Tags}
 import spray.json.DefaultJsonProtocol
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-import com.alvin.niagara.mysql.model.UserDAO
-import com.alvin.niagara.mysql.model.UserDAO.User
+import com.alvin.niagara.cassandra.UserDAO.User
+import com.alvin.niagara.cassandra.{CassandraDao, UserDAO}
+import com.alvin.niagara.model.RichPost
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -21,60 +17,54 @@ import scala.concurrent.ExecutionContext.Implicits.global
   *
   */
 
-trait AkkaJSONProtocol extends DefaultJsonProtocol {
-  implicit val postFormat = jsonFormat4(Post.apply)
-  implicit val responseFormat = jsonFormat3(Response.apply)
-  implicit val tagFormat = jsonFormat1(Tags.apply)
+trait AkkaJSONProtocol extends DefaultJsonProtocol with CassandraDao {
+  implicit val postFormat = jsonFormat4(RichPost.apply)
   implicit val userFormat = jsonFormat6(User.apply)
 }
 
 trait Routes extends AkkaJSONProtocol {
 
-
   val route =
     path("postid" / LongNumber) { id =>
-      //Query posts by specific postid
       get {
-        onSuccess(CassandraService.queryPostById(id)) {
-          case result: List[Response] =>
+        onSuccess(queryPostById(id)) {
+          case result: List[RichPost] =>
             complete(result)
         }
       } ~ delete {
-        onSuccess(CassandraService.deletePostById(id)) {
-          case result: Long =>
-            complete(HttpEntity(ContentTypes.`application/json`, result.toString))
+        onSuccess(deletePostById(id)) {
+          case result: String =>
+            complete(result)
         }
-      } ~
-        //Update the tag list by looking up the postid
-        (post & entity(as[Tags])) { t =>
-          onSuccess(CassandraService.updatePost(id, t.tags)) {
-            case result: String =>
-              complete(HttpEntity(ContentTypes.`application/json`, result))
-          }
-        } ~ {
-        reject(MethodRejection(HttpMethods.GET))
       }
     } ~
-      //Query posts containing a specific element in its tags
-      path("tag" / Segment) { (tag: String) =>
-        get {
-          onSuccess(CassandraService.queryPostByTag(tag)) {
-            case result: List[Response] =>
+      path("post") {
+        (post & entity(as[RichPost])) { p =>
+          onSuccess(insertPost(p)) {
+            case result: String =>
               complete(result)
           }
         }
       } ~
-      //Create a new post by the payload
-      path("post") {
-        (post & entity(as[Post])) { p =>
-          onSuccess(CassandraService.insertPost(p)) {
-            case result: String =>
-              complete(HttpEntity(ContentTypes.`application/json`, result))
+      path("title" / Segment) { title =>
+        get {
+          onSuccess(queryByTitle(title)) {
+            case result: List[RichPost] =>
+              //complete(HttpEntity(ContentTypes.`application/json`, result))
+            complete(result)
           }
-
-
+        }
+      }~
+      path("count" / Segment) { typ =>
+        get {
+          onSuccess(countByType(typ)) {
+            case result: Long =>
+              complete(result.toString)
+          }
         }
       }
+
+
 
   val authRoute = path("users" / Segment) { email =>
     get {
