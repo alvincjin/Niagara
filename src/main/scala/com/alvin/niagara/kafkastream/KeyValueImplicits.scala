@@ -1,4 +1,4 @@
-package com.alvin.niagara.kstreams
+package com.alvin.niagara.kafkastream
 
 import org.apache.kafka.streams.KeyValue
 

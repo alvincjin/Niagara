@@ -1,11 +1,14 @@
-package com.alvin.niagara.common
+package com.alvin.niagara.model
 
 import java.io.ByteArrayOutputStream
 import java.util
+
+import com.alvin.niagara.config.Config
 import org.apache.avro.Schema
 import org.apache.avro.generic.GenericData.Record
-import org.apache.avro.generic.{GenericDatumReader, GenericRecord, GenericDatumWriter}
+import org.apache.avro.generic.{GenericDatumReader, GenericDatumWriter, GenericRecord}
 import org.apache.avro.io.{DecoderFactory, EncoderFactory}
+
 import scala.collection.JavaConversions._
 import scala.io.Source
 
@@ -21,7 +24,7 @@ case class Post(postid: Long, typeid: Int, tags: Seq[String], creationdate: Long
 
 case class Tags(tags: List[String])
 
-object Post extends Setting {
+object Post extends Config {
 
   val avroSchema = Source.fromInputStream(getClass.getResourceAsStream("/post.avsc")).mkString
   val schema = new Schema.Parser().parse(avroSchema)
@@ -31,6 +34,7 @@ object Post extends Setting {
 
   /**
    * Serialize case class object to an Avro message
+ *
    * @param post the given case class
    * @return An array byte to send
    */
@@ -53,6 +57,7 @@ object Post extends Setting {
 
   /**
    * Deserialize an avro message to a case class object
+ *
    * @param post the received byte array
    * @return  a case class object
    */

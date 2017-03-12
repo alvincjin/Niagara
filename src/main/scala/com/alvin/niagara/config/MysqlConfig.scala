@@ -1,4 +1,4 @@
-package com.alvin.niagara.mysql
+package com.alvin.niagara.config
 
 import com.typesafe.config.ConfigFactory
 import slick.driver.MySQLDriver.api._

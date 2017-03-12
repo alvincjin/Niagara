@@ -1,7 +1,7 @@
 
 name := "Niagara"
 
-version := "1.0.2"
+version := "1.0.0"
 
 
 lazy val versions = Map(

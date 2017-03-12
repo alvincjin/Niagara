@@ -1,6 +1,6 @@
-package com.alvin.niagara.cassandra
+package com.alvin.niagara.dao
 
-import com.alvin.niagara.common.Setting
+import com.alvin.niagara.config.Config
 import com.alvin.niagara.model.RichPost
 import com.datastax.driver.core.querybuilder.{QueryBuilder, Select}
 import com.datastax.driver.core.{Cluster, QueryOptions, ResultSet}
@@ -12,7 +12,7 @@ import scala.concurrent._
 /**
   * Created by alvin.jin on 3/2/2017.
   */
-trait CassandraDao extends Setting {
+trait CassandraDAO extends Config {
 
   implicit val session = new Cluster.Builder()
     .addContactPoints(hosts.toArray: _*)

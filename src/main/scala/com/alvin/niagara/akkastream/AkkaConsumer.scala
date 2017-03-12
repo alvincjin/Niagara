@@ -14,8 +14,8 @@ import akka.stream.alpakka.cassandra.scaladsl.CassandraSink
 import com.datastax.driver.core.PreparedStatement
 import java.lang.{Long => JLong}
 
-import com.alvin.niagara.cassandra.CassandraDao
-import com.alvin.niagara.common.Setting
+import com.alvin.niagara.dao.CassandraDAO
+import com.alvin.niagara.config.Config
 import com.alvin.niagara.model.PostSede
 
 
@@ -23,7 +23,7 @@ import com.alvin.niagara.model.PostSede
   * Created by alvin.jin on 3/2/2017.
   */
 
-trait AkkaConsumer extends Setting {
+trait AkkaConsumer extends Config {
 
   val system = ActorSystem("AkkaConsumer")
   implicit val ec = system.dispatcher
@@ -46,7 +46,7 @@ trait AkkaConsumer extends Setting {
 }
 
 
-object CassandraAkkaConsumer extends App with AkkaConsumer with CassandraDao {
+object CassandraAkkaConsumer extends App with AkkaConsumer with CassandraDAO {
 
   type postType = (JLong, String, String, JLong)
   //Create keyspace and table if not exist

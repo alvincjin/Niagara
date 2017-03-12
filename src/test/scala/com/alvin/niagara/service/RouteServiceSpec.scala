@@ -1,15 +1,14 @@
 package com.alvin.niagara.service
 
 
-
-import com.alvin.niagara.common.Post
-import org.scalatest.{ Matchers, WordSpec }
+import org.scalatest.{Matchers, WordSpec}
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import akka.http.scaladsl.server._
 import Directives._
 import spray.json.DefaultJsonProtocol
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
+import com.alvin.niagara.model.Post
 //import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
@@ -26,7 +25,7 @@ class RouteServiceSpec extends WordSpec with Matchers
 
       val tags = Seq("java", "cassandra", "storm", "cassandra-jdbc")
 
-      val expect = com.alvin.niagara.common.Post(24698610L, 1, tags, 1405098721353L)
+      val expect = Post(24698610L, 1, tags, 1405098721353L)
 
       Get("/postid/24698610") ~> route ~> check {
         responseAs[Post] shouldEqual expect

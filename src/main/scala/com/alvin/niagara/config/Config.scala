@@ -1,14 +1,15 @@
-package com.alvin.niagara.common
+package com.alvin.niagara.config
 
 import com.typesafe.config.ConfigFactory
-import collection.JavaConversions._
+
+import scala.collection.JavaConversions._
 /**
  * Created by jinc4 on 5/29/2016.
  *
  * The global setting for spark/kafka/cassandra parsed from application.conf
  */
 
-trait Setting {
+trait Config {
 
   val appConfig = ConfigFactory.load()
 

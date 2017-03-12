@@ -1,11 +1,10 @@
-package com.alvin.niagara.cassandra
+package com.alvin.niagara.dao
 
 /**
   * Created by alvinjin on 2016-12-17.
   */
 
-
-import com.alvin.niagara.mysql.DBManager
+import com.alvin.niagara.config.DBManager
 import com.github.t3hnar.bcrypt._
 import org.joda.time.{DateTime, DateTimeZone}
 import slick.driver.MySQLDriver.api._

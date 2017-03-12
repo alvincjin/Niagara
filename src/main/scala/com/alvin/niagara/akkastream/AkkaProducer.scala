@@ -12,9 +12,10 @@ import org.apache.kafka.common.serialization.StringSerializer
 import akka.stream.{ActorMaterializer, ClosedShape}
 import akka.{Done, NotUsed}
 import akka.stream.scaladsl.{Broadcast, Flow, GraphDSL, Merge, RunnableGraph}
-import com.alvin.niagara.common.Setting
+import com.alvin.niagara.config.Config
 import com.alvin.niagara.model.{NewPost, PostSede, RichPost}
 import com.alvin.niagara.util.XmlParser
+
 import scala.concurrent.duration._
 
 
@@ -23,7 +24,7 @@ import scala.concurrent.duration._
   * Created by alvin.jin on 3/2/2017.
   */
 
-trait AkkaProducer extends Setting {
+trait AkkaProducer extends Config {
 
 
   val system = ActorSystem("AkkaProducer")

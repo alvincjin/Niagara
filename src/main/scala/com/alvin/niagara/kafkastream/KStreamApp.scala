@@ -1,15 +1,15 @@
-package com.alvin.niagara.kstreams
+package com.alvin.niagara.kafkastream
 
 import java.util.Properties
 
-import com.alvin.niagara.common.Setting
+import com.alvin.niagara.config.Config
 import org.apache.kafka.common.serialization._
 import org.apache.kafka.streams._
 import org.apache.kafka.streams.kstream.{KStream, KStreamBuilder}
 /**
   * Created by alvinjin on 2017-02-06.
   */
-object KStreamApp extends App with Setting {
+object KStreamApp extends App with Config {
 
   val builder: KStreamBuilder = new KStreamBuilder
 
