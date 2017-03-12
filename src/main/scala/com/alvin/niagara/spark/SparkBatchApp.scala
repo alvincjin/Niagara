@@ -34,13 +34,13 @@ object SparkBatchApp extends App with Config {
       .filter{ l:String => l.contains("<row ")}
       .flatMap{ line:String => Util.parseXml(line, sdf) }
 
-    val postsOfMonth = SparkSQL.collectPostsByMonth(totalPosts, "2014-07")
+    val postsOfMonth = SparkService.collectPostsByMonth(totalPosts, "2014-07")
     println(s"Total posts in July 2014 : ${postsOfMonth.count()}")
 
-    val stormPosts = SparkSQL.collectPostsByTag(totalPosts, "storm")
+    val stormPosts = SparkService.collectPostsByTag(totalPosts, "storm")
     println(s"Total Apache Storm posts: ${stormPosts.count()}")
 
-    val postsByMonth = SparkSQL.countTagOverMonth(stormPosts, spark)
+    val postsByMonth = SparkService.countTagOverMonth(stormPosts, spark)
     postsByMonth.foreach { case (month, times) => println(month + " has Apache Storm posts " + times) }
 
     val popularMonth = postsByMonth
