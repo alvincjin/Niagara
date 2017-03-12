@@ -2,7 +2,7 @@ package com.alvin.niagara.common
 
 import java.text.SimpleDateFormat
 
-import com.alvin.niagara.model.PostTags$
+import com.alvin.niagara.model.PostTags
 import com.alvin.niagara.util.Util
 import org.scalatest._
 
