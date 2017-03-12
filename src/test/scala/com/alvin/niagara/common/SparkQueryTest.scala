@@ -1,6 +1,8 @@
 package com.alvin.niagara.common
 
-import com.alvin.niagara.{SparkBase, DatasetSuite}
+import com.alvin.niagara.model.Post
+import com.alvin.niagara.sparkstreaming.SparkQuery
+import com.alvin.niagara.{DatasetSuite, SparkBase}
 import org.scalatest._
 
 /**

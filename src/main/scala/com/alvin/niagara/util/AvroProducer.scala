@@ -1,7 +1,9 @@
-package com.alvin.niagara.common
+package com.alvin.niagara.util
 
 import java.util.Properties
 
+import com.alvin.niagara.config.Config
+import com.alvin.niagara.model.Post
 import org.apache.kafka.clients.producer._
 
 /**
@@ -11,7 +13,7 @@ import org.apache.kafka.clients.producer._
  * Then, Sents avro message to kafka
  */
 
-class AvroProducer extends Setting {
+class AvroProducer extends Config {
 
   val props = new Properties()
   props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList)
@@ -25,7 +27,8 @@ class AvroProducer extends Setting {
 
   /**
    * Sent a Post object as Avro records to Kafka.
-   * @param post a case class to send
+    *
+    * @param post a case class to send
    * @return A sequence of FutureRecordMetadata instances
    */
   def send(post: Post) = {

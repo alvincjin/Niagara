@@ -1,5 +1,7 @@
-package com.alvin.niagara.common
+package com.alvin.niagara.sparkstreaming
 
+import com.alvin.niagara.model.Post
+import com.alvin.niagara.util.Util
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{Dataset, SparkSession}
 import org.apache.spark.streaming.Seconds

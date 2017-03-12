@@ -1,9 +1,12 @@
 package com.alvin.niagara.sparkstreaming
 
 import java.text.SimpleDateFormat
-import org.apache.spark.streaming.{StreamingContext, Seconds}
+
+import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.SparkConf
 import com.alvin.niagara.common._
+import com.alvin.niagara.config.Config
+import com.alvin.niagara.util.{AvroProducer, Util}
 
 /**
  * Created by JINC4 on 5/29/2016.
@@ -16,7 +19,7 @@ import com.alvin.niagara.common._
  * It is not read previous files that are in directory.
  */
 
-object SparkStreamingProducer extends App with Setting {
+object SparkStreamingProducer extends App with Config {
 
   val conf = new SparkConf()
     .setAppName("SparkStreamingProducer")

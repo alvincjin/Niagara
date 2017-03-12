@@ -1,9 +1,12 @@
-package com.alvin.niagara.common
+package com.alvin.niagara.util
 
 import java.text.SimpleDateFormat
 import java.util.Date
+
+import com.alvin.niagara.model.Post
 import com.datastax.spark.connector.cql.CassandraConnector
 import org.apache.spark.sql.{Dataset, SaveMode}
+
 import scala.xml.XML
 
 /**

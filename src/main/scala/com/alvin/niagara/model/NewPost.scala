@@ -2,11 +2,12 @@ package com.alvin.niagara.model
 
 import java.io.ByteArrayOutputStream
 
-import com.alvin.niagara.common.Setting
+import com.alvin.niagara.config.Config
 import org.apache.avro.Schema
 import org.apache.avro.generic.GenericData.Record
 import org.apache.avro.generic.{GenericDatumReader, GenericDatumWriter, GenericRecord}
 import org.apache.avro.io.{DecoderFactory, EncoderFactory}
+
 import scala.io.Source
 /**
   * Created by alvin.jin on 3/2/2017.
@@ -16,7 +17,7 @@ case class NewPost(postid: Long, typeid: Int, title: String, creationdate: Long)
 
 case class RichPost(postid: Long, posttype: String, title: String, creationdate: Long)
 
-object PostSede extends Setting {
+object PostSede extends Config {
 
   val avroSchema = Source.fromInputStream(getClass.getResourceAsStream("/newpost.avsc")).mkString
   val schema = new Schema.Parser().parse(avroSchema)
@@ -26,6 +27,7 @@ object PostSede extends Setting {
 
   /**
    * Serialize case class object to an Avro message
+ *
    * @param post the given case class
    * @return An array byte to send
    */
@@ -48,6 +50,7 @@ object PostSede extends Setting {
 
   /**
    * Deserialize an avro message to a case class object
+ *
    * @param post the received byte array
    * @return  a case class object
    */

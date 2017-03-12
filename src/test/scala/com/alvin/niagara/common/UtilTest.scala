@@ -1,6 +1,9 @@
 package com.alvin.niagara.common
 
 import java.text.SimpleDateFormat
+
+import com.alvin.niagara.model.Post
+import com.alvin.niagara.util.Util
 import org.scalatest._
 
 /**

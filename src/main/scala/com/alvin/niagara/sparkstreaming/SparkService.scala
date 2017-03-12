@@ -1,12 +1,13 @@
-package com.alvin.niagara.service
+package com.alvin.niagara.sparkstreaming
 
-import com.alvin.niagara.common.{Post, Setting}
-import org.apache.spark.sql.{DataFrame, SparkSession}
-import scala.concurrent.Future
+import com.alvin.niagara.config.Config
+import com.alvin.niagara.model.Post
+import com.alvin.niagara.util.Util
 import org.apache.spark.sql.functions._
-import com.alvin.niagara.common.Util
+import org.apache.spark.sql.{DataFrame, SparkSession}
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 /**
  * Created by JINC4 on 6/14/2016.
@@ -15,7 +16,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
  * Create a temp Spark table from a Cassandra table
  * by using spark-cassandra connector
  */
-object SparkService extends Setting {
+object SparkService extends Config {
 
   val sparkSession = SparkSession.builder
     .master(sparkMaster)

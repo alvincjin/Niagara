@@ -1,11 +1,11 @@
-package com.alvin.niagara.sparkbatch
-
+package com.alvin.niagara.sparkstreaming
 
 import java.text.SimpleDateFormat
 
-import org.apache.spark.sql.{Dataset, SQLContext, SparkSession}
-import org.apache.spark.{SparkConf, SparkContext}
-import com.alvin.niagara.common.{Post, SparkQuery, Setting, Util}
+import com.alvin.niagara.config.Config
+import com.alvin.niagara.model.Post
+import com.alvin.niagara.util.Util
+import org.apache.spark.sql.{Dataset, SparkSession}
 
 
 /**
@@ -16,7 +16,7 @@ import com.alvin.niagara.common.{Post, SparkQuery, Setting, Util}
   * Runs some queries, then persists post objects in file sys.
   */
 
-object SparkBatchApp extends App with Setting {
+object SparkBatchApp extends App with Config {
 
   val spark = SparkSession
     .builder()

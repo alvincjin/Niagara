@@ -4,8 +4,8 @@ package com.alvin.niagara.service
 import akka.http.scaladsl.server.Directives._
 import spray.json.DefaultJsonProtocol
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-import com.alvin.niagara.cassandra.UserDAO.User
-import com.alvin.niagara.cassandra.{CassandraDao, UserDAO}
+import com.alvin.niagara.dao.UserDAO.User
+import com.alvin.niagara.dao.{CassandraDAO, UserDAO}
 import com.alvin.niagara.model.RichPost
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -17,7 +17,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
   *
   */
 
-trait AkkaJSONProtocol extends DefaultJsonProtocol with CassandraDao {
+trait AkkaJSONProtocol extends DefaultJsonProtocol with CassandraDAO {
   implicit val postFormat = jsonFormat4(RichPost.apply)
   implicit val userFormat = jsonFormat6(User.apply)
 }

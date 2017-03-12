@@ -1,6 +1,8 @@
 package com.alvin.niagara.sparkstreaming
 
-import com.alvin.niagara.common.{Post, Setting, Util}
+import com.alvin.niagara.config.Config
+import com.alvin.niagara.model.Post
+import com.alvin.niagara.util.Util
 import com.datastax.spark.connector.SomeColumns
 import com.datastax.spark.connector.cql.CassandraConnector
 import com.datastax.spark.connector.streaming._
@@ -11,7 +13,7 @@ import org.apache.spark.streaming.kafka010.KafkaUtils
 import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent
 import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
 import org.apache.spark.streaming.{Seconds, StreamingContext}
-import org.apache.kafka.common.serialization.{StringDeserializer, ByteArrayDeserializer}
+import org.apache.kafka.common.serialization.{ByteArrayDeserializer, StringDeserializer}
 /**
  * Created by JINC4 on 6/2/2016.
  *
@@ -20,7 +22,7 @@ import org.apache.kafka.common.serialization.{StringDeserializer, ByteArrayDeser
  * Runs real-time queries to incrementally update the (tag, count) pairs.
  * Persists post data into Cassandra table
  */
-object SparkStreamingConsumer extends App with Setting {
+object SparkStreamingConsumer extends App with Config {
 
   val sparkConf = new SparkConf()
     .setAppName("SparkStreamingConsumerApp")
@@ -48,7 +50,8 @@ object SparkStreamingConsumer extends App with Setting {
 
   /**
    * Create a steaming context and setup checkpoint
-   * @return
+    *
+    * @return
    */
   def functionToCreateContext(): StreamingContext = {
 
