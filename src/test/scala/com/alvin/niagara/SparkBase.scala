@@ -1,6 +1,5 @@
 package com.alvin.niagara
 
-import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.sql.{SQLContext, SparkSession}
 
 /**
