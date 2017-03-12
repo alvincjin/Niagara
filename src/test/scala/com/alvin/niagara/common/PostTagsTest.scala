@@ -5,7 +5,7 @@ import org.apache.avro.io.EncoderFactory
 import org.scalatest._
 import java.io.{ByteArrayOutputStream, File}
 
-import com.alvin.niagara.model.Post
+import com.alvin.niagara.model.PostTags$
 import org.apache.avro.Schema
 import org.apache.avro.file.DataFileReader
 import org.apache.avro.generic._
@@ -13,23 +13,23 @@ import org.apache.avro.generic._
 /**
  * Created by jinc4 on 6/6/2016.
  */
-class PostTest extends FunSuite with ShouldMatchers with SparkBase{
+class PostTagsTest extends FunSuite with ShouldMatchers with SparkBase{
 
   val avroMessage: Array[Byte] = readAvroToByte("src/test/resources/post.avro",
-                                                Post.schema)
+                                                PostTags.schema)
 
   test("serializeToAvro should return a byte array")({
 
-    val post = Post(11111L, 1, List("storm", "java"), 1407546091050L)
-    val result: Array[Byte] = Post.serialize(post)
+    val post = PostTags(11111L, 1, List("storm", "java"), 1407546091050L)
+    val result: Array[Byte] = PostTags.serialize(post)
 
     assert(result === avroMessage)
   })
 
   test("deserializeToClass should return a case class object")({
 
-    val expect = Post(11111L, 1, List("storm", "java"), 1407546091050L)
-    val result: Post = Post.deserialize(avroMessage)
+    val expect = PostTags(11111L, 1, List("storm", "java"), 1407546091050L)
+    val result: PostTags = PostTags.deserialize(avroMessage)
 
     assert(expect === result)
   })

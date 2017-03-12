@@ -1,7 +1,7 @@
-package com.alvin.niagara.sparkstreaming
+package com.alvin.niagara.spark
 
 import com.alvin.niagara.config.Config
-import com.alvin.niagara.model.Post
+import com.alvin.niagara.model.PostTags
 import com.alvin.niagara.util.Util
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{DataFrame, SparkSession}
@@ -40,7 +40,7 @@ object SparkService extends Config {
   //Register a SparkSQL UDF
   sparkSession.udf.register("convertYM", Util.getYearMonth _)
 
-  def searchPostById(postid: Long): Future[Post] = {
+  def searchPostById(postid: Long): Future[PostTags] = {
 
     Future{
       val df = sparkSession.sql(s"SELECT * FROM posts where postid = $postid")
@@ -49,7 +49,7 @@ object SparkService extends Config {
   }
 
 
-  def searchPostsByDate(date: String): Future[List[Post]] = {
+  def searchPostsByDate(date: String): Future[List[PostTags]] = {
 
     Future{
       val df = sparkSession.sql(s"SELECT count(*) FROM posts WHERE convertYM(creationdate) = $date")
@@ -58,7 +58,7 @@ object SparkService extends Config {
   }
 
 
-  def searchPostsByTag(tag: String): Future[List[Post]] = {
+  def searchPostsByTag(tag: String): Future[List[PostTags]] = {
 
     Future {
       val df = sparkSession.sql(s"SELECT * FROM posts")
@@ -68,10 +68,10 @@ object SparkService extends Config {
     }
   }
 
-  private def getPosts(df: DataFrame): List[Post] = {
+  private def getPosts(df: DataFrame): List[PostTags] = {
 
     import sparkSession.implicits._
-    df.map {row => Post(row.getAs[Long]("postid"), row.getAs[Int]("typeid"),
+    df.map {row => PostTags(row.getAs[Long]("postid"), row.getAs[Int]("typeid"),
       row.getAs[Seq[String]]("tags"), row.getAs[Long]("creationdate"))}
       .collect()
       .toList

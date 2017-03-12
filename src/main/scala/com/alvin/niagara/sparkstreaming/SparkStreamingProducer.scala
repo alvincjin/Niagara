@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat
 
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.SparkConf
-import com.alvin.niagara.common._
 import com.alvin.niagara.config.Config
 import com.alvin.niagara.util.{AvroProducer, Util}
 

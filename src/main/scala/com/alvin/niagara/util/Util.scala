@@ -3,7 +3,7 @@ package com.alvin.niagara.util
 import java.text.SimpleDateFormat
 import java.util.Date
 
-import com.alvin.niagara.model.Post
+import com.alvin.niagara.model.{PostTags, PostTags$}
 import com.datastax.spark.connector.cql.CassandraConnector
 import org.apache.spark.sql.{Dataset, SaveMode}
 
@@ -18,11 +18,12 @@ object Util {
 
   /**
    * Parse a single line in the xml file
-   * @param line  the given line in xml
+    *
+    * @param line  the given line in xml
    * @param sdf the simpleDataFormat object
    * @return a option of Post
    */
-  def parseXml(line: String, sdf: SimpleDateFormat): Option[Post] = {
+  def parseXml(line: String, sdf: SimpleDateFormat): Option[PostTags] = {
     try {
 
       val xml = XML.loadString(line)
@@ -37,7 +38,7 @@ object Util {
       val tagList = if (tags.length == 0) List[String]()
       else tags.substring(1, tags.length - 1).split("><").toList
 
-      Some(Post(postId, postTypeId, tagList, creationDatetime))
+      Some(PostTags(postId, postTypeId, tagList, creationDatetime))
 
     } catch {
       case ex: Exception =>
@@ -49,10 +50,11 @@ object Util {
 
   /**
    * Writes the given dataframe into parquet format
-   * @param dataset a dataframe object
+    *
+    * @param dataset a dataframe object
    * @param path  the output location
    */
-  def writeParquet(dataset: Dataset[Post], path: String): Unit = {
+  def writeParquet(dataset: Dataset[PostTags], path: String): Unit = {
 
     dataset.toDF().write
       .format("parquet")
@@ -62,7 +64,8 @@ object Util {
 
   /**
    * Convert unix timestamp to a yyyy-MM format
-   * @param ts the given long type timestamp
+    *
+    * @param ts the given long type timestamp
    * @return a literal timestamp in yyyy-MM
    */
   def getYearMonth(ts: Long): String = new SimpleDateFormat("yyyy-MM").format(new Date(ts))
@@ -70,7 +73,8 @@ object Util {
 
   /**
    * Create a Cassandra table if not exists
-   * @param connector Connector for Spark access to Cassandra
+    *
+    * @param connector Connector for Spark access to Cassandra
    * @param keyspace the database in Cassandra
    * @param table    the Cassandra table
    */

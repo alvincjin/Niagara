@@ -2,7 +2,7 @@ package com.alvin.niagara.common
 
 import java.text.SimpleDateFormat
 
-import com.alvin.niagara.model.Post
+import com.alvin.niagara.model.PostTags$
 import com.alvin.niagara.util.Util
 import org.scalatest._
 
@@ -21,9 +21,9 @@ class UtilTest extends FunSuite with ShouldMatchers{
       """.stripMargin
 
     val sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-    val result: Post = Util.parseXml(xmlLine, sdf).get
+    val result: PostTags = Util.parseXml(xmlLine, sdf).get
 
-    val expect = Post(4L, 1, List("c#", "winforms","type-conversion","opacity"), 1217554972667L)
+    val expect = PostTags(4L, 1, List("c#", "winforms","type-conversion","opacity"), 1217554972667L)
 
     assert(result === expect)
   })
