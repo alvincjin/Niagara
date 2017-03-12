@@ -1,6 +1,6 @@
 package com.alvin.niagara.common
 
-import com.alvin.niagara.model.PostTags$
+import com.alvin.niagara.model.PostTags
 import com.alvin.niagara.spark.SparkSQL
 import com.alvin.niagara.{DatasetSuite, SparkBase}
 import org.scalatest._

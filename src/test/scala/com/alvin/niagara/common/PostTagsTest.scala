@@ -5,7 +5,7 @@ import org.apache.avro.io.EncoderFactory
 import org.scalatest._
 import java.io.{ByteArrayOutputStream, File}
 
-import com.alvin.niagara.model.PostTags$
+import com.alvin.niagara.model.PostTags
 import org.apache.avro.Schema
 import org.apache.avro.file.DataFileReader
 import org.apache.avro.generic._

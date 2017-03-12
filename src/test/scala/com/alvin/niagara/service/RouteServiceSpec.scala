@@ -8,7 +8,7 @@ import akka.http.scaladsl.server._
 import Directives._
 import spray.json.DefaultJsonProtocol
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-import com.alvin.niagara.model.PostTags$
+import com.alvin.niagara.model.PostTags
 //import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
