@@ -13,7 +13,7 @@ import akka.stream.{ActorMaterializer, ClosedShape}
 import akka.{Done, NotUsed}
 import akka.stream.scaladsl.{Broadcast, Flow, GraphDSL, Merge, RunnableGraph}
 import com.alvin.niagara.config.Config
-import com.alvin.niagara.model.{NewPost, PostSede, RichPost}
+import com.alvin.niagara.model.{Post, PostSede, RichPost}
 import com.alvin.niagara.util.XmlParser
 
 import scala.concurrent.duration._
@@ -55,17 +55,17 @@ object XmlFileAkkaProducer extends App with AkkaProducer {
 
       import GraphDSL.Implicits._
 
-      val broadcast = builder.add(Broadcast[NewPost](2))
+      val broadcast = builder.add(Broadcast[Post](2))
       val merge = builder.add(Merge[RichPost](2))
 
       val parser = Flow[String].filter(_.contains("<row"))
         .mapConcat{ line => XmlParser.parseXml(line).toList }
 
-      val enrichType1 = Flow[NewPost]
+      val enrichType1 = Flow[Post]
         .filter(_.typeid == 1)
         .map { p => RichPost(p.postid, "Question", p.title, p.creationdate)}
 
-      val enrichType2 = Flow[NewPost]
+      val enrichType2 = Flow[Post]
         .filter(_.typeid == 2)
         .map { p => RichPost(p.postid, "Answer", p.title, p.creationdate)}
 

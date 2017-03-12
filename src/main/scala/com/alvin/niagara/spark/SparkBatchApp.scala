@@ -1,9 +1,9 @@
-package com.alvin.niagara.sparkstreaming
+package com.alvin.niagara.spark
 
 import java.text.SimpleDateFormat
 
 import com.alvin.niagara.config.Config
-import com.alvin.niagara.model.Post
+import com.alvin.niagara.model.PostTags
 import com.alvin.niagara.util.Util
 import org.apache.spark.sql.{Dataset, SparkSession}
 
@@ -30,17 +30,17 @@ object SparkBatchApp extends App with Config {
   try {
     val sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
 
-    val totalPosts: Dataset[Post] = spark.read.textFile(inputPath)
+    val totalPosts: Dataset[PostTags] = spark.read.textFile(inputPath)
       .filter{ l:String => l.contains("<row ")}
       .flatMap{ line:String => Util.parseXml(line, sdf) }
 
-    val postsOfMonth = SparkQuery.collectPostsByMonth(totalPosts, "2014-07")
+    val postsOfMonth = SparkSQL.collectPostsByMonth(totalPosts, "2014-07")
     println(s"Total posts in July 2014 : ${postsOfMonth.count()}")
 
-    val stormPosts = SparkQuery.collectPostsByTag(totalPosts, "storm")
+    val stormPosts = SparkSQL.collectPostsByTag(totalPosts, "storm")
     println(s"Total Apache Storm posts: ${stormPosts.count()}")
 
-    val postsByMonth = SparkQuery.countTagOverMonth(stormPosts, spark)
+    val postsByMonth = SparkSQL.countTagOverMonth(stormPosts, spark)
     postsByMonth.foreach { case (month, times) => println(month + " has Apache Storm posts " + times) }
 
     val popularMonth = postsByMonth

@@ -1,7 +1,7 @@
 package com.alvin.niagara.sparkstreaming
 
 import com.alvin.niagara.config.Config
-import com.alvin.niagara.model.Post
+import com.alvin.niagara.model.{PostTags, PostTags$}
 import com.alvin.niagara.util.Util
 import com.datastax.spark.connector.SomeColumns
 import com.datastax.spark.connector.cql.CassandraConnector
@@ -69,7 +69,7 @@ object SparkStreamingConsumer extends App with Config {
       ssc,
       PreferConsistent,
       Subscribe[String, Array[Byte]](Array(topic), kafkaParams)
-    ).map {record => Post.deserialize(record.value())}
+    ).map {record => PostTags.deserialize(record.value())}
 
 
     val tagCounts = messages.flatMap(post => post.tags)

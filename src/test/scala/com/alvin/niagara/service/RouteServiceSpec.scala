@@ -8,7 +8,7 @@ import akka.http.scaladsl.server._
 import Directives._
 import spray.json.DefaultJsonProtocol
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-import com.alvin.niagara.model.Post
+import com.alvin.niagara.model.PostTags$
 //import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
@@ -28,7 +28,7 @@ class RouteServiceSpec extends WordSpec with Matchers
       val expect = Post(24698610L, 1, tags, 1405098721353L)
 
       Get("/postid/24698610") ~> route ~> check {
-        responseAs[Post] shouldEqual expect
+        responseAs[PostTags] shouldEqual expect
       }
     }
 

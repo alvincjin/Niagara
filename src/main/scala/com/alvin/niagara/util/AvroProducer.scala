@@ -3,7 +3,7 @@ package com.alvin.niagara.util
 import java.util.Properties
 
 import com.alvin.niagara.config.Config
-import com.alvin.niagara.model.Post
+import com.alvin.niagara.model.PostTags
 import org.apache.kafka.clients.producer._
 
 /**
@@ -31,8 +31,8 @@ class AvroProducer extends Config {
     * @param post a case class to send
    * @return A sequence of FutureRecordMetadata instances
    */
-  def send(post: Post) = {
-    val message = new ProducerRecord[String, Array[Byte]](topic, Post.serialize(post))
+  def send(post: PostTags) = {
+    val message = new ProducerRecord[String, Array[Byte]](topic, PostTags.serialize(post))
     producer.send(message)
   }
 

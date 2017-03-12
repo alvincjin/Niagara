@@ -1,6 +1,6 @@
-package com.alvin.niagara.sparkstreaming
+package com.alvin.niagara.spark
 
-import com.alvin.niagara.model.Post
+import com.alvin.niagara.model.PostTags
 import com.alvin.niagara.util.Util
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{Dataset, SparkSession}
@@ -13,25 +13,27 @@ import org.apache.spark.streaming.dstream.DStream
  *
  * Contains a bunch of queries for aggregations, filtering on Post dataset
  */
-object SparkQuery {
+object SparkSQL {
 
   /**
    * Collect all posts contain a specific tag in their tags field
+ *
    * @param postDS the given Post dataset
    * @param tag the given tag name
    * @return another Post dataset
    */
-  def collectPostsByTag(postDS: Dataset[Post], tag: String): Dataset[Post] =
-    postDS.filter { post:Post => post.typeid == 1 && post.tags.contains(tag) }.cache()
+  def collectPostsByTag(postDS: Dataset[PostTags], tag: String): Dataset[PostTags] =
+    postDS.filter { post: PostTags => post.typeid == 1 && post.tags.contains(tag) }.cache()
 
 
   /**
    * Count the number of tags for each month
+ *
    * @param postDS the given Post dataset
    * @param sparkSession
    * @return  a RDD contains tuple(month, count)
    */
-  def countTagOverMonth(postDS: Dataset[Post], sparkSession: SparkSession): RDD[(String, Int)] = {
+  def countTagOverMonth(postDS: Dataset[PostTags], sparkSession: SparkSession): RDD[(String, Int)] = {
 
     import sparkSession.implicits._
 
@@ -46,12 +48,13 @@ object SparkQuery {
 
   /**
    * Collect all post published in a specific month
+ *
    * @param postDS the given Post dataset
    * @param month the given month
    * @return  another Post dataset
    */
-  def collectPostsByMonth(postDS: Dataset[Post], month: String): Dataset[Post] =
-    postDS.filter{post:Post => Util.getYearMonth(post.creationdate) == month}
+  def collectPostsByMonth(postDS: Dataset[PostTags], month: String): Dataset[PostTags] =
+    postDS.filter { post:PostTags => Util.getYearMonth(post.creationdate) == month}
 
 
 
@@ -59,11 +62,12 @@ object SparkQuery {
 
   /**
    * Find the month with the most posts
+ *
    * @param postDS the given post dataset
    * @param sparkSession
    * @return the (month, count) pair
    */
-  def findPopularMonth(postDS: Dataset[Post], sparkSession: SparkSession): (String, Int) = {
+  def findPopularMonth(postDS: Dataset[PostTags], sparkSession: SparkSession): (String, Int) = {
     import sparkSession.implicits._
 
     if (postDS.count() == 0)
@@ -80,10 +84,11 @@ object SparkQuery {
 
   /**
    * Count the number of tags for each month in streaming
+ *
    * @param stream  the given Post streams
    * @param tag the given tag
    */
-  def countTagByMonth(stream: DStream[Post], tag: String) = {
+  def countTagByMonth(stream: DStream[PostTags], tag: String) = {
 
     stream
       .filter(post => post.typeid == 1 && post.tags.contains(tag))
@@ -95,9 +100,10 @@ object SparkQuery {
 
   /**
    * Count the number of posts by each tag
+ *
    * @param stream  the given Post streams
    */
-  def countPostByTag(stream: DStream[Post]) = {
+  def countPostByTag(stream: DStream[PostTags]) = {
 
     stream
       .flatMap(post => post.tags)

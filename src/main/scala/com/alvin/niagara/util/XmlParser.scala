@@ -2,7 +2,7 @@ package com.alvin.niagara.util
 
 import java.text.SimpleDateFormat
 
-import com.alvin.niagara.model.NewPost
+import com.alvin.niagara.model.Post
 
 import scala.xml.XML
 
@@ -13,10 +13,11 @@ object XmlParser {
 
   /**
    * Parse a single line in the xml file
+ *
    * @param line  the given line in xml
    * @return a option of Post
    */
-  def parseXml(line: String): Option[NewPost] = {
+  def parseXml(line: String): Option[Post] = {
 
     val sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
 
@@ -30,7 +31,7 @@ object XmlParser {
 
       val creationDatetime = sdf.parse(creationDate).getTime
 
-      Some(NewPost(postId, postTypeId, title, creationDatetime))
+      Some(Post(postId, postTypeId, title, creationDatetime))
 
     } catch {
       case ex: Exception =>
