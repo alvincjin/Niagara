@@ -44,7 +44,7 @@ object XmlFileAkkaProducer extends App with AkkaProducer {
 
 
   val xmlSource = FileTailSource.lines(
-    path = FileSystems.getDefault.getPath(inputPath),
+    path = FileSystems.getDefault.getPath(stackInputPath),
     maxLineSize = 88888,
     pollingInterval = 250.millis)
 

@@ -30,7 +30,7 @@ object SparkStreamingProducer extends App with Config {
   val sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
 
   //Note: The inputPath refers to a hdfs path rather than local linux/windows path
-  val postDstream = ssc.textFileStream(inputPath)
+  val postDstream = ssc.textFileStream(stackInputPath)
     .filter(_.contains("<row "))
     .flatMap { line => Util.parseXml(line, sdf) }
     .map { post => producer.send(post)}

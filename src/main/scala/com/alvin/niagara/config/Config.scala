@@ -31,7 +31,8 @@ trait Config {
   val table = cassandraConfig.getString("table")
   val port = cassandraConfig.getInt("port")
 
-  val inputPath = appConfig.getString("inputPath")
+  val stackInputPath = appConfig.getString("stackInputPath")
   val outputPath = appConfig.getString("outputPath")
+  val yelpInputPath = appConfig.getString("yelpInputPath")
 }
 
