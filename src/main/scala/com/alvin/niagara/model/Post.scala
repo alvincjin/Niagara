@@ -19,7 +19,7 @@ case class RichPost(postid: Long, posttype: String, title: String, creationdate:
 
 object PostSede extends Config {
 
-  val avroSchema = Source.fromInputStream(getClass.getResourceAsStream("/newpost.avsc")).mkString
+  val avroSchema = Source.fromInputStream(getClass.getResourceAsStream("/schema/newpost.avsc")).mkString
   val schema = new Schema.Parser().parse(avroSchema)
 
   val reader = new GenericDatumReader[GenericRecord](schema)

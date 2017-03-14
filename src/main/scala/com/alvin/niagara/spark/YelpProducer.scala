@@ -36,11 +36,11 @@ object YelpProducer extends App with Config {
 
 
 
-    businessDF.printSchema()
-    reviewDF.printSchema()
-    tipDF.printSchema()
-    userDF.printSchema()
-    checkinDF.printSchema()
+    println(businessDF.schema.json)//.toString()//printSchema()
+    println(reviewDF.schema.json)//.printSchema()
+      println( tipDF.schema.json)//printSchema()
+      println( userDF.schema.json)//printSchema()
+      println( checkinDF.schema.json)//printSchema()
 
 
     // Zookeeper connection properties
@@ -54,7 +54,7 @@ object YelpProducer extends App with Config {
     val producer = new KafkaProducer[String, String](props)
 
     // Send some messages
-    while(true) {
+   /* while(true) {
       (1 to messagesPerSec.toInt).foreach { messageNum =>
         val str = (1 to wordsPerMessage.toInt).map(x => scala.util.Random.nextInt(10).toString)
           .mkString(" ")
@@ -65,7 +65,7 @@ object YelpProducer extends App with Config {
 
       Thread.sleep(1000)
     }
-
+  */
 
   } finally {
     spark.stop()

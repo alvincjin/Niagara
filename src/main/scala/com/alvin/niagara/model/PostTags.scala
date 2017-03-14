@@ -25,7 +25,7 @@ case class PostTags(postid: Long, typeid: Int, tags: Seq[String], creationdate: 
 
 object PostTags extends Config {
 
-  val avroSchema = Source.fromInputStream(getClass.getResourceAsStream("/post.avsc")).mkString
+  val avroSchema = Source.fromInputStream(getClass.getResourceAsStream("/schema/post.avsc")).mkString
   val schema = new Schema.Parser().parse(avroSchema)
 
   val reader = new GenericDatumReader[GenericRecord](PostTags.schema)
