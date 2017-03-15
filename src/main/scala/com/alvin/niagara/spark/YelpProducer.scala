@@ -18,11 +18,11 @@ object YelpProducer extends App with Config {
 
   import spark.implicits._
 
-  val businessPath = yelpInputPath+"yelp_academic_dataset_business.json"
-  val reviewPath = yelpInputPath+"yelp_academic_dataset_review.json"
-  val tipPath = yelpInputPath+"yelp_academic_dataset_tip.json"
-  val userPath = yelpInputPath+"yelp_academic_dataset_user.json"
-  val checkinPath = yelpInputPath+"yelp_academic_dataset_checkin.json"
+  val businessPath = yelpInputPath + "yelp_academic_dataset_business.json"
+  val reviewPath = yelpInputPath + "yelp_academic_dataset_review.json"
+  val tipPath = yelpInputPath + "yelp_academic_dataset_tip.json"
+  val userPath = yelpInputPath + "yelp_academic_dataset_user.json"
+  val checkinPath = yelpInputPath + "yelp_academic_dataset_checkin.json"
 
   try {
 
@@ -33,18 +33,65 @@ object YelpProducer extends App with Config {
     val checkinDS: Dataset[Checkin] = spark.read.json(checkinPath).as[Checkin]
 
 
-    val checkinProducer = new AvroObjectProducer(checkinTopic)
+    val businessProducer = new AvroObjectProducer(businessTopic)
 
-    checkinDS.take(100).map{ r =>
-      val msg = CheckinSerde.serialize(r)
-      val key = r.business_id
-      checkinProducer.send(key, msg)
-
+    businessDS.take(1000).map { r =>
+      println("hours: " + r.hours)
+      if (r.hours != null && r.categories != null && r.attributes != null) {
+        val msg = BusinessSerde.serialize(r)
+        val key = r.business_id
+        businessProducer.send(key, msg)
+      }
     }
     //without close(), can't send data actually
-    checkinProducer.close()
+    businessProducer.close()
 
- } finally {
+    /*
+   val reviewProducer = new AvroObjectProducer(reviewTopic)
+
+    reviewDS.take(1000).map{ r =>
+      val msg = ReviewSerde.serialize(r)
+      val key = r.business_id
+      reviewProducer.send(key, msg)
+    }
+    //without close(), can't send data actually
+    reviewProducer.close()
+   */
+    /* val tipProducer = new AvroObjectProducer(tipTopic)
+
+     tipDS.take(1000).map{ r =>
+         val msg = TipSerde.serialize(r)
+         val key = r.business_id
+         tipProducer.send(key, msg)
+     }
+     //without close(), can't send data actually
+     tipProducer.close()
+ */
+    /*
+    val userProducer = new AvroObjectProducer(userTopic)
+
+    userDS.take(1000).map{ r =>
+      val msg = UserSerde.serialize(r)
+      val key = r.user_id
+      userProducer.send(key, msg)
+    }
+    //without close(), can't send data actually
+    userProducer.close()
+*/
+    /*
+        val checkinProducer = new AvroObjectProducer(checkinTopic)
+
+        checkinDS.take(1000).map{ r =>
+          val msg = CheckinSerde.serialize(r)
+          val key = r.business_id
+          checkinProducer.send(key, msg)
+        }
+        //without close(), can't send data actually
+        checkinProducer.close()
+
+    */
+
+  } finally {
     spark.stop()
   }
 

@@ -27,7 +27,7 @@ class AvroObjectProducer(topic: String) extends Config {
 
     val record = new ProducerRecord[String, Array[Byte]](topic, key, value)
     producer.send(record)
-    //println(topic +" "+key)
+    //println(value)
   }
 
   def close() = producer.close()

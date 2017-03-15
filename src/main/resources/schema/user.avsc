@@ -49,7 +49,7 @@
 },
 {
 "name":"compliment_writer",
-"type":"long",
+"type":"long"
 },
 {
 "name":"cool",

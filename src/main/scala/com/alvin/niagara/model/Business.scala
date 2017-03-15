@@ -36,7 +36,7 @@ object BusinessSerde {
     avroRecord.put("address", buz.address)
     avroRecord.put("attributes", asJavaCollection(buz.attributes))
     avroRecord.put("business_id", buz.business_id)
-    avroRecord.put("categories", asJavaCollection(buz.attributes))
+    avroRecord.put("categories", asJavaCollection(buz.categories))
     avroRecord.put("city", buz.city)
     avroRecord.put("hours", asJavaCollection(buz.hours))
     avroRecord.put("is_open", buz.is_open)
