@@ -20,7 +20,7 @@ case class User(average_stars: Double, compliment_cool: Long, compliment_cute: L
                 review_count: Long, `type`: String, useful: Long, user_id: String, yelping_since: String)
 
 
-object CheckinSerde {
+object UserSerde {
 
   val avroSchema = Source.fromInputStream(getClass.getResourceAsStream("/schema/user.avsc")).mkString
   val schema = new Schema.Parser().parse(avroSchema)

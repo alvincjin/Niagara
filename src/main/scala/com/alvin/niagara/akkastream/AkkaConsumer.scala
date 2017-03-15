@@ -59,7 +59,7 @@ object CassandraAkkaConsumer extends App with AkkaConsumer with CassandraDAO {
   val statementBinder = (post: postType, statement: PreparedStatement) => statement.bind(post._1, post._2, post._3, post._4)
   val cassandraSink = CassandraSink[postType](parallelism = 2, insertStmt, statementBinder)
 
-  val flow = Consumer.committableSource(consumerSettings, Subscriptions.topics(topic))
+  val flow = Consumer.committableSource(consumerSettings, Subscriptions.topics(postTopic))
     .map(msg => PostSede.deserialize(msg.record.value()))
     .map { p => (p.postid: JLong, p.posttype: String, p.title: String, p.creationdate: JLong)}
     .runWith(cassandraSink)

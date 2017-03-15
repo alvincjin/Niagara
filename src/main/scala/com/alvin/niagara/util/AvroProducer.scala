@@ -32,7 +32,7 @@ class AvroProducer extends Config {
    * @return A sequence of FutureRecordMetadata instances
    */
   def send(post: PostTags) = {
-    val message = new ProducerRecord[String, Array[Byte]](topic, PostTags.serialize(post))
+    val message = new ProducerRecord[String, Array[Byte]](postTopic, PostTags.serialize(post))
     producer.send(message)
   }
 

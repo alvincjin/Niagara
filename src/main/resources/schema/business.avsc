@@ -9,7 +9,7 @@
 },
 {
 "name":"attributes",
-"type":{"items":"string", type":"array"}
+"type":{"items":"string", "type":"array"}
 },
 {
 "name":"business_id",
@@ -17,7 +17,7 @@
 },
 {
 "name":"categories",
-"type":{"items":"string", type":"array"}
+"type":{"items":"string", "type":"array"}
 },
 {
 "name":"city",
@@ -25,7 +25,7 @@
 },
 {
 "name":"hours",
-"type":{"items":"string", type":"array"}
+"type":{"items":"string", "type":"array"}
 },
 {
 "name":"is_open",

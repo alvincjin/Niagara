@@ -74,7 +74,7 @@ object XmlFileAkkaProducer extends App with AkkaProducer {
           case t: String if t != "" => p.copy(title = t.toUpperCase())
           case _ => p.copy(title = "no subject")
         }}
-        .map { post => new ProducerRecord[String, Array[Byte]](topic, PostSede.serialize(post))}
+        .map { post => new ProducerRecord[String, Array[Byte]](postTopic, PostSede.serialize(post))}
 
 
       xmlSource ~> parser ~> broadcast ~> enrichType1 ~> merge ~> fillTitle ~> kafkaSink

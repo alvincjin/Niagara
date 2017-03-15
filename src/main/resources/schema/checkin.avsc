@@ -9,7 +9,7 @@
 },
 {
 "name":"time",
-"type":{"items":"string", type":"array"}
+"type":{"items":"string", "type":"array"}
 },
 {
 "name":"type",

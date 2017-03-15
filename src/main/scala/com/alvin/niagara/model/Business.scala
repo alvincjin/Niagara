@@ -59,7 +59,7 @@ object BusinessSerde {
 
   }
 
-  def deserialize(bytes: Array[Byte]): Review = {
+  def deserialize(bytes: Array[Byte]): Business = {
 
     val decoder = DecoderFactory.get.binaryDecoder(bytes, null)
     val record = reader.read(null, decoder)

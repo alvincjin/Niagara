@@ -57,7 +57,7 @@
 },
 {
 "name":"elite",
-"type":{"items":"string", type":"array"}
+"type":{"items":"string", "type":"array"}
 },
 {
 "name":"fans",
@@ -65,7 +65,7 @@
 },
 {
 "name":"friends",
-"type":{"items":"string", type":"array"}
+"type":{"items":"string", "type":"array"}
 },
 {
 "name":"funny",

@@ -68,7 +68,7 @@ object SparkStreamingConsumer extends App with Config {
     val messages = KafkaUtils.createDirectStream(
       ssc,
       PreferConsistent,
-      Subscribe[String, Array[Byte]](Array(topic), kafkaParams)
+      Subscribe[String, Array[Byte]](Array(postTopic), kafkaParams)
     ).map {record => PostTags.deserialize(record.value())}
 
 
