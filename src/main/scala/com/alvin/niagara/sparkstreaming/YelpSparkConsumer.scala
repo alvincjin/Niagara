@@ -1,8 +1,9 @@
 package com.alvin.niagara.sparkstreaming
 
+import java.util.UUID
+
 import com.alvin.niagara.config.Config
-import com.alvin.niagara.model.{BusinessSerde, PostTags}
-import com.datastax.spark.connector.SomeColumns
+import com.alvin.niagara.model._
 import org.apache.spark._
 import org.apache.kafka.common.serialization._
 import org.apache.spark.streaming.kafka010.KafkaUtils
@@ -23,13 +24,13 @@ object YelpSparkConsumer extends App with Config {
     "bootstrap.servers" -> brokerList,
     "key.deserializer" -> classOf[StringDeserializer],
     "value.deserializer" -> classOf[ByteArrayDeserializer],
-    "group.id" -> "niagara-yelp",
-    "auto.offset.reset" -> "latest",
-    "enable.auto.commit" -> (true: java.lang.Boolean)
+    "group.id" -> s"${UUID.randomUUID().toString}",
+    "auto.offset.reset" -> "earliest",
+    "enable.auto.commit" -> (false: java.lang.Boolean)
   )
 
-  val topics = Array(businessTopic)
-
+  //Completely delete the checkpoint directory for each new message type
+  val topics = Array(userTopic)
 
   val context = StreamingContext.getOrCreate(checkpointDir, functionToCreateContext _)
 
@@ -53,30 +54,11 @@ object YelpSparkConsumer extends App with Config {
       ssc,
       PreferConsistent,
       Subscribe[String, Array[Byte]](topics, kafkaParams)
-    ).map { record => BusinessSerde.deserialize(record.value()) }
+    ).map { record => UserSerde.deserialize(record.value()) }
 
 
-    //val ds = messages.flatMap(println(_.toString))
-    messages.map(m => println(m.toString)).print()
+    messages.map(m => println(m.toString)).count().print()
 
-    /*val tagCounts = messages.flatMap(post => post.tags)
-      .map { tag => (tag, 1) }
-
-    val updateState = (batchTime: Time, key: String, value: Option[Int], state: State[Int]) => {
-      val sum = value.getOrElse(0) + state.getOption.getOrElse(0)
-      state.update(sum)
-      Some((key, sum))
-    }
-
-    val spec = StateSpec.function(updateState)
-
-    // This will give a Dstream made of state (which is the cumulative count of the tags)
-    val tagStats = tagCounts.mapWithState(spec)
-
-    tagStats.reduceByKey((a, b) => Math.max(a, b))
-      .filter { case (tag, count) => count > 30 }
-      *.print()
-*/
   }
 
 }

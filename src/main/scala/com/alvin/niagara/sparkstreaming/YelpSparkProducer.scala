@@ -32,7 +32,7 @@ object YelpSparkProducer extends App with Config {
     val userDS: Dataset[User] = spark.read.json(userPath).as[User]
     val checkinDS: Dataset[Checkin] = spark.read.json(checkinPath).as[Checkin]
 
-
+/*
     val businessProducer = new AvroObjectProducer(businessTopic)
 
     businessDS.take(1000).map { r =>
@@ -45,8 +45,8 @@ object YelpSparkProducer extends App with Config {
     }
     //without close(), can't send data actually
     businessProducer.close()
-
-    /*
+*/
+/*
    val reviewProducer = new AvroObjectProducer(reviewTopic)
 
     reviewDS.take(1000).map{ r =>
@@ -56,8 +56,8 @@ object YelpSparkProducer extends App with Config {
     }
     //without close(), can't send data actually
     reviewProducer.close()
-   */
-    /* val tipProducer = new AvroObjectProducer(tipTopic)
+*//*
+     val tipProducer = new AvroObjectProducer(tipTopic)
 
      tipDS.take(1000).map{ r =>
          val msg = TipSerde.serialize(r)
@@ -66,8 +66,8 @@ object YelpSparkProducer extends App with Config {
      }
      //without close(), can't send data actually
      tipProducer.close()
- */
-    /*
+*/
+
     val userProducer = new AvroObjectProducer(userTopic)
 
     userDS.take(1000).map{ r =>
@@ -77,8 +77,8 @@ object YelpSparkProducer extends App with Config {
     }
     //without close(), can't send data actually
     userProducer.close()
-*/
-    /*
+
+/*
         val checkinProducer = new AvroObjectProducer(checkinTopic)
 
         checkinDS.take(1000).map{ r =>
@@ -88,8 +88,8 @@ object YelpSparkProducer extends App with Config {
         }
         //without close(), can't send data actually
         checkinProducer.close()
+*/
 
-    */
 
   } finally {
     spark.stop()
