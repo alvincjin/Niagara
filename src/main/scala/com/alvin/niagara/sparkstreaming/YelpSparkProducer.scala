@@ -1,14 +1,14 @@
-package com.alvin.niagara.spark
+package com.alvin.niagara.sparkstreaming
 
 import com.alvin.niagara.config.Config
-import org.apache.spark.sql.{Dataset, SparkSession}
 import com.alvin.niagara.model._
 import com.alvin.niagara.util.AvroObjectProducer
+import org.apache.spark.sql.{Dataset, SparkSession}
 
 /**
   * Created by alvinjin on 2017-03-12.
   */
-object YelpProducer extends App with Config {
+object YelpSparkProducer extends App with Config {
 
   val spark = SparkSession
     .builder()

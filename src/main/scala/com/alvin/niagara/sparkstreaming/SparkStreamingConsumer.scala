@@ -1,7 +1,7 @@
 package com.alvin.niagara.sparkstreaming
 
 import com.alvin.niagara.config.Config
-import com.alvin.niagara.model.{PostTags, PostTags$}
+import com.alvin.niagara.model.PostTags
 import com.alvin.niagara.util.Util
 import com.datastax.spark.connector.SomeColumns
 import com.datastax.spark.connector.cql.CassandraConnector
