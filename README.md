@@ -8,47 +8,37 @@
                         ( ( __))
 </pre>
 
-Niagara is a open-source Data-as-a-Service platform implemented in Scala and built by SMACK(Spark, Mesos, Akka, Cassandra and Kafka) stack.
-It is a MVP project to evaluate cutting-edge real-time processing frameworks, e.g. Spark Streaming, Akka Stream, Kafka Streams, etc.
-It utilizes HDFS, MySQL and Cassandra as storage systems, and Kafka as a Pub-Sub system.
+Niagara is a Real-time Big Data Processing, Machine Learning, and Data-as-a-Service platform, which are implemented in Scala and built by SMACK(Spark, Mesos, Akka, Cassandra and Kafka) stack.
 
+It is a MVP project on public real-life data sets to evaluate cutting-edge data streaming and machine learning frameworks and libraries.
 
 # Modules
 
-* Batch Processing
+* Akka Streams
 
-* Real-time Processing
+* Spark Streaming
 
-* Data-as-a-Service
+* Kafka Streams
 
-## Batch Processing
-
-The batch layer streams the xml files by Spark textfile API.
-Then, parses the xml file line by line into a DataSet data structure.
-Analyzes the data set by either Dataset API or Spark SQL.
-Finally, persists the request on HDFS in Parquet format.
-
-### Tech Stack
-
-* Data Formats: XML, Parquet
-
-* Storage Systems: HDFS
-
-* Frameworks: Spark Core/SQL
-
-## Real-time Processing
+* Machine Learning
 
 
-The real-time layer utilizes Akka Streams to simulate an infinite streaming source.
-Akka streams parses Xml files and converts to Avro messages to a Kafka topic simultaneously.
-Three different frameworks are used to build consumers.
-1. Spark streaming
-2. Kafka Streams
-3. Akka Streams
+## Akka Streams
 
-The consumers consume Avro messages from Kafka topic.
-Then executes the real-time data analytics.
-The ingested data are persisted in Cassandra.
+Dataset:
+
+Stack Exchange Dataset contains 28 million posts in a 40GB single XML file.
+https://archive.org/details/stackexchange
+
+The real-time layer utilizes Akka Streams and Alpakka to simulate an infinite streaming source.
+
+Akka streams producer parses Xml files and converts to Avro messages to a Kafka topic simultaneously.
+
+An Akka stream consumer consumes avro messages from Kafka, and then persists into Cassandra database.
+
+The service layer provides RESTful APIs built by Akka-Http for users to easily interact with data for ad-hoc analytics.
+Under the hood, the service calls Cassandra APIs to implement CRUD operations.
+
 
 ### Tech Stack
 
@@ -58,23 +48,30 @@ The ingested data are persisted in Cassandra.
 
 * Messaging Systems: Kafka
 
-* Frameworks: Akka Streams, Alpakka, Kafka Streams Spark Streaming
+* Frameworks: Akka Streams, Alpakka, Akka-Http
 
-## Data-as-a-Service
 
-The service layer provides RESTful APIs built by Akka-Http for users to easily interact with data for ad-hoc analytics.
-Under the hood, the service calls Cassandra APIs to implement CRUD operations.
+## Spark Streaming
+
+Utilize Spark to read Json files and convert to Avro messages in Kafka topics.
+A Spark streaming consumer consumes data from Kafka, and then do the transformation and aggregation.
+Select features and persist them into Cassandra.
+Build a recommendation engine by Spark MLlibs and Standford NLP.
+
+
+Dataset:
+
+Yelp Dataset contains Stack Exchange Dataset contains 4.1 million reviews by 1 million users for 144K businesses.
+https://www.yelp.ca/dataset_challenge
 
 ### Tech Stack
 
-* Data Formats: Json
+* Data Formats: Json, Avro
 
-* Storage Systems: Cassandra, MySQL
+* Storage Systems: HDFS, Cassandra
 
-* Frameworks: Akka-Http, Slick
+* Messaging Systems: Kafka
+
+* Frameworks: Spark, Spark Streaming, MLlib, Stanford NLP
 
 
-## Dataset used in the project:
-
-Stack Exchange Dataset contains 28 million posts in a 40GB single XML file.
-https://archive.org/details/stackexchange
