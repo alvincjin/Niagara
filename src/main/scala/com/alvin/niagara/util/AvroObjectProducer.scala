@@ -3,17 +3,14 @@ package com.alvin.niagara.util
 import java.util.Properties
 
 import com.alvin.niagara.config.Config
-import com.alvin.niagara.model.PostTags
-import org.apache.kafka.clients.producer._
+import com.alvin.niagara.model.{Entity, PostTags}
+import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig, ProducerRecord}
 
 /**
- * Created by JINC4 on 5/26/2016.
- *
- * Avro message producer connects to kafka cluster
- * Then, Sents avro message to kafka
- */
+  * Created by alvinjin on 2017-03-13.
+  */
+class AvroObjectProducer(topic: String) extends Config {
 
-class AvroProducer extends Config {
 
   val props = new Properties()
   props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList)
@@ -25,15 +22,12 @@ class AvroProducer extends Config {
 
   val producer = new KafkaProducer[String, Array[Byte]](props)
 
-  /**
-   * Sent a Post object as Avro records to Kafka.
-    *
-    * @param post a case class to send
-   * @return A sequence of FutureRecordMetadata instances
-   */
-  def send(post: PostTags) = {
-    val message = new ProducerRecord[String, Array[Byte]](postTopic, PostTags.serialize(post))
-    producer.send(message)
+
+  def send(key: String, value: Array[Byte]) = {
+
+    val record = new ProducerRecord[String, Array[Byte]](topic, key, value)
+    producer.send(record)
+    //println(value)
   }
 
   def close() = producer.close()

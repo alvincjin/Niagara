@@ -1,7 +1,7 @@
 package com.alvin.niagara.sparkstreaming
 
 import com.alvin.niagara.config.Config
-import com.alvin.niagara.model.{PostTags, PostTags$}
+import com.alvin.niagara.model.PostTags
 import com.alvin.niagara.util.Util
 import com.datastax.spark.connector.SomeColumns
 import com.datastax.spark.connector.cql.CassandraConnector
@@ -68,7 +68,7 @@ object SparkStreamingConsumer extends App with Config {
     val messages = KafkaUtils.createDirectStream(
       ssc,
       PreferConsistent,
-      Subscribe[String, Array[Byte]](Array(topic), kafkaParams)
+      Subscribe[String, Array[Byte]](Array(postTopic), kafkaParams)
     ).map {record => PostTags.deserialize(record.value())}
 
 

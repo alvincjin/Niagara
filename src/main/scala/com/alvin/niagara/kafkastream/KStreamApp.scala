@@ -27,11 +27,11 @@ object KStreamApp extends App with Config {
 
   import KeyValueImplicits._
 
-  val textLines: KStream[Array[Byte], String] = builder.stream(textlineTopic)
+  val textLines: KStream[Array[Byte], String] = builder.stream(postTopic)
 
   val uppercasedValues: KStream[String, String] = textLines.map((key, value) => (value, value.toUpperCase()))
 
-  uppercasedValues.to(Serdes.String, Serdes.String, uppercaseTopic)
+  uppercasedValues.to(Serdes.String, Serdes.String, postTopic)
 
   val stream: KafkaStreams = new KafkaStreams(builder, settings)
 

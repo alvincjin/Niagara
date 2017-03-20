@@ -44,7 +44,7 @@ object XmlFileAkkaProducer extends App with AkkaProducer {
 
 
   val xmlSource = FileTailSource.lines(
-    path = FileSystems.getDefault.getPath(inputPath),
+    path = FileSystems.getDefault.getPath(stackInputPath),
     maxLineSize = 88888,
     pollingInterval = 250.millis)
 
@@ -74,7 +74,7 @@ object XmlFileAkkaProducer extends App with AkkaProducer {
           case t: String if t != "" => p.copy(title = t.toUpperCase())
           case _ => p.copy(title = "no subject")
         }}
-        .map { post => new ProducerRecord[String, Array[Byte]](topic, PostSede.serialize(post))}
+        .map { post => new ProducerRecord[String, Array[Byte]](postTopic, PostSede.serialize(post))}
 
 
       xmlSource ~> parser ~> broadcast ~> enrichType1 ~> merge ~> fillTitle ~> kafkaSink

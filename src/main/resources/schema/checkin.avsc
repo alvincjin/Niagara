@@ -1,0 +1,19 @@
+{
+"name":"checkin",
+"namespace":"com.alvin.niagara",
+"type":"record",
+"fields":[
+{
+"name":"business_id",
+"type":"string"
+},
+{
+"name":"time",
+"type":{"items":"string", "type":"array"}
+},
+{
+"name":"type",
+"type":"string"
+}
+]
+}

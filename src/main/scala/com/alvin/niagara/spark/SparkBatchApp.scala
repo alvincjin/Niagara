@@ -30,7 +30,7 @@ object SparkBatchApp extends App with Config {
   try {
     val sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
 
-    val totalPosts: Dataset[PostTags] = spark.read.textFile(inputPath)
+    val totalPosts: Dataset[PostTags] = spark.read.textFile(stackInputPath)
       .filter{ l:String => l.contains("<row ")}
       .flatMap{ line:String => Util.parseXml(line, sdf) }
 

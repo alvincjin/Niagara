@@ -1,13 +1,13 @@
 
 name := "Niagara"
 
-version := "1.0.0"
+version := "1.1.0"
 
 
 lazy val versions = Map(
   "kafka" -> "0.10.1.1",
   "confluent" -> "3.1.2",
-  "spark" -> "2.0.2",
+  "spark" -> "2.1.0",
   "akka" -> "2.4.11"
 )
 
@@ -26,7 +26,7 @@ libraryDependencies ++= Seq(
   //Avro
   "com.databricks" % "spark-avro_2.10" % "3.0.1",
   "org.apache.avro" % "avro" % "1.8.1",
-  "com.databricks" %% "spark-xml" % "0.3.3",
+  "com.twitter" %% "bijection-avro" % "0.9.5",
 
   //Kafka
   "org.apache.kafka" % "kafka-clients" % versions("kafka"),
@@ -53,7 +53,7 @@ libraryDependencies ++= Seq(
   "com.lightbend.akka" %% "akka-stream-alpakka-cassandra" % "0.6",
   "com.lightbend.akka" %% "akka-stream-alpakka-file" % "0.6",
 
-  "org.scala-lang.modules" % "scala-xml_2.11" % "1.0.6",
+  "org.scala-lang.modules" %% "scala-xml" % "1.0.6",
   "com.typesafe.slick" %% "slick" % "3.1.0",
   "mysql" % "mysql-connector-java" % "5.1.34",
   "com.github.t3hnar" %% "scala-bcrypt" % "2.4",
