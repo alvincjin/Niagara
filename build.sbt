@@ -59,7 +59,8 @@ libraryDependencies ++= Seq(
   "com.github.t3hnar" %% "scala-bcrypt" % "2.4",
   "com.jason-goodwin" %% "authentikat-jwt" % "0.4.3",
   "com.github.nscala-time" %% "nscala-time" % "2.4.0",
-  "com.danielasfregola" %% "twitter4s" % "5.0"
+  "com.danielasfregola" %% "twitter4s" % "5.0",
+  "org.reactivemongo" %% "reactivemongo" % "0.12"
 )
 
 assemblyJarName in assembly := s"${name.value}-${version.value}.jar"
