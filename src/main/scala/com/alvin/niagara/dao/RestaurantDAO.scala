@@ -16,9 +16,9 @@ import scala.util.{Failure, Random, Success}
 object RestaurantDAO extends DBManager {
 
   case class Restaurant(
-                         id: Option[Int] = None,
+                         //id: Option[Int] = None,
                          restaurantid: String,
-                         restaurantname: String,
+                         //restaurantname: String,
                          maxid: Long,
                          ingesttime: Timestamp
                        )
@@ -27,17 +27,17 @@ object RestaurantDAO extends DBManager {
 
   class Restaurants(tag: Tag) extends Table[Restaurant](tag, "restaurants") {
 
-    def id = column[Int]("id", O.SqlType("SERIAL"), O.AutoInc, O.PrimaryKey)
+    //def id = column[Int]("id", O.SqlType("SERIAL"), O.AutoInc, O.PrimaryKey)
 
     def restaurantid = column[String]("restaurantid", O.SqlType("VARCHAR(30)"))
 
-    def restaurantname = column[String]("restaurantname", O.SqlType("VARCHAR(30)"))
+    //def restaurantname = column[String]("restaurantname", O.SqlType("VARCHAR(30)"))
 
     def maxid = column[Long]("maxid")
 
     def ingesttime = column[Timestamp]("createdAt", O.SqlType("timestamp not null default CURRENT_TIMESTAMP"))
 
-    def * = (id.?, restaurantid, restaurantname, maxid, ingesttime) <>(Restaurant.tupled, Restaurant.unapply)
+    def * = (restaurantid, maxid, ingesttime) <>(Restaurant.tupled, Restaurant.unapply)
 
     def unique_user_idx = index("unique_user_id", restaurantid, unique = true)
 
@@ -48,17 +48,17 @@ object RestaurantDAO extends DBManager {
 
   def createUsersTable = db.run(restaurants.schema.create)
 
-
-  def insertRestaurant(restaurantid: String, restaurantname: String, maxid: Long, ingesttime: Timestamp): Future[Option[Restaurant]] = {
+/*
+  def insertRestaurant(restaurantid: String, maxid: Long, ingesttime: Timestamp): Future[Option[Restaurant]] = {
 
 
     val dt = new DateTime(DateTimeZone.forID("America/Toronto"))
 
-    val restaurant = Restaurant(restaurantid = restaurantid, restaurantname = restaurantname,
+    val restaurant = Restaurant(restaurantid = restaurantid,
       maxid = maxid, ingesttime = new Timestamp(dt.getMillis))
 
-    val query = restaurants returning restaurants.map(_.id) into
-      ((res, id) => restaurant.copy(id = Some(id)))
+    val query = restaurants returning restaurants.map(_.restaurantid) into
+      ((res, id) => restaurant.copy(id = id))
 
     val action = query += restaurant
 
@@ -70,7 +70,7 @@ object RestaurantDAO extends DBManager {
       }
     }
   }
-
+*/
 
   def queryUserById(handler: String): Future[Option[Long]] = {
 
@@ -88,5 +88,26 @@ object RestaurantDAO extends DBManager {
 
 
   }
+
+
+  def queryAllHandlers(): Future[Seq[String]] = {
+
+    val action = restaurants.map(_.restaurantid).result
+
+    /*db.run(action.asTry).map { result =>
+      result match {
+        case Success(res) => res
+        case Failure(e: Exception) => None
+      }
+    }
+    */
+
+    db.run(action)
+
+
+  }
+
+
+
 
 }
