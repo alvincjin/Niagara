@@ -39,5 +39,13 @@ trait Config {
   val stackInputPath = appConfig.getString("stackInputPath")
   val outputPath = appConfig.getString("outputPath")
   val yelpInputPath = appConfig.getString("yelpInputPath")
+
+  val twitterConfig = appConfig.getConfig("twitter")
+  val consumerKey = twitterConfig.getString("consumer.key")
+  val consumerSecret = twitterConfig.getString("consumer.secret")
+  val accessKey = twitterConfig.getString("access.key")
+  val accessSecret = twitterConfig.getString("access.secret")
+
+
 }
 
