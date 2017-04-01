@@ -13,8 +13,8 @@ import scala.io.Source
 /**
   * Created by alvinjin on 2017-03-13.
   */
-case class Business(address: String, attributes: Seq[String], business_id: String, categories: Seq[String],
-                    city: String, hours: Seq[String], is_open: Long, latitude: Double, longitude: Double,
+case class Business(address: String, attributes: Option[Seq[String]], business_id: String, categories: Option[Seq[String]],
+                    city: String, hours: Option[Seq[String]], is_open: Long, latitude: Double, longitude: Double,
                     name: String, neighborhood: String, postal_code: String, review_count: Long, stars: Double,
                     state: String, `type`: String)
 
@@ -34,11 +34,11 @@ object BusinessSerde {
 
     val avroRecord = new GenericData.Record(schema)
     avroRecord.put("address", buz.address)
-    avroRecord.put("attributes", asJavaCollection(buz.attributes))
+    avroRecord.put("attributes", asJavaCollection(buz.attributes.getOrElse(Seq.empty)))
     avroRecord.put("business_id", buz.business_id)
-    avroRecord.put("categories", asJavaCollection(buz.categories))
+    avroRecord.put("categories", asJavaCollection(buz.categories.getOrElse(Seq.empty)))
     avroRecord.put("city", buz.city)
-    avroRecord.put("hours", asJavaCollection(buz.hours))
+    avroRecord.put("hours", asJavaCollection(buz.hours.getOrElse(Seq.empty)))
     avroRecord.put("is_open", buz.is_open)
     avroRecord.put("latitude", buz.latitude)
     avroRecord.put("longitude", buz.longitude)
@@ -78,11 +78,11 @@ object BusinessSerde {
 
     Business(
       record.get("address").toString,
-      attributes,
+      if(attributes.isEmpty) None else Some(attributes),
       record.get("business_id").toString,
-      categories,
+      if(categories.isEmpty) None else Some(categories),
       record.get("city").toString,
-      hours,
+      if(hours.isEmpty) None else Some(hours),
       record.get("is_open").asInstanceOf[Long],
       record.get("latitude").asInstanceOf[Double],
       record.get("longitude").asInstanceOf[Double],

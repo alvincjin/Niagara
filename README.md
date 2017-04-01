@@ -61,7 +61,7 @@ Build a recommendation engine by Spark MLlibs and Standford NLP.
 
 Dataset:
 
-Yelp Dataset contains Stack Exchange Dataset contains 4.1 million reviews by 1 million users for 144K businesses.
+Yelp Dataset contains 4.1 million reviews by 1 million users for 144K businesses.
 https://www.yelp.ca/dataset_challenge
 
 ### Tech Stack
