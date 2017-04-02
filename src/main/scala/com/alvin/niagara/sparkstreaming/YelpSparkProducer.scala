@@ -43,7 +43,7 @@ object YelpSparkProducer extends App with Config {
 
     businessProducer.close()
 
-    /*
+
     val reviewProducer = new AvroObjectProducer(reviewTopic)
 
     reviewDS.take(10000).map { r =>
@@ -53,7 +53,7 @@ object YelpSparkProducer extends App with Config {
     }
 
     reviewProducer.close()
-*/
+
 /*
     val userProducer = new AvroObjectProducer(userTopic)
 

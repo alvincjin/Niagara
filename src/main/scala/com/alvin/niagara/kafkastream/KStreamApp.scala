@@ -31,57 +31,23 @@ object KStreamApp extends App with Config {
   settings.put(STATE_DIR_CONFIG, buzzStore)
 
   val stringSerde: Serde[String] = Serdes.String()
-
-  /*
-  val  jsonSerializer:Serializer[JsonNode] = new JsonSerializer();
-  val  jsonDeserializer:Deserializer[JsonNode] = new JsonDeserializer();
-  val  jsonSerde:Serde[JsonNode] = Serdes.serdeFrom(jsonSerializer, jsonDeserializer);
-
-
-  val reviewSerde = Serdes.serdeFrom(ReviewSerde.s, )
-*/
-  import KeyValueImplicits._
-
   val reviewSerde = new ReviewSerde()
-
   val businessSerde = new BusinessSerde()
 
-  // Because this is a KStream ("record stream"), multiple records for the same user will be
-  // considered as separate click-count events, each of which will be added to the total count.
   val reviewStream: KStream[String, Review] = builder.stream(stringSerde, reviewSerde, reviewTopic)
 
+  val businessTable: KTable[String, Business] = builder.table(stringSerde, businessSerde, businessTopic, "BuzzStore")
 
-  //val businessTable: KTable[String, Business] = builder.table(stringSerde, businessSerde, businessTopic, "BuzzStore")
+  //val businessStream: KStream[String, Business] = builder.stream(stringSerde, businessSerde, businessTopic)
 
-  val businessStream: KStream[String, Business] = builder.stream(stringSerde, businessSerde, businessTopic)
-
-/*
-  val reviewJoinBusiness : KStream[String, (String, Long)] = reviewStream
-    // Join the stream against the table.
-    //
-    // Null values possible: In general, null values are possible for region (i.e. the value of
-    // the KTable we are joining against) so we must guard against that (here: by setting the
-    // fallback region "UNKNOWN").  In this specific example this is not really needed because
-    // we know, based on the test setup, that all users have appropriate region entries at the
-    // time we perform the join.
-    .leftJoin(businessTable, (clicks: Long, region: String) => (if (region == null) "UNKNOWN" else region, clicks))
-*/
-
-  /*
-  val textLines: KStream[Array[Byte], String] = builder.stream(postTopic)
-
-  val uppercasedValues: KStream[String, String] = textLines.map((key, value) => (value, value.toUpperCase()))
-
-  uppercasedValues.to(Serdes.String, Serdes.String, postTopic)
-*/
   import KeyValueImplicits._
+  val reviewJoinBusiness:KStream[String, String] = reviewStream.join(businessTable, (review: Review, buzz: Business) => buzz.city+" : "+review.text)
 
   //val newStream:KStream[String, String] = reviewStream.map((key,value) => (key, value.date))
+  //val newStream:KStream[String, String] = businessStream.map((key,value) => (key, value.city))
+  //val newStream:KStream[String, String] = businessTable.toStream.map((key,value) => (key, value.city))
 
-  val newStream:KStream[String, String] = businessStream.map((key,value) => (key, value.city))
-
-  newStream.to(stringSerde, stringSerde, "2Business")
-
+  reviewJoinBusiness.to(stringSerde, stringSerde, "reviewBusiness")
 
 
   val stream: KafkaStreams = new KafkaStreams(builder, settings)
