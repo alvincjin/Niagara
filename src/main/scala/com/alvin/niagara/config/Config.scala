@@ -28,8 +28,7 @@ trait Config {
   val tipTopic = kafkaConfig.getString("topic.tip")
   val userTopic = kafkaConfig.getString("topic.user")
   val buzzStore = kafkaConfig.getString("buzzStore")
-  //val textlineTopic = kafkaConfig.getString("textline_topic")
-  //val uppercaseTopic = kafkaConfig.getString("uppercase_topic")
+  val reviewBusinessTopic = kafkaConfig.getString("reviewBusiness")
 
   val cassandraConfig = appConfig.getConfig("cassandra")
   val hosts: List[String] = cassandraConfig.getStringList("hostList").toList
