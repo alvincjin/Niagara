@@ -18,19 +18,19 @@ object YelpSparkConsumer extends App with Config {
 
   val conf = new SparkConf()
     .setMaster(sparkMaster)
-    .setAppName("YelpConsumer")
+    .setAppName("YelpConsumerApp")
 
   val kafkaParams = Map[String, Object](
     "bootstrap.servers" -> brokerList,
     "key.deserializer" -> classOf[StringDeserializer],
     "value.deserializer" -> classOf[ByteArrayDeserializer],
-    "group.id" -> s"${UUID.randomUUID().toString}",
+    "group.id" -> s"consumer-${UUID.randomUUID().toString}",
     "auto.offset.reset" -> "earliest",
     "enable.auto.commit" -> (false: java.lang.Boolean)
   )
 
   //Completely delete the checkpoint directory for each new message type
-  val topics = Array(userTopic)
+  val topics = Array(businessTopic)
 
   val context = StreamingContext.getOrCreate(checkpointDir, functionToCreateContext _)
 
@@ -54,7 +54,7 @@ object YelpSparkConsumer extends App with Config {
       ssc,
       PreferConsistent,
       Subscribe[String, Array[Byte]](topics, kafkaParams)
-    ).map { record => UserSerde.deserialize(record.value()) }
+    ).map { record => BusinessSerde.deserialize(record.value()) }
 
 
     messages.map(m => println(m.toString)).count().print()
