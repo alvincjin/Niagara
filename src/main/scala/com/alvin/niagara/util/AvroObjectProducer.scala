@@ -3,7 +3,7 @@ package com.alvin.niagara.util
 import java.util.Properties
 
 import com.alvin.niagara.config.Config
-import com.alvin.niagara.model.{Entity, PostTags}
+import com.alvin.niagara.model.PostTags
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig, ProducerRecord}
 
 /**

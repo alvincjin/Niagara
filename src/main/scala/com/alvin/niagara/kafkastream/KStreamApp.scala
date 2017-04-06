@@ -3,11 +3,11 @@ package com.alvin.niagara.kafkastream
 import java.util.{Properties, UUID}
 
 import com.alvin.niagara.config.Config
-import com.alvin.niagara.model.{Business, BusinessSerde, Review}
+import com.alvin.niagara.model.{Business, BusinessSerde, Review, User}
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization._
 import org.apache.kafka.streams.{KafkaStreams, StreamsConfig}
-import org.apache.kafka.streams.kstream.{GlobalKTable, KStream, KStreamBuilder}
+import org.apache.kafka.streams.kstream.{GlobalKTable, KStream, KStreamBuilder, KTable}
 
 /**
   * Created by alvinjin on 2017-02-06.
@@ -29,12 +29,14 @@ object KStreamApp extends App with Config {
   val stringSerde: Serde[String] = Serdes.String()
   val reviewSerde = new ReviewSerde()
   val businessSerde = new BusinessSerde()
+  val userSerde = new UserSerde()
   val reviewBusinessSerde = new ReviewBusinessSerde()
+  val reviewBusinessUserSerde = new ReviewBusinessUserSerde()
 
   val builder: KStreamBuilder = new KStreamBuilder
   val reviewStream: KStream[String, Review] = builder.stream(stringSerde, reviewSerde, reviewTopic)
   val businessTable: GlobalKTable[String, Business] = builder.globalTable(stringSerde, businessSerde, businessTopic, "business")
-
+  val userTable: GlobalKTable[String, User] = builder.globalTable(stringSerde, userSerde, userTopic, "user")
   import KeyValueImplicits._
 
   val reviewJoinBusiness: KStream[String, ReviewBusiness] = reviewStream
@@ -44,10 +46,19 @@ object KStreamApp extends App with Config {
     (r: Review, b: Business) =>
       ReviewBusiness(r.business_id, r.date, r.review_id, r.stars, r.text, r.user_id, b.address,
         b.city, b.latitude, b.longitude, b.name, b.postal_code, b.review_count)
+    )
+
+  val reviewJoinBusinessJoinUser: KStream[String, ReviewBusinessUser] = reviewJoinBusiness
+    .join(userTable,
+    (businessid, reviewBusiness) => reviewBusiness.user_id, //join key
+    (r: ReviewBusiness, u: User) =>
+      ReviewBusinessUser(r.business_id, r.date, r.review_id, r.stars, r.text, r.user_id, r.address, r.city,
+        r.latitude, r.longitude, r.name, r.postal_code, r.review_count, u.average_stars, u.fans, u.name, u.yelping_since)
   )
 
-  reviewJoinBusiness.print(stringSerde, reviewBusinessSerde)
-  //reviewJoinBusiness.to(stringSerde, reviewBusinessSerde, reviewBusinessTopic)
+  //reviewJoinBusiness.print(stringSerde, reviewBusinessSerde)
+  reviewJoinBusinessJoinUser.print(stringSerde, reviewBusinessUserSerde)
+  //reviewJoinBusinessJoinUser.to(stringSerde, reviewBusinessUserSerde, reviewBusinessUserTopic)
 
   val stream: KafkaStreams = new KafkaStreams(builder, settings)
 
