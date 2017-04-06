@@ -3,7 +3,6 @@ package com.alvin.niagara.util
 import java.util.Properties
 
 import com.alvin.niagara.config.Config
-import com.alvin.niagara.model.{Entity, PostTags}
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig, ProducerRecord}
 
 /**
@@ -27,7 +26,6 @@ class AvroObjectProducer(topic: String) extends Config {
 
     val record = new ProducerRecord[String, Array[Byte]](topic, key, value)
     producer.send(record)
-    //println(value)
   }
 
   def close() = producer.close()

@@ -1,10 +1,7 @@
 package com.alvin.niagara.kafkastream
 
-
 import java.io.ByteArrayOutputStream
 import java.util
-
-import com.alvin.niagara.model.Business
 import org.apache.avro.Schema
 import org.apache.avro.generic._
 import org.apache.avro.io.{DecoderFactory, EncoderFactory}
@@ -19,21 +16,26 @@ import scala.io.Source
 
 case class ReviewBusiness(business_id: String, date: String, review_id: String, stars: Long, text: String,
                           user_id: String, address: String, city: String, latitude: Double, longitude: Double,
-                          name: String, postal_code: String, review_count: Long)
+                          business_name: String, postal_code: String, review_count: Long)
 
-class ReviewBusinessSerde extends Serde[ReviewBusiness]{
+case class ReviewBusinessUser(business_id: String, date: String, review_id: String, stars: Long, text: String,
+                              user_id: String, address: String, city: String, latitude: Double, longitude: Double,
+                              business_name: String, postal_code: String, review_count: Long, average_stars: Double,
+                              fans: Long, user_name: String, yelping_since: String)
 
-  val avroSchema = Source.fromInputStream(getClass.getResourceAsStream("/schema/reviewbusiness.avsc")).mkString
+class ReviewBusinessUserSerde extends Serde[ReviewBusinessUser] {
+
+  val avroSchema = Source.fromInputStream(getClass.getResourceAsStream("/schema/reviewbusinessuser.avsc")).mkString
   val schema = new Schema.Parser().parse(avroSchema)
 
   val reader = new GenericDatumReader[GenericRecord](schema)
   val writer = new GenericDatumWriter[GenericRecord](schema)
 
-  override def serializer(): Serializer[ReviewBusiness] = new Serializer[ReviewBusiness] {
+  override def serializer(): Serializer[ReviewBusinessUser] = new Serializer[ReviewBusinessUser] {
 
     override def configure(configs: util.Map[String, _], isKey: Boolean): Unit = {}
 
-    override def serialize(topic: String, data: ReviewBusiness): Array[Byte] = {
+    override def serialize(topic: String, data: ReviewBusinessUser): Array[Byte] = {
       val out = new ByteArrayOutputStream()
       val encoder = EncoderFactory.get.binaryEncoder(out, null)
 
@@ -48,9 +50,14 @@ class ReviewBusinessSerde extends Serde[ReviewBusiness]{
       avroRecord.put("city", data.city)
       avroRecord.put("latitude", data.latitude)
       avroRecord.put("longitude", data.longitude)
-      avroRecord.put("name", data.name)
+      avroRecord.put("business_name", data.business_name)
       avroRecord.put("postal_code", data.postal_code)
       avroRecord.put("review_count", data.review_count)
+      avroRecord.put("average_stars", data.average_stars)
+      avroRecord.put("fans", data.fans)
+      avroRecord.put("user_name", data.user_name)
+      avroRecord.put("yelping_since", data.yelping_since)
+
 
       writer.write(avroRecord, encoder)
       encoder.flush
@@ -61,18 +68,18 @@ class ReviewBusinessSerde extends Serde[ReviewBusiness]{
     override def close(): Unit = {}
   }
 
-  override def deserializer(): Deserializer[ReviewBusiness] = new Deserializer[ReviewBusiness] {
+  override def deserializer(): Deserializer[ReviewBusinessUser] = new Deserializer[ReviewBusinessUser] {
 
     override def configure(configs: util.Map[String, _], isKey: Boolean): Unit = {}
 
     override def close(): Unit = {}
 
-    override def deserialize(topic: String, data: Array[Byte]): ReviewBusiness = {
+    override def deserialize(topic: String, data: Array[Byte]): ReviewBusinessUser = {
       val decoder = DecoderFactory.get.binaryDecoder(data, null)
       val record = reader.read(null, decoder)
 
 
-      ReviewBusiness(
+      ReviewBusinessUser(
         record.get("business_id").toString,
         record.get("date").toString,
         record.get("review_id").toString,
@@ -83,9 +90,13 @@ class ReviewBusinessSerde extends Serde[ReviewBusiness]{
         record.get("city").toString,
         record.get("latitude").asInstanceOf[Double],
         record.get("longitude").asInstanceOf[Double],
-        record.get("name").toString,
+        record.get("business_name").toString,
         record.get("postal_code").toString,
-        record.get("review_count").asInstanceOf[Long]
+        record.get("review_count").asInstanceOf[Long],
+        record.get("average_stars").asInstanceOf[Double],
+        record.get("fans").asInstanceOf[Long],
+        record.get("user_name").toString,
+        record.get("yelping_since").toString
       )
     }
   }
