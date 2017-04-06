@@ -14,6 +14,10 @@ import scala.io.Source
   * Created by alvinjin on 2017-04-02.
   */
 
+case class ReviewBusiness(business_id: String, date: String, review_id: String, stars: Long, text: String,
+                          user_id: String, address: String, city: String, latitude: Double, longitude: Double,
+                          business_name: String, postal_code: String, review_count: Long)
+
 case class ReviewBusinessUser(business_id: String, date: String, review_id: String, stars: Long, text: String,
                               user_id: String, address: String, city: String, latitude: Double, longitude: Double,
                               business_name: String, postal_code: String, review_count: Long, average_stars: Double,

@@ -3,7 +3,7 @@ package com.alvin.niagara.kafkastream
 import java.util.{Properties, UUID}
 
 import com.alvin.niagara.config.Config
-import com.alvin.niagara.model.{Business, BusinessSerde, Review, User}
+import com.alvin.niagara.model.{Business, Review, User}
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization._
 import org.apache.kafka.streams.{KafkaStreams, StreamsConfig}
@@ -30,7 +30,6 @@ object KStreamApp extends App with Config {
   val reviewSerde = new ReviewSerde()
   val businessSerde = new BusinessSerde()
   val userSerde = new UserSerde()
-  val reviewBusinessSerde = new ReviewBusinessSerde()
   val reviewBusinessUserSerde = new ReviewBusinessUserSerde()
 
   val builder: KStreamBuilder = new KStreamBuilder
@@ -53,10 +52,9 @@ object KStreamApp extends App with Config {
     (businessid, reviewBusiness) => reviewBusiness.user_id, //join key
     (r: ReviewBusiness, u: User) =>
       ReviewBusinessUser(r.business_id, r.date, r.review_id, r.stars, r.text, r.user_id, r.address, r.city,
-        r.latitude, r.longitude, r.name, r.postal_code, r.review_count, u.average_stars, u.fans, u.name, u.yelping_since)
+        r.latitude, r.longitude, r.business_name, r.postal_code, r.review_count, u.average_stars, u.fans, u.name, u.yelping_since)
   )
 
-  //reviewJoinBusiness.print(stringSerde, reviewBusinessSerde)
   reviewJoinBusinessJoinUser.print(stringSerde, reviewBusinessUserSerde)
   //reviewJoinBusinessJoinUser.to(stringSerde, reviewBusinessUserSerde, reviewBusinessUserTopic)
 
