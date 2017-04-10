@@ -46,8 +46,29 @@ https://archive.org/details/stackexchange
 
 * The other libs: Kafka Connects, Alpakka, Akka-Http
 
+## Prerequisites
 
+#### Install Java8 and Scala in Ubuntu
 
+Please check the steps in my [Big Data Blog](http://alvincjin.blogspot.ca/2017/01/install-java-and-scala-in-ubuntu.html)
+
+#### Install Kafka and Zookeeper
+
+Download [Kafka 0.10.2+](http://mirror.dsrg.utoronto.ca/apache/kafka/0.10.2.0/kafka_2.11-0.10.2.0.tgz)
+```
+$ cd kafka_2.11-0.10.2.0/
+$ ./bin/zookeeper-server-start.sh config/zookeeper.properties
+$ ./bin/kafka-server-start.sh config/server.properties
+$ ./bin/kafka-topics --zookeeper localhost:2181 --create --topic post
+```
+
+#### Install Cassandra
+
+Download [Cassandra 3.1.0+](http://apache.forsale.plus/cassandra/3.10/apache-cassandra-3.10-bin.tar.gz)
+```
+$ cd apache-cassandra-3.1.0
+$ ./bin/cassandra
+```
 ## Kafka Streams
 
 Utilize Spark to read Json files and convert to Avro messages in Kafka topics.
