@@ -8,70 +8,98 @@
                         ( ( __))
 </pre>
 
-Niagara is a Real-time Big Data Processing, Machine Learning, and Data-as-a-Service platform, which are implemented in Scala and built by SMACK(Spark, Mesos, Akka, Cassandra and Kafka) stack.
+Niagara is a Fast-Big Data Processing, Machine Learning, and Data-as-a-Service platform, implemented in Scala with SMACK(Spark, Mesos, Akka, Cassandra and Kafka) stack.
 
-It is a MVP project on public real-life data sets to evaluate cutting-edge data streaming and machine learning frameworks and libraries.
+It is built on complicated public data sets to evaluate emerging data streaming and machine learning frameworks and libraries.
 
-# Modules
+## Modules
 
-* Akka Streams
+* Kafka Streams
 
 * Spark Streaming
 
-* Kafka Streams
+* Akka Streams
 
 * Machine Learning
 
 
-## Akka Streams
+## Dataset
 
-Dataset:
+* The Yelp Dataset contains 4.1 million reviews(3.5GB) by 1 million users(1.2GB) for 144K businesses(115MB).
+https://www.yelp.ca/dataset_challenge
 
-Stack Exchange Dataset contains 28 million posts in a 40GB single XML file.
+* The Stack Exchange Dataset contains 28 million Posts in a 40GB single XML file.
 https://archive.org/details/stackexchange
 
-The real-time layer utilizes Akka Streams and Alpakka to simulate an infinite streaming source.
+## Tech Stack
 
-Akka streams producer parses Xml files and converts to Avro messages to a Kafka topic simultaneously.
-
-An Akka stream consumer consumes avro messages from Kafka, and then persists into Cassandra database.
-
-The service layer provides RESTful APIs built by Akka-Http for users to easily interact with data for ad-hoc analytics.
-Under the hood, the service calls Cassandra APIs to implement CRUD operations.
-
-
-### Tech Stack
-
-* Data Formats: XML, Avro
+* Data Formats: Json, XML, Avro
 
 * Storage Systems: HDFS, Cassandra
 
-* Messaging Systems: Kafka
+* Messaging System: Kafka
 
-* Frameworks: Akka Streams, Alpakka, Akka-Http
+* Streaming Frameworks/libs: Kafka Streams, Spark Streaming, Akka Streams
+
+* Machine Learning: MLlib, Stanford NLP, TensorFlow
+
+* The Other Libs: Kafka Connects, Alpakka, Akka-Http
+
+
+## Prerequisites
+
+#### Install Java 8 and Scala 2.11 in Ubuntu
+
+Please check the steps in my [Big Data Blog](http://alvincjin.blogspot.ca/2017/01/install-java-and-scala-in-ubuntu.html)
+
+#### Install Kafka and Zookeeper
+
+Download and unzip [Kafka 0.10.2+](http://mirror.dsrg.utoronto.ca/apache/kafka/0.10.2.0/kafka_2.11-0.10.2.0.tgz)
+```
+$ cd kafka_2.11-0.10.2.0/
+$ ./bin/zookeeper-server-start.sh config/zookeeper.properties
+$ ./bin/kafka-server-start.sh config/server.properties
+$ ./bin/kafka-topics --zookeeper localhost:2181 --create --topic post
+```
+
+#### Install Cassandra
+
+Download and unzip [Cassandra 3.1.0+](http://apache.forsale.plus/cassandra/3.10/apache-cassandra-3.10-bin.tar.gz)
+```
+$ cd apache-cassandra-3.1.0
+$ ./bin/cassandra
+```
+## Kafka Streams
+
+A Spark core app ingests Json files and converts Json to Avro messages in Kafka topics, e.g. review, business, user.
+A Kafka streams application consumes review messages as KStream from review topic.
+In the meanwhile, it consumes Business and User data as GlobalKTable.
+
+KStream works like Fact table, containing large volume immutable transactional records.
+While KTable works like Dimension table, contains small volume domain data snapshot.
+The pipeline enriches Review Stream by joining with Business and User KTables in real-time to a new Kafka topic.
 
 
 ## Spark Streaming
 
-Utilize Spark to read Json files and convert to Avro messages in Kafka topics.
+A Spark core app ingests Json files and converts Json to Avro messages in Kafka topics, e.g. review, business, user.
 A Spark streaming consumer consumes data from Kafka, and then do the transformation and aggregation.
 Select features and persist them into Cassandra.
-Build a recommendation engine by Spark MLlibs and Standford NLP.
 
 
-Dataset:
 
-Yelp Dataset contains 4.1 million reviews by 1 million users for 144K businesses.
-https://www.yelp.ca/dataset_challenge
+## Akka Streams
 
-### Tech Stack
+The Akka Streams application ingests XML format posts by the file connector in Alpakka.
+Akka streams producer app forms a real-time data pipeline to parse, enrich and transform XML files to Avro messages in a Kafka topic.
 
-* Data Formats: Json, Avro
+An Akka stream consumer app consumes avro messages from Kafka, and then persists data into Cassandra database.
+The data flow DSL is shown below:
 
-* Storage Systems: HDFS, Cassandra
+```
+xmlSource ~> parsing ~> broadcast ~> enrich1 ~> merge ~> fillTitle ~> kafkaSink
+                        broadcast ~> enrich2 ~> merge
+```
 
-* Messaging Systems: Kafka
-
-* Frameworks: Spark, Spark Streaming, MLlib, Stanford NLP
-
-
+The service layer provides RESTful APIs built by Akka-Http for users to easily interact with data for ad-hoc analytics.
+Under the hood, the service calls Cassandra APIs to implement CRUD operations.
