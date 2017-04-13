@@ -3,11 +3,12 @@ package com.alvin.niagara.kafkastream
 import java.util.{Properties, UUID}
 import java.lang.{Double => JDouble, Long => JLong}
 import javax.ws.rs.NotFoundException
+
 import com.alvin.niagara.config.Config
 import com.alvin.niagara.model.{Business, Review, User}
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization._
-import org.apache.kafka.streams.{KafkaStreams, StreamsConfig}
+import org.apache.kafka.streams.{KafkaStreams, KeyValue, StreamsConfig}
 import org.apache.kafka.streams.kstream._
 import org.apache.kafka.streams.state.{QueryableStoreTypes, ReadOnlyKeyValueStore}
 
@@ -74,27 +75,31 @@ object KStreamApp extends App with Config {
           r.latitude, r.longitude, r.business_name, r.postal_code, r.review_count, u.average_stars, u.fans, u.name, u.yelping_since)
     )
 
+
   //reviewJoinBusinessJoinUser.to(stringSerde, reviewBusinessUserSerde, reviewBusinessUserTopic)
   //State Tables for Aggregations
 
+  import KeyValueImplicits._
+  import FunctionImplicits.BinaryFunctionToReducer
 
-  val starsPerCity = reviewJoinBusinessJoinUser
+  val cityStars: KStream[String, Long] = reviewJoinBusinessJoinUser
     .filter((user_id, rbu) => rbu.yelping_since < "2016" && rbu.review_count > 0)
-    .map((user_id, rbu) => (rbu.city, rbu.stars))
-    .groupBy((city, stars) => city, stringSerde, longSerde)
-    .reduce((first, second) => first + second: Long, STARS_CITY_STORE)
+   .map((user_id, rbu) => (rbu.city, rbu.stars))
 
-  /*.filter((user_id, rbu) => rbu.yelping_since < "2016" && rbu.review_count > 0)
-  .groupBy((user_id, rbu) => rbu.city, stringSerde, reviewBusinessUserSerde)
-  .count(CITY_BUZZ_COUNT_STORE)
-*/
+
+  val starsPerCity: KTable[String, Long] = cityStars
+    .groupBy((city, stars) => city, stringSerde, longSerde)
+    .reduce((first: Long, second: Long) => first + second, STARS_CITY_STORE)
+
+
+  starsPerCity.toStream.print(stringSerde, longSerde)
 
   val stream: KafkaStreams = new KafkaStreams(builder, settings)
 
   stream.start()
 
 
-  println(querybyKey(STARS_CITY_STORE, "Toronto"))
+  //println(querybyKey(STARS_CITY_STORE, "Toronto"))
 
 
   def querybyKey(storeName: String, key: String): Long = {
