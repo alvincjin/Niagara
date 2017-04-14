@@ -80,7 +80,10 @@ While KTable works like Dimension table, contains small volume domain data snaps
 The pipeline enriches Review Stream by joining with Business and User KTables in real-time to a new Kafka topic.
 Then, apply filtering, aggregations and keep the results in local state store for Interactive Queries.
 
-
+For example,
+```
+POST localhost:8080/stars/Toronto
+```
 
 ## Spark Streaming
 

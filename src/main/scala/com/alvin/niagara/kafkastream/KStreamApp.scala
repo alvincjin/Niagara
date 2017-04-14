@@ -2,7 +2,6 @@ package com.alvin.niagara.kafkastream
 
 import java.util.{Properties, UUID}
 import java.lang.{Double => JDouble, Long => JLong}
-import javax.ws.rs.NotFoundException
 
 import com.alvin.niagara.config.Config
 import com.alvin.niagara.model.{Business, Review, User}
@@ -10,7 +9,6 @@ import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization._
 import org.apache.kafka.streams.{KafkaStreams, KeyValue, StreamsConfig}
 import org.apache.kafka.streams.kstream._
-import org.apache.kafka.streams.state.{QueryableStoreTypes, ReadOnlyKeyValueStore}
 
 /**
   * Created by alvinjin on 2017-02-06.
@@ -98,17 +96,8 @@ object KStreamApp extends App with Config {
 
   stream.start()
 
+  //start the Interactive Query Service
+  val qs = new QueryService(stream)
+  qs.start
 
-  //println(querybyKey(STARS_CITY_STORE, "Toronto"))
-
-
-  def querybyKey(storeName: String, key: String): Long = {
-    val store: ReadOnlyKeyValueStore[String, Long] = stream.store(STARS_CITY_STORE, QueryableStoreTypes.keyValueStore[String, Long])
-    if (store == null) {
-      throw new NotFoundException
-    }
-
-    store.get(key)
-
-  }
 }
