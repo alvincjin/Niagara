@@ -78,6 +78,19 @@ In the meanwhile, it consumes Business and User data as GlobalKTable.
 KStream works like Fact table, containing large volume immutable transactional records.
 While KTable works like Dimension table, contains small volume domain data snapshot.
 The pipeline enriches Review Stream by joining with Business and User KTables in real-time to a new Kafka topic.
+Then, apply filtering, aggregations and keep the results in local state store for Interactive Queries.
+
+For example, KeyValue query on stars summed by city
+
+```
+POST localhost:8080/stars/{city}
+```
+
+Range Query on stars sumed by business in a time window
+
+```
+POST localhost:8080/stars/{business}/{from}/{to}
+```
 
 
 ## Spark Streaming
@@ -103,3 +116,8 @@ xmlSource ~> parsing ~> broadcast ~> enrich1 ~> merge ~> fillTitle ~> kafkaSink
 
 The service layer provides RESTful APIs built by Akka-Http for users to easily interact with data for ad-hoc analytics.
 Under the hood, the service calls Cassandra APIs to implement CRUD operations.
+
+
+## Machine Learning
+
+Comming Soon ......
