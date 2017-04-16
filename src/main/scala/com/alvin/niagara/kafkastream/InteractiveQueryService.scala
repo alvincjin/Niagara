@@ -43,7 +43,7 @@ class InteractiveQueryService(streams: KafkaStreams) extends AkkaJSONProtocol {
 
       }
 
-  def start = {
+  def start() = {
 
     import actorSystem.dispatcher
     //ExecutionContext
