@@ -35,7 +35,7 @@ object YelpSparkProducer extends App with Config {
 
     val businessProducer = new AvroObjectProducer(businessTopic)
 
-    businessDS.take(10000).map { r =>
+    businessDS.collect().map { r =>
       val msg = BusinessSerde.serialize(r)
       val key = r.business_id
       businessProducer.send(key, msg)

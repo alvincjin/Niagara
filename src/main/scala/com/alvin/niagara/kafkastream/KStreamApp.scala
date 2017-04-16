@@ -1,14 +1,13 @@
 package com.alvin.niagara.kafkastream
 
 import java.util.{Properties, UUID}
-import java.lang.{Double => JDouble, Long => JLong}
 
 import com.alvin.niagara.config.Config
 import com.alvin.niagara.model.{Business, Review, User}
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization._
 import org.apache.kafka.streams.{KafkaStreams, KeyValue, StreamsConfig}
-import org.apache.kafka.streams.kstream._
+import org.apache.kafka.streams.kstream.{Windowed, _}
 
 /**
   * Created by alvinjin on 2017-02-06.
@@ -20,8 +19,8 @@ object KStreamApp extends App with Config {
 
   val BUZZ_STORE = "business"
   val USER_STORE = "user"
-  val CITY_BUZZ_COUNT_STORE = "city-buzz-count"
   val STARS_CITY_STORE = "starts-per-city"
+  val STARS_WINDOWED_STORE = "starts-windowed"
 
   val settings = new Properties()
   settings.put(APPLICATION_ID_CONFIG, "KstreamApp")
@@ -31,7 +30,7 @@ object KStreamApp extends App with Config {
   settings.put(COMMIT_INTERVAL_MS_CONFIG, "10000")
   settings.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
   settings.put(STATE_DIR_CONFIG, stateDir)
-
+  settings.put(StreamsConfig.TIMESTAMP_EXTRACTOR_CLASS_CONFIG,"org.apache.kafka.streams.processor.WallclockTimestampExtractor")
 
   // We want to use `Long` (which refers to `scala.Long`) throughout this code.  However, Kafka
   // ships only with serdes for `java.lang.Long`.  The "trick" below works because there is no
@@ -39,6 +38,7 @@ object KStreamApp extends App with Config {
   // because Scala converts between `long` and `java.lang.Long` automatically.
   val longSerde: Serde[Long] = Serdes.Long().asInstanceOf[Serde[Long]]
   val stringSerde: Serde[String] = Serdes.String()
+  //val windowedStringSerde: Serde[Windowed[String]] = new WindowedSerde[String](stringSerde)
   //val longSerde: Serde[JLong] = Serdes.Long()
   val reviewSerde = new ReviewSerde()
   val businessSerde = new BusinessSerde()
@@ -50,10 +50,6 @@ object KStreamApp extends App with Config {
   val reviewStream: KStream[String, Review] = builder.stream(stringSerde, reviewSerde, reviewTopic)
   val businessTable: GlobalKTable[String, Business] = builder.globalTable(stringSerde, businessSerde, businessTopic, BUZZ_STORE)
   val userTable: GlobalKTable[String, User] = builder.globalTable(stringSerde, userSerde, userTopic, USER_STORE)
-
-
-  import KeyValueImplicits._
-
 
   //Join review stream(fact table) with business and user globalktable(dimension tables) on selected join keys, rather than the partition key
   val reviewJoinBusiness: KStream[String, ReviewBusiness] = reviewStream
@@ -90,6 +86,13 @@ object KStreamApp extends App with Config {
     .reduce((first: Long, second: Long) => first + second, STARS_CITY_STORE)
 
 
+  val BuzzStars: KStream[String, Long] = reviewJoinBusinessJoinUser.map((user_id, rbu) => (rbu.business_id, rbu.stars))
+
+  val starsPerBuss: KTable[Windowed[String], Long] = BuzzStars
+    .groupByKey(stringSerde, longSerde)
+    .reduce( (first: Long, second: Long) => first + second, TimeWindows.of(10000), STARS_WINDOWED_STORE)
+
+  //starsPerBuss.toStream.print(new Serde[Windowed[String]], longSerde)//
   starsPerCity.toStream.print(stringSerde, longSerde)
 
   val stream: KafkaStreams = new KafkaStreams(builder, settings)
@@ -97,7 +100,7 @@ object KStreamApp extends App with Config {
   stream.start()
 
   //start the Interactive Query Service
-  val qs = new QueryService(stream)
+  val qs = new InteractiveQueryService(stream)
   qs.start
 
 }
