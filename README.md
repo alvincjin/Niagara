@@ -83,13 +83,13 @@ Then, apply filtering, aggregations and keep the results in local state store fo
 For example, KeyValue query on stars summed by city
 
 ```
-POST localhost:8080/stars/{city}
+GET localhost:8080/stars/{city}
 ```
 
 Range Query on stars sumed by business in a time window
 
 ```
-POST localhost:8080/stars/{business}/{from}/{to}
+GET localhost:8080/stars/{business}/{from}/{to}
 ```
 
 
@@ -120,4 +120,4 @@ Under the hood, the service calls Cassandra APIs to implement CRUD operations.
 
 ## Machine Learning
 
-Comming Soon ......
+Coming Soon ...
