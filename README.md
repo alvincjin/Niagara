@@ -10,17 +10,17 @@
 
 Niagara is a Fast-Big Data Processing, Machine Learning, and Data-as-a-Service platform, implemented in Scala with SMACK stack.
 
-	* The language: Scala
+* The language: Scala
  
-	* The engine: Spark
+* The engine: Spark
  
-	* The container: Mesos, Docker
+* The container: Mesos, Docker
  
-	* The view: Akka
+* The view: Akka
  
-	* The storage: Cassandra
+* The storage: Cassandra
  
-	* The message broker: Kafka
+* The message broker: Kafka
  
 
 It is built on complicated public data sets to evaluate emerging data streaming and machine learning frameworks and libraries.
