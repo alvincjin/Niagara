@@ -8,7 +8,20 @@
                         ( ( __))
 </pre>
 
-Niagara is a Fast-Big Data Processing, Machine Learning, and Data-as-a-Service platform, implemented in Scala with SMACK(Spark, Mesos, Akka, Cassandra and Kafka) stack.
+Niagara is a Fast-Big Data Processing, Machine Learning, and Data-as-a-Service platform, implemented in Scala with SMACK stack.
+
+	* The language: Scala
+ 
+	* The engine: Spark
+ 
+	* The container: Mesos, Docker
+ 
+	* The view: Akka
+ 
+	* The storage: Cassandra
+ 
+	* The message broker: Kafka
+ 
 
 It is built on complicated public data sets to evaluate emerging data streaming and machine learning frameworks and libraries.
 
@@ -78,7 +91,7 @@ In the meanwhile, it consumes Business and User data as GlobalKTable.
 KStream works like Fact table, containing large volume immutable transactional records.
 While KTable works like Dimension table, contains small volume domain data snapshot.
 The pipeline enriches Review Stream by joining with Business and User KTables in real-time to a new Kafka topic.
-Then, apply filtering, aggregations and keep the results in local state store for Interactive Queries.
+Then, apply filtering, aggregations and keep the results in local state store to provide Micro-service for Interactive Queries.
 
 For example, KeyValue query on stars summed by city
 
