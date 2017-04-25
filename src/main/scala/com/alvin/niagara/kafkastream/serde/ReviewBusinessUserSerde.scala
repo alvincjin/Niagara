@@ -1,13 +1,13 @@
-package com.alvin.niagara.kafkastream
+package com.alvin.niagara.kafkastream.serde
 
 import java.io.ByteArrayOutputStream
 import java.util
+
 import org.apache.avro.Schema
 import org.apache.avro.generic._
 import org.apache.avro.io.{DecoderFactory, EncoderFactory}
 import org.apache.kafka.common.serialization.{Deserializer, Serde, Serializer}
 
-import scala.collection.JavaConversions._
 import scala.io.Source
 
 /**

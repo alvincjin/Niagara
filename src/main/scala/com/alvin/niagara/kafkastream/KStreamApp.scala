@@ -3,6 +3,7 @@ package com.alvin.niagara.kafkastream
 import java.util.{Properties, UUID}
 
 import com.alvin.niagara.config.Config
+import com.alvin.niagara.kafkastream.serde._
 import com.alvin.niagara.model.{Business, Review, User}
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization._
