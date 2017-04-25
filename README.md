@@ -134,5 +134,4 @@ Under the hood, the service calls Cassandra APIs to implement CRUD operations.
 
 
 ## CQRS & Event Sourcing
-
 Coming Soon ...
