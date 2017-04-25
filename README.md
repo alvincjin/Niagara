@@ -85,6 +85,7 @@ $ cd apache-cassandra-3.1.0
 $ ./bin/cassandra
 ```
 ## Kafka Streams
+Support event-by-event low latency model rather than one that focuses on microbatches, and deliver upstream changes to the microservice local store to serve materalized view of the microservice.
 
 A Spark core app ingests Json files and converts Json to Avro messages in Kafka topics, e.g. review, business, user.
 A Kafka streams application consumes review messages as KStream from review topic.
@@ -134,4 +135,5 @@ Under the hood, the service calls Cassandra APIs to implement CRUD operations.
 
 
 ## CQRS & Event Sourcing
-Coming Soon ...
+
+"Change Data Capture"(CDC) for capturing database table changes and streaming to Kafka Start Store.
