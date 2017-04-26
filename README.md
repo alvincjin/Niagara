@@ -134,4 +134,7 @@ Under the hood, the service calls Cassandra APIs to implement CRUD operations.
 
 
 ## CQRS & Event Sourcing
-Coming Soon ...
+
+With the distributed guarantees of Exactly Once Processing,
+Event Driven Services supported by Apache Kafka become reliable, fast and nimble, blurring the line between business system and big data pipeline.
+CDC(Chang Logs Capture) to stream the database changes from logs to Kafka State Store.
