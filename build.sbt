@@ -6,7 +6,7 @@ version := "1.1.0"
 
 lazy val versions = Map(
   "kafka" -> "0.10.2.0",
-  //"confluent" -> "3.2.0",
+  "confluent" -> "3.2.0",
   "spark" -> "2.1.0",
   "akka" -> "2.4.11"
 )
@@ -28,13 +28,14 @@ libraryDependencies ++= Seq(
   //Avro
   "com.databricks" % "spark-avro_2.10" % "3.0.1",
   "org.apache.avro" % "avro" % "1.8.1",
-  "com.twitter" %% "bijection-avro" % "0.9.5",
+  "com.sksamuel.avro4s" %% "avro4s-core" % "1.6.4",
+  //"com.twitter" %% "bijection-avro" % "0.9.5",
 
   //Kafka
   "org.apache.kafka" % "kafka-clients" % versions("kafka"),
   "org.apache.kafka" % "kafka-streams" % versions("kafka"),
-  //"io.confluent" % "kafka-avro-serializer" % versions("confluent"),
-  //"io.confluent" % "kafka-schema-registry-client" % versions("confluent"),
+  "io.confluent" % "kafka-avro-serializer" % versions("confluent"),
+  "io.confluent" % "kafka-schema-registry-client" % versions("confluent"),
 
   //Test
   "org.specs2" %% "specs2-core" % "3.6.4" % "test",

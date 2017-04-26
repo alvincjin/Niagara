@@ -1,7 +1,8 @@
-package com.alvin.niagara.kafkastream
+package com.alvin.niagara.kafkastream.serde
 
 import java.io.ByteArrayOutputStream
 import java.util
+
 import com.alvin.niagara.model.Review
 import org.apache.avro.Schema
 import org.apache.avro.generic._

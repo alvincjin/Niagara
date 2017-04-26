@@ -8,19 +8,20 @@
                         ( ( __))
 </pre>
 
-Niagara is a Fast-Big Data Processing, Machine Learning, and Data-as-a-Service platform, implemented in Scala with SMACK(Spark, Mesos, Akka, Cassandra and Kafka) stack.
+Niagara is a Fast-Big Data Processing, Machine Learning, and Data-as-a-Service platform, implemented in Scala with SMACK stack.
+It is built on complicated public data sets to evaluate emerging Stateful Stream Processing to build lightweight Streaming Services.
 
-It is built on complicated public data sets to evaluate emerging data streaming and machine learning frameworks and libraries.
+##### SMACK Tech Stack
 
-## Modules
+* The engine: Spark (Spark Core, SQL, Streaming, MLlib)
 
-* Kafka Streams
+* The container: Mesos (Docker)
 
-* Spark Streaming
+* The view: Akka (Akka Http, Streams, Alpakka)
 
-* Akka Streams
+* The storage: Cassandra
 
-* Machine Learning
+* The message broker: Kafka (Kafka Streams, Connects, Avro Schema Registry)
 
 
 ## Dataset
@@ -31,19 +32,14 @@ https://www.yelp.ca/dataset_challenge
 * The Stack Exchange Dataset contains 28 million Posts in a 40GB single XML file.
 https://archive.org/details/stackexchange
 
-## Tech Stack
 
-* Data Formats: Json, XML, Avro
+## Modules
 
-* Storage Systems: HDFS, Cassandra
+* Data Streaming (Kafka, Spark, Akka)
 
-* Messaging System: Kafka
+* CQRS & Event Sourcing
 
-* Streaming Frameworks/libs: Kafka Streams, Spark Streaming, Akka Streams
-
-* Machine Learning: MLlib, Stanford NLP, TensorFlow
-
-* The Other Libs: Kafka Connects, Alpakka, Akka-Http
+* Machine Learning
 
 
 ## Prerequisites
@@ -71,6 +67,9 @@ $ ./bin/cassandra
 ```
 ## Kafka Streams
 
+In many use cases, we have to support an event-by-event low latency model rather than one that focuses on microbatches,
+and deliver upstream changes to the materialized state store to serve microservice.
+
 A Spark core app ingests Json files and converts Json to Avro messages in Kafka topics, e.g. review, business, user.
 A Kafka streams application consumes review messages as KStream from review topic.
 In the meanwhile, it consumes Business and User data as GlobalKTable.
@@ -78,7 +77,7 @@ In the meanwhile, it consumes Business and User data as GlobalKTable.
 KStream works like Fact table, containing large volume immutable transactional records.
 While KTable works like Dimension table, contains small volume domain data snapshot.
 The pipeline enriches Review Stream by joining with Business and User KTables in real-time to a new Kafka topic.
-Then, apply filtering, aggregations and keep the results in local state store for Interactive Queries.
+Then, apply filtering, aggregations and keep the results in local state store to provide Micro-service for Interactive Queries.
 
 For example, KeyValue query on stars summed by city
 
@@ -118,6 +117,8 @@ The service layer provides RESTful APIs built by Akka-Http for users to easily i
 Under the hood, the service calls Cassandra APIs to implement CRUD operations.
 
 
-## Machine Learning
+## CQRS & Event Sourcing
 
-Coming Soon ...
+With the distributed guarantees of Exactly Once Processing, Event Driven Services supported by Apache Kafka become reliable, fast and nimble,
+blurring the line between business system and big data pipeline.
+CDC(Chang Data Capture) is an approach to stream the database changes from binlogs to Kafka State Store.

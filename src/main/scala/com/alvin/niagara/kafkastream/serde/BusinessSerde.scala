@@ -1,4 +1,4 @@
-package com.alvin.niagara.kafkastream
+package com.alvin.niagara.kafkastream.serde
 
 /**
   * Created by alvinjin on 2017-04-02.
