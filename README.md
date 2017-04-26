@@ -86,6 +86,8 @@ $ ./bin/cassandra
 ```
 ## Kafka Streams
 
+Support event-by-event low latency model rather than one that focuses on microbatches, and deliver upstream changes to the microservice local store to serve materalized view of the microservice. Using Stateful Stream Processing to build lightweight Streaming Services
+
 A Spark core app ingests Json files and converts Json to Avro messages in Kafka topics, e.g. review, business, user.
 A Kafka streams application consumes review messages as KStream from review topic.
 In the meanwhile, it consumes Business and User data as GlobalKTable.
