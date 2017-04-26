@@ -9,33 +9,19 @@
 </pre>
 
 Niagara is a Fast-Big Data Processing, Machine Learning, and Data-as-a-Service platform, implemented in Scala with SMACK stack.
+It is built on complicated public data sets to evaluate emerging Stateful Stream Processing to build lightweight Streaming Services.
 
-* The language: Scala
+##### SMACK Tech Stack
 
-* The engine: Spark
+* The engine: Spark (Spark Core, SQL, Streaming, MLlib)
 
-* The container: Mesos, Docker
+* The container: Mesos (Docker)
 
-* The view: Akka
+* The view: Akka (Akka Http, Streams, Alpakka)
 
 * The storage: Cassandra
 
-* The message broker: Kafka
-
-
-It is built on complicated public data sets to evaluate emerging data streaming and machine learning frameworks and libraries.
-
-## Modules
-
-* Kafka Streams
-
-* Spark Streaming
-
-* Akka Streams
-
-* CQRS & Event Sourcing
-
-* Machine Learning
+* The message broker: Kafka (Kafka Streams, Connects, Avro Schema Registry)
 
 
 ## Dataset
@@ -46,19 +32,14 @@ https://www.yelp.ca/dataset_challenge
 * The Stack Exchange Dataset contains 28 million Posts in a 40GB single XML file.
 https://archive.org/details/stackexchange
 
-## Tech Stack
 
-* Data Formats: Json, XML, Avro
+## Modules
 
-* Storage Systems: HDFS, Cassandra
+* Data Streaming (Kafka, Spark, Akka)
 
-* Messaging System: Kafka
+* CQRS & Event Sourcing
 
-* Streaming Frameworks/libs: Kafka Streams, Spark Streaming, Akka Streams
-
-* Machine Learning: MLlib, Stanford NLP, TensorFlow
-
-* The Other Libs: Kafka Connects, Alpakka, Akka-Http
+* Machine Learning
 
 
 ## Prerequisites
@@ -86,7 +67,8 @@ $ ./bin/cassandra
 ```
 ## Kafka Streams
 
-Support event-by-event low latency model rather than one that focuses on microbatches, and deliver upstream changes to the microservice local store to serve materalized view of the microservice. Using Stateful Stream Processing to build lightweight Streaming Services
+In many use cases, we have to support an event-by-event low latency model rather than one that focuses on microbatches,
+and deliver upstream changes to the materialized state store to serve microservice.
 
 A Spark core app ingests Json files and converts Json to Avro messages in Kafka topics, e.g. review, business, user.
 A Kafka streams application consumes review messages as KStream from review topic.
@@ -137,7 +119,6 @@ Under the hood, the service calls Cassandra APIs to implement CRUD operations.
 
 ## CQRS & Event Sourcing
 
-
-With the distributed guarantees of Exactly Once Processing,
-Event Driven Services supported by Apache Kafka become reliable, fast and nimble, blurring the line between business system and big data pipeline.
-CDC(Chang Logs Capture) to stream the database changes from logs to Kafka State Store.
+With the distributed guarantees of Exactly Once Processing, Event Driven Services supported by Apache Kafka become reliable, fast and nimble,
+blurring the line between business system and big data pipeline.
+CDC(Chang Data Capture) is an approach to stream the database changes from binlogs to Kafka State Store.
