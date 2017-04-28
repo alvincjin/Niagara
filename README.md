@@ -13,7 +13,7 @@ It is built on complicated public data sets to evaluate emerging Stateful Stream
 
 ##### SMACK Tech Stack
 
-* The engine: Spark (Spark Core, SQL, Streaming, MLlib)
+* The engine: Spark (Spark Streaming, SQL, MLlib)
 
 * The container: Mesos (Docker)
 
@@ -82,13 +82,13 @@ Then, apply filtering, aggregations and keep the results in local state store to
 For example, KeyValue query on stars summed by city
 
 ```
-GET localhost:8080/stars/{city}
+GET /stars/{city}
 ```
 
 Range Query on stars sumed by business in a time window
 
 ```
-GET localhost:8080/stars/{business}/{from}/{to}
+GET /stars/{business}/{from}/{to}
 ```
 
 
@@ -121,4 +121,5 @@ Under the hood, the service calls Cassandra APIs to implement CRUD operations.
 
 With the distributed guarantees of Exactly Once Processing, Event Driven Services supported by Apache Kafka become reliable, fast and nimble,
 blurring the line between business system and big data pipeline.
+Please check my [Big Data Blog](http://alvincjin.blogspot.ca/2017/04/event-sourcing-and-cqrs.html) for the details of CQRS & Event Sourcing.
 CDC(Chang Data Capture) is an approach to stream the database changes from binlogs to Kafka State Store.

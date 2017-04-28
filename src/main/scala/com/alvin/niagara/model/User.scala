@@ -3,6 +3,7 @@ package com.alvin.niagara.model
 import java.io.ByteArrayOutputStream
 import java.util
 
+import com.sksamuel.avro4s.AvroSchema
 import org.apache.avro.Schema
 import org.apache.avro.generic.{GenericData, GenericDatumReader, GenericDatumWriter, GenericRecord}
 import org.apache.avro.io.{DecoderFactory, EncoderFactory}
@@ -22,9 +23,7 @@ case class User(average_stars: Double, compliment_cool: Long, compliment_cute: L
 
 object UserSerde {
 
-  val avroSchema = Source.fromInputStream(getClass.getResourceAsStream("/schema/user.avsc")).mkString
-  val schema = new Schema.Parser().parse(avroSchema)
-
+  val schema: Schema = AvroSchema[User]
   val reader = new GenericDatumReader[GenericRecord](schema)
   val writer = new GenericDatumWriter[GenericRecord](schema)
 

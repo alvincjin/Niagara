@@ -3,7 +3,8 @@ package com.alvin.niagara.kafkastream.serde
 import java.io.ByteArrayOutputStream
 import java.util
 
-import com.alvin.niagara.model.Review
+import com.alvin.niagara.model.{Business, Review}
+import com.sksamuel.avro4s.AvroSchema
 import org.apache.avro.Schema
 import org.apache.avro.generic._
 import org.apache.avro.io.{DecoderFactory, EncoderFactory}
@@ -16,9 +17,7 @@ import scala.io.Source
   */
 class ReviewSerde extends Serde[Review]{
 
-  val avroSchema = Source.fromInputStream(getClass.getResourceAsStream("/schema/review.avsc")).mkString
-  val schema = new Schema.Parser().parse(avroSchema)
-
+  val schema: Schema = AvroSchema[Review]
   val reader = new GenericDatumReader[GenericRecord](schema)
   val writer = new GenericDatumWriter[GenericRecord](schema)
 
