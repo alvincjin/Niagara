@@ -8,7 +8,8 @@ lazy val versions = Map(
   "kafka" -> "0.10.2.0",
   "confluent" -> "3.2.0",
   "spark" -> "2.1.0",
-  "akka" -> "2.4.11"
+  "akka" -> "2.4.18",
+  "akka-http" -> "10.0.5"
 )
 
 scalaVersion := "2.11.8"
@@ -29,7 +30,7 @@ libraryDependencies ++= Seq(
   "com.databricks" % "spark-avro_2.10" % "3.0.1",
   "org.apache.avro" % "avro" % "1.8.1",
   "com.sksamuel.avro4s" %% "avro4s-core" % "1.6.4",
-  //"com.twitter" %% "bijection-avro" % "0.9.5",
+
 
   //Kafka
   "org.apache.kafka" % "kafka-clients" % versions("kafka"),
@@ -49,12 +50,19 @@ libraryDependencies ++= Seq(
 
   //Akka
   "com.typesafe.akka" %% "akka-stream" % versions("akka"),
-  "com.typesafe.akka" %% "akka-http-experimental" % versions("akka"),
-  "com.typesafe.akka" %% "akka-http-spray-json-experimental" % versions("akka"),
-  "com.typesafe.akka" %% "akka-http-testkit-experimental" % "2.4.2-RC3",
+  "com.typesafe.akka" %% "akka-persistence" % versions("akka"),
+  "com.typesafe.akka" %% "akka-persistence-query-experimental"  % versions("akka"),
+
+  "com.typesafe.akka" %% "akka-http" % versions("akka-http"),
+  "com.typesafe.akka" %% "akka-http-spray-json" % versions("akka-http"),
+  "com.typesafe.akka" %% "akka-http-testkit" % versions("akka-http"),
+
   "com.typesafe.akka" %% "akka-stream-kafka" % "0.13",
   "com.lightbend.akka" %% "akka-stream-alpakka-cassandra" % "0.6",
   "com.lightbend.akka" %% "akka-stream-alpakka-file" % "0.6",
+
+  "org.iq80.leveldb" % "leveldb" % "0.9",
+  "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8",
 
   "org.scala-lang.modules" %% "scala-xml" % "1.0.6",
   "com.typesafe.slick" %% "slick" % "3.1.0",

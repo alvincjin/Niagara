@@ -1,19 +1,10 @@
-<pre>
- ____  _____   _
-|_   \|_   _| (_)
-  |   \ | |   __   ,--.   .--./) ,--.   _ .--.  ,--.
-  | |\ \| |  [  | `'_\ : / /'`\;`'_\ : [ `/'`\]`'_\ :
- _| |_\   |_  | | // | |,\ \._//// | |, | |    // | |,
-|_____|\____|[___]\'-;__/.',__` \'-;__/[___]   \'-;__/
-                        ( ( __))
-</pre>
 
 Niagara is a Fast-Big Data Processing, Machine Learning, and Data-as-a-Service platform, implemented in Scala with SMACK stack.
 It is built on complicated public data sets to evaluate emerging Stateful Stream Processing to build lightweight Streaming Services.
 
-##### SMACK Tech Stack
+#### SMACK Tech Stack
 
-* The engine: Spark (Spark Core, SQL, Streaming, MLlib)
+* The engine: Spark (Spark Streaming, SQL, MLlib)
 
 * The container: Mesos (Docker)
 
@@ -50,12 +41,21 @@ Please check the steps in my [Big Data Blog](http://alvincjin.blogspot.ca/2017/0
 
 #### Install Kafka and Zookeeper
 
-Download and unzip [Kafka 0.10.2+](http://mirror.dsrg.utoronto.ca/apache/kafka/0.10.2.0/kafka_2.11-0.10.2.0.tgz)
+Download and unzip [Confluent-3.2+](https://www.confluent.io/download/#download-center)
 ```
-$ cd kafka_2.11-0.10.2.0/
-$ ./bin/zookeeper-server-start.sh config/zookeeper.properties
-$ ./bin/kafka-server-start.sh config/server.properties
-$ ./bin/kafka-topics --zookeeper localhost:2181 --create --topic post
+$ cd /pathto/confluent-3.2.0/
+//start Zookeeper
+$ ./bin/zookeeper-server-start etc/kafka/zookeeper.properties
+
+//start Kafka
+$ ./bin/kafka-server-start etc/kafka/server.properties
+
+//start Schema Registry
+$ ./bin/schema-registry-start etc/schema-registry/schema-registry.properties
+
+//start Kafka Connect
+./bin/connect-distributed etc/kafka/connect-distributed.properties
+
 ```
 
 #### Install Cassandra
@@ -71,6 +71,22 @@ In many use cases, we have to support an event-by-event low latency model rather
 and deliver upstream changes to the materialized state store to serve microservice.
 
 A Spark core app ingests Json files and converts Json to Avro messages in Kafka topics, e.g. review, business, user.
+
+Start Kafka Connect worker, and then post a file source connector configuration map.
+```
+POST localhost:8083/connectors
+{
+"name":"load-kafka-config",
+"config":{
+"connector.class":"FileStreamSource",
+"file":"~/IdeaProjects/Niagara/data/yelp/yelp_academic_dataset_business.json",
+"topic":"kafka-config-topic"
+}
+}
+```
+
+
+
 A Kafka streams application consumes review messages as KStream from review topic.
 In the meanwhile, it consumes Business and User data as GlobalKTable.
 
@@ -82,13 +98,13 @@ Then, apply filtering, aggregations and keep the results in local state store to
 For example, KeyValue query on stars summed by city
 
 ```
-GET localhost:8080/stars/{city}
+GET /stars/{city}
 ```
 
 Range Query on stars sumed by business in a time window
 
 ```
-GET localhost:8080/stars/{business}/{from}/{to}
+GET /stars/{business}/{from}/{to}
 ```
 
 
@@ -120,5 +136,6 @@ Under the hood, the service calls Cassandra APIs to implement CRUD operations.
 ## CQRS & Event Sourcing
 
 With the distributed guarantees of Exactly Once Processing, Event Driven Services supported by Apache Kafka become reliable, fast and nimble,
-blurring the line between business system and big data pipeline.
+blurring the line between transactional business system and big data pipeline.
+Please check my [Blog Post](http://alvincjin.blogspot.ca/2017/04/event-sourcing-and-cqrs.html) for the details of CQRS & Event Sourcing.
 CDC(Chang Data Capture) is an approach to stream the database changes from binlogs to Kafka State Store.

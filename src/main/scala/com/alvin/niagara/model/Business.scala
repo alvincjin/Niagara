@@ -3,6 +3,7 @@ package com.alvin.niagara.model
 import java.io.ByteArrayOutputStream
 import java.util
 
+import com.sksamuel.avro4s.AvroSchema
 import org.apache.avro.Schema
 import org.apache.avro.generic.{GenericData, GenericDatumReader, GenericDatumWriter, GenericRecord}
 import org.apache.avro.io.{DecoderFactory, EncoderFactory}
@@ -21,9 +22,7 @@ case class Business(address: String, attributes: Option[Seq[String]], business_i
 
 object BusinessSerde {
 
-  val avroSchema = Source.fromInputStream(getClass.getResourceAsStream("/schema/business.avsc")).mkString
-  val schema = new Schema.Parser().parse(avroSchema)
-
+  val schema: Schema = AvroSchema[Business]
   val reader = new GenericDatumReader[GenericRecord](schema)
   val writer = new GenericDatumWriter[GenericRecord](schema)
 
