@@ -1,17 +1,8 @@
-<pre>
- ____  _____   _
-|_   \|_   _| (_)
-  |   \ | |   __   ,--.   .--./) ,--.   _ .--.  ,--.
-  | |\ \| |  [  | `'_\ : / /'`\;`'_\ : [ `/'`\]`'_\ :
- _| |_\   |_  | | // | |,\ \._//// | |, | |    // | |,
-|_____|\____|[___]\'-;__/.',__` \'-;__/[___]   \'-;__/
-                        ( ( __))
-</pre>
 
 Niagara is a Fast-Big Data Processing, Machine Learning, and Data-as-a-Service platform, implemented in Scala with SMACK stack.
 It is built on complicated public data sets to evaluate emerging Stateful Stream Processing to build lightweight Streaming Services.
 
-##### SMACK Tech Stack
+#### SMACK Tech Stack
 
 * The engine: Spark (Spark Streaming, SQL, MLlib)
 
@@ -148,9 +139,3 @@ With the distributed guarantees of Exactly Once Processing, Event Driven Service
 blurring the line between transactional business system and big data pipeline.
 Please check my [Blog Post](http://alvincjin.blogspot.ca/2017/04/event-sourcing-and-cqrs.html) for the details of CQRS & Event Sourcing.
 CDC(Chang Data Capture) is an approach to stream the database changes from binlogs to Kafka State Store.
-
-Kafka for Event Sourcing is not a good idea.
-
-Kafka is not a database, not designed to query
-Kafka is not possible to reply events, filtering particular aggregate root.
-Create topic per aggregate root will lead to a huge number of topics/partitions.
