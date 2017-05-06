@@ -13,11 +13,26 @@ import org.apache.avro.generic.GenericRecord
 /**
   * Created by alvinjin on 2017-05-05.
   */
-object GenericAvroConsumer extends App with Config {
 
-  def createConsumerConfig(brokers: String, groupId: String): Properties = {
+object ConsumerApp extends App {
+
+  val consumer = new GenericAvroConsumer("group1", "topic3")
+
+  consumer.run()
+
+  //consumer.shutdown()
+
+}
+
+class GenericAvroConsumer(groupId: String, topic: String) extends Config {
+
+  val props = createConsumerConfig(groupId)
+  val consumer = new KafkaConsumer[String, GenericRecord](props)
+
+
+  def createConsumerConfig(groupId: String): Properties = {
     val props = new Properties()
-    props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers)
+    props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList)
     props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId)
     props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true")
     props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
@@ -32,41 +47,26 @@ object GenericAvroConsumer extends App with Config {
   }
 
 
+  def run() = {
 
+    consumer.subscribe(Collections.singletonList(topic))
 
-  val topic = "topic1"
-
-  val topicCountMap = new util.HashMap[String, Integer]()
-  topicCountMap.put(topic, new Integer(1))
-
-  val props = createConsumerConfig(brokerList, "test3")
-  val vProps = new VerifiableProperties(props)
-  //val keyDecoder = new KafkaAvroDecoder(vProps)
-  //val valueDecoder = new KafkaAvroDecoder(vProps)
-
-  val consumer = new KafkaConsumer[String, GenericRecord](props)
-
-  consumer.subscribe(Collections.singletonList(topic))
-  /*
-  Executors.newSingleThreadExecutor.execute(new Runnable {
-    override def run(): Unit = {
-      while (true) {
-        val records = consumer.poll(1000)
-
-        for (record: ConsumerRecord[String, Object] <- records)
-        System.out.printf("offset = %d, key = %s, value = %s\n",
-          record.offset(), record.key(), record.value().toString)
-      }
-      }
-
-  })
-*/
-  val records: ConsumerRecords[String, GenericRecord] = consumer.poll(1000)
-  for (record:ConsumerRecord[String, GenericRecord] <- records) {
-    val avroRecord = record.value()
-    val myRecord = MyRecord(avroRecord.get("f1").toString)
-    println(myRecord)
+    Executors.newSingleThreadExecutor.execute(
+      new Runnable { override def run(): Unit = {
+          while (true) {
+            val records: ConsumerRecords[String, GenericRecord] = consumer.poll(1000)
+            for (record: ConsumerRecord[String, GenericRecord] <- records) {
+              val avroRecord = record.value()
+              val myRecord = MyRecord(avroRecord.get("f1").toString)
+              println(myRecord)
+            }
+          }}}
+    )
   }
 
-  consumer.close()
+  def shutdown() = {
+    if (consumer != null)
+      consumer.close()
+  }
+
 }
