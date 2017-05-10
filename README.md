@@ -1,18 +1,18 @@
 
-Niagara is a Fast-Big Data Processing, Machine Learning, and Data-as-a-Service platform, implemented in Scala with SMACK stack.
+Niagara is a Fast & Big Data Processing, Machine Learning, and Data-as-a-Service platform, implemented in Scala with SDACK stack.
 It is built on complicated public data sets to evaluate emerging Stateful Stream Processing to build lightweight Streaming Services.
 
 #### SMACK Tech Stack
 
-* The engine: Spark (Spark Streaming, SQL, MLlib)
+* The batch analytic engine: Spark (Spark Streaming, SQL, MLlib)
 
-* The container: Mesos (Docker)
+* The lightweight container: Docker (Kubernetes)
 
-* The view: Akka (Akka Http, Streams, Alpakka)
+* The real-time view: Akka (Akka Streams, Http, Alpakka)
 
-* The storage: Cassandra
+* The scalable storage: Cassandra
 
-* The message broker: Kafka (Kafka Streams, Connects, Avro Schema Registry)
+* The distributed message broker: Kafka (Kafka Streams, Connects, Schema Registry)
 
 
 ## Dataset
@@ -53,9 +53,6 @@ $ ./bin/kafka-server-start etc/kafka/server.properties
 //start Schema Registry
 $ ./bin/schema-registry-start etc/schema-registry/schema-registry.properties
 
-//start Kafka Connect
-./bin/connect-distributed etc/kafka/connect-distributed.properties
-
 ```
 
 #### Install Cassandra
@@ -71,21 +68,6 @@ In many use cases, we have to support an event-by-event low latency model rather
 and deliver upstream changes to the materialized state store to serve microservice.
 
 A Spark core app ingests Json files and converts Json to Avro messages in Kafka topics, e.g. review, business, user.
-
-Start Kafka Connect worker, and then post a file source connector configuration map.
-```
-POST localhost:8083/connectors
-{
-"name":"load-kafka-config",
-"config":{
-"connector.class":"FileStreamSource",
-"file":"~/IdeaProjects/Niagara/data/yelp/yelp_academic_dataset_business.json",
-"topic":"kafka-config-topic"
-}
-}
-```
-
-
 
 A Kafka streams application consumes review messages as KStream from review topic.
 In the meanwhile, it consumes Business and User data as GlobalKTable.
