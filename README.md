@@ -39,19 +39,33 @@ https://archive.org/details/stackexchange
 
 Please check the steps in my [Big Data Blog](http://alvincjin.blogspot.ca/2017/01/install-java-and-scala-in-ubuntu.html)
 
-#### Install Kafka and Zookeeper
+#### Create Kafka and Zookeeper Docker Containers
 
-Download and unzip [Confluent-3.2+](https://www.confluent.io/download/#download-center)
+Install Docker for Mac OS, then run containers
+
 ```
-$ cd /pathto/confluent-3.2.0/
-//start Zookeeper
-$ ./bin/zookeeper-server-start etc/kafka/zookeeper.properties
+$ docker run -d \
+      --net=host \
+      --name=zookeeper \
+      -e ZOOKEEPER_CLIENT_PORT=32181 \
+      confluentinc/cp-zookeeper
 
-//start Kafka
-$ ./bin/kafka-server-start etc/kafka/server.properties
+$ docker run -d \
+    --net=host \
+    --add-host=moby:127.0.0.1 \
+    --name=kafka \
+    -e KAFKA_ZOOKEEPER_CONNECT=127.0.0.1:32181 \
+    -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:29092 \
+    confluentinc/cp-kafka
 
-//start Schema Registry
-$ ./bin/schema-registry-start etc/schema-registry/schema-registry.properties
+$ docker run -d \
+  --net=host \
+  --add-host=moby:127.0.0.1 \
+  --name=schema-registry \
+  -e SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=127.0.0.1:32181 \
+  -e SCHEMA_REGISTRY_HOST_NAME=127.0.0.1\
+  -e SCHEMA_REGISTRY_LISTENERS=http://0.0.0.0:8081\
+  confluentinc/cp-schema-registry
 
 ```
 
