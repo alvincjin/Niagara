@@ -1,13 +1,11 @@
 package com.alvin.niagara.util
 
-import java.util
 import java.util.concurrent.Executors
 import java.util.{Collections, Properties}
 import collection.JavaConversions._
 import com.alvin.niagara.config.Config
-import io.confluent.kafka.serializers.{AbstractKafkaAvroSerDeConfig, KafkaAvroDeserializer}
+import io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig
 import org.apache.kafka.clients.consumer._
-import kafka.utils.VerifiableProperties
 import org.apache.avro.generic.GenericRecord
 
 /**
@@ -41,7 +39,7 @@ class GenericAvroConsumer(groupId: String, topic: String) extends Config {
     props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "30000")
     props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer")
     props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "io.confluent.kafka.serializers.KafkaAvroDeserializer")
-    props.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081")
+    props.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistry)
 
     props
   }

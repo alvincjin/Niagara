@@ -19,8 +19,9 @@ trait Config {
 
   val kafkaConfig = appConfig.getConfig("kafka")
   val brokerList = kafkaConfig.getString("brokerList")
-  //val schemaRegistry = kafkaConfig.getString("schemaRegistry")
-  //val zookeeperHost = kafkaConfig.getString("zookeeper")
+  val schemaRegistry = kafkaConfig.getString("schemaRegistry")
+  val zookeeperHost = kafkaConfig.getString("zookeeper")
+
   val postTopic = kafkaConfig.getString("topic.post")
   val businessTopic = kafkaConfig.getString("topic.business")
   val checkinTopic = kafkaConfig.getString("topic.checkin")

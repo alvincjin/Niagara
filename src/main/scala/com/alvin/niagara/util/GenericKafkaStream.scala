@@ -36,10 +36,10 @@ object GenericKafkaStream extends App with Config {
 
   val schemaRegistryUrl = "http://localhost:8081"
   //val longSerde: Serde[Long] = Serdes.Long
-  val schemaRegistry: CachedSchemaRegistryClient = new CachedSchemaRegistryClient(schemaRegistryUrl, 100)
+  val schemaRegistryCli: CachedSchemaRegistryClient = new CachedSchemaRegistryClient(schemaRegistryUrl, 100)
   val serdeProps = Collections.singletonMap("schema.registry.url", schemaRegistryUrl)
   // create and configure the SpecificAvroSerdes required in this example
-  val playEventSerde: SpecificAvroSerde[MyRecord] = new SpecificAvroSerde(schemaRegistry, serdeProps)
+  val playEventSerde: SpecificAvroSerde[MyRecord] = new SpecificAvroSerde(schemaRegistryCli, serdeProps)
   playEventSerde.configure(serdeProps, false)
 
   val builder: KStreamBuilder = new KStreamBuilder()
