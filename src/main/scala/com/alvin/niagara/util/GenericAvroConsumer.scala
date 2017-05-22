@@ -1,13 +1,11 @@
 package com.alvin.niagara.util
 
-import java.util
 import java.util.concurrent.Executors
 import java.util.{Collections, Properties}
 import collection.JavaConversions._
 import com.alvin.niagara.config.Config
-import io.confluent.kafka.serializers.{AbstractKafkaAvroSerDeConfig, KafkaAvroDeserializer}
+import io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig
 import org.apache.kafka.clients.consumer._
-import kafka.utils.VerifiableProperties
 import org.apache.avro.generic.GenericRecord
 
 /**
@@ -34,14 +32,14 @@ class GenericAvroConsumer(groupId: String, topic: String) extends Config {
     val props = new Properties()
     props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList)
     props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId)
-    props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false)
+    props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false")
     props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
     props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000")
 
     props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "30000")
     props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer")
     props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "io.confluent.kafka.serializers.KafkaAvroDeserializer")
-    props.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081")
+    props.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistry)
 
     props
   }

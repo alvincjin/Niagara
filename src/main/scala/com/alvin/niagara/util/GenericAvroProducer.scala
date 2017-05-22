@@ -24,10 +24,10 @@ object ProducerApp extends App {
   val schema: Schema = AvroSchema[MyRecord]
 
   val avroRecord = new GenericData.Record(schema)
+
   avroRecord.put("f1", "value3")
 
   producer.send("key2", avroRecord)
-
 
   producer.close()
 
@@ -51,7 +51,7 @@ class GenericAvroProducer(topic: String) extends Config {
       "io.confluent.kafka.serializers.KafkaAvroSerializer")
     props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
       "io.confluent.kafka.serializers.KafkaAvroSerializer")
-    props.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081")
+    props.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistry)
 
     props
   }

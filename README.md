@@ -2,7 +2,7 @@
 Niagara is a Fast & Big Data Processing, Machine Learning, and Data-as-a-Service platform, implemented in Scala with SDACK stack.
 It is built on complicated public data sets to evaluate emerging Stateful Stream Processing to build lightweight Streaming Services.
 
-#### SMACK Tech Stack
+#### SDACK Tech Stack
 
 * The batch analytic engine: Spark (Spark Streaming, SQL, MLlib)
 
@@ -41,31 +41,17 @@ Please check the steps in my [Big Data Blog](http://alvincjin.blogspot.ca/2017/0
 
 #### Create Kafka and Zookeeper Docker Containers
 
-Install Docker for Mac OS, then run containers
+Install Docker for Mac OS, then create 3 containers for Zookeeper, Kafka broker and Schema Registry, respectively.
 
 ```
-$ docker run -d \
-      --net=host \
-      --name=zookeeper \
-      -e ZOOKEEPER_CLIENT_PORT=32181 \
-      confluentinc/cp-zookeeper
+$ cd ~/pathto/Niagara
 
-$ docker run -d \
-    --net=host \
-    --add-host=moby:127.0.0.1 \
-    --name=kafka \
-    -e KAFKA_ZOOKEEPER_CONNECT=127.0.0.1:32181 \
-    -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:29092 \
-    confluentinc/cp-kafka
+//Start containers
+$ docker-compose up
 
-$ docker run -d \
-  --net=host \
-  --add-host=moby:127.0.0.1 \
-  --name=schema-registry \
-  -e SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=127.0.0.1:32181 \
-  -e SCHEMA_REGISTRY_HOST_NAME=127.0.0.1\
-  -e SCHEMA_REGISTRY_LISTENERS=http://0.0.0.0:8081\
-  confluentinc/cp-schema-registry
+
+//Stop containers and remove them entirely
+$ docker-compose down
 
 ```
 

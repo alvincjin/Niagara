@@ -1,6 +1,7 @@
+enablePlugins(DockerPlugin)
 
-name := "Niagara"
-
+name := "niagara"
+organization := "alvincjin"
 version := "1.1.0"
 
 
@@ -77,11 +78,41 @@ assemblyJarName in assembly := s"${name.value}-${version.value}.jar"
 
 test in assembly := {}
 
+mainClass in assembly := Some("com.alvin.niagara.util.ConsumerApp")
+
 assemblyMergeStrategy in assembly := {
   case PathList("META-INF", xs @ _*) => MergeStrategy.discard
   case "application.conf"            => MergeStrategy.concat
   case x => MergeStrategy.first
 }
+
+dockerfile in docker := {
+  // The assembly task generates a fat JAR file
+  val artifact: File = assembly.value
+  println(artifact.getPath)
+  val artifactTargetPath = s"/app/${artifact.name}"
+  val mainclass = mainClass.in(assembly).value.getOrElse(sys.error("Expected exactly one main class"))
+
+  new Dockerfile {
+    from("anapsix/alpine-java")
+    copy(artifact, artifactTargetPath)
+
+    expose(8080)
+    entryPoint("java", "-jar", artifactTargetPath, mainclass)
+  }
+}
+
+imageNames in docker := Seq(
+  // Sets the latest tag
+  ImageName(s"${organization.value}/${name.value}:latest"),
+
+  // Sets a name with a tag that contains the project version
+  ImageName(
+    namespace = Some(organization.value),
+    repository = name.value,
+    tag = Some("v" + version.value)
+  )
+)
 
 scalacOptions := Seq("-unchecked", "-deprecation", "-Xexperimental")
 
