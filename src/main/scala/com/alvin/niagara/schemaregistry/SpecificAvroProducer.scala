@@ -1,13 +1,11 @@
-package com.alvin.niagara.util
+package com.alvin.niagara.schemaregistry
 
 import java.util.Properties
+
+import com.alvin.niagara.Employee
 import com.alvin.niagara.config.Config
-import com.sksamuel.avro4s.AvroSchema
 import io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig
-import org.apache.avro.Schema
-import org.apache.avro.generic.{GenericData, GenericRecord}
-import org.apache.kafka.clients.producer._
-import org.apache.kafka.clients.producer.KafkaProducer
+import org.apache.kafka.clients.producer.{KafkaProducer, _}
 import org.apache.kafka.common.errors.SerializationException
 import org.apache.log4j.Logger
 
@@ -19,13 +17,9 @@ import org.apache.log4j.Logger
 
 object ProducerApp extends App {
 
-  val producer = new GenericAvroProducer("topic3")
+  val producer = new GenericAvroProducer("topic5")
 
-  val schema: Schema = AvroSchema[MyRecord]
-
-  val avroRecord = new GenericData.Record(schema)
-
-  avroRecord.put("f1", "value3")
+  val avroRecord = new Employee("alvin", "jin", 100, "345-566-3445")
 
   producer.send("key2", avroRecord)
 
@@ -38,7 +32,7 @@ class GenericAvroProducer(topic: String) extends Config {
   val logger = Logger.getLogger(this.getClass)
 
   val props = createProducerConfig()
-  var producer = new KafkaProducer[String, GenericRecord](props)
+  var producer = new KafkaProducer[String, Employee](props)
 
   def createProducerConfig(): Properties = {
 
@@ -57,9 +51,9 @@ class GenericAvroProducer(topic: String) extends Config {
   }
 
 
-  def send(key: String, value: GenericRecord) = {
+  def send(key: String, value: Employee) = {
 
-    val record: ProducerRecord[String, GenericRecord] = new ProducerRecord(topic, key, value)
+    val record: ProducerRecord[String, Employee] = new ProducerRecord(topic, key, value)
 
     try {
       producer.send(record)

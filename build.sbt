@@ -1,5 +1,6 @@
 enablePlugins(DockerPlugin)
 
+
 name := "niagara"
 organization := "alvincjin"
 version := "1.1.0"
@@ -121,6 +122,10 @@ resolvers ++= Seq(
   "confluent" at "http://packages.confluent.io/maven/",
   "Typesafe Simple Repository" at "http://repo.typesafe.com/typesafe/simple/maven-releases/"
 )
+
+//Compile avsc to Scala class
+sbtavrohugger.SbtAvrohugger.specificAvroSettings
+(scalaSource in avroConfig) :=  baseDirectory.value / "/src/compiledavro"
 
 dependencyOverrides ++= Set(
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.6.7",
