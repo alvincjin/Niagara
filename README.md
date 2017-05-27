@@ -62,6 +62,21 @@ Download and unzip [Cassandra 3.1.0+](http://apache.forsale.plus/cassandra/3.10/
 $ cd apache-cassandra-3.1.0
 $ ./bin/cassandra
 ```
+
+
+## Build and Run the App
+
+
+Use [sbt-avrohugger](https://github.com/julianpeeters/sbt-avrohugger) to automatically generate SpecificRecord case class from avro schema.
+```
+$ sbt avro:generate-specific
+```
+
+Build an uber jar with all the dependencies.
+```
+$ sbt clean assembly
+```
+
 ## Kafka Streams
 
 In many use cases, we have to support an event-by-event low latency model rather than one that focuses on microbatches,

@@ -1,14 +1,11 @@
-package com.alvin.niagara.util
+package com.alvin.niagara.schemaregistry
 
 import java.util.Properties
 
 import com.alvin.niagara.Employee
 import com.alvin.niagara.config.Config
-import com.sksamuel.avro4s.AvroSchema
 import io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig
-import org.apache.avro.Schema
-import org.apache.kafka.clients.producer._
-import org.apache.kafka.clients.producer.KafkaProducer
+import org.apache.kafka.clients.producer.{KafkaProducer, _}
 import org.apache.kafka.common.errors.SerializationException
 import org.apache.log4j.Logger
 
@@ -20,9 +17,7 @@ import org.apache.log4j.Logger
 
 object ProducerApp extends App {
 
-  val producer = new GenericAvroProducer("topic4")
-
-  val schema: Schema = AvroSchema[MyRecord]
+  val producer = new GenericAvroProducer("topic5")
 
   val avroRecord = new Employee("alvin", "jin", 100, "345-566-3445")
 
