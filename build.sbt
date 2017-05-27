@@ -2,8 +2,8 @@ enablePlugins(DockerPlugin)
 
 
 name := "niagara"
-organization := "alvincjin"
-version := "1.1.0"
+organization := "intellidata"
+version := "1.2.0"
 
 
 lazy val versions = Map(
