@@ -21,16 +21,19 @@ trait Config {
   val brokerList = kafkaConfig.getString("brokerList")
   val schemaRegistry = kafkaConfig.getString("schemaRegistry")
   val zookeeperHost = kafkaConfig.getString("zookeeper")
-
-  val postTopic = kafkaConfig.getString("topic.post")
-  val businessTopic = kafkaConfig.getString("topic.business")
-  val checkinTopic = kafkaConfig.getString("topic.checkin")
-  val reviewTopic = kafkaConfig.getString("topic.review")
-  val tipTopic = kafkaConfig.getString("topic.tip")
-  val userTopic = kafkaConfig.getString("topic.user")
-  val reviewBusinessUserTopic = kafkaConfig.getString("topic.reviewBusinessUser")
-
   val stateDir = kafkaConfig.getString("stateDir")
+
+  val topicConfig = kafkaConfig.getConfig("topic")
+  val postTopic = topicConfig.getString("post")
+  val businessTopic = topicConfig.getString("business")
+  val checkinTopic = topicConfig.getString("checkin")
+  val reviewTopic = topicConfig.getString("review")
+  val tipTopic = topicConfig.getString("tip")
+  val userTopic = topicConfig.getString("user")
+  val reviewBusinessUserTopic = topicConfig.getString("reviewBusinessUser")
+  val employeeTopic = topicConfig.getString("employee")
+
+
 
   val cassandraConfig = appConfig.getConfig("cassandra")
   val hosts: List[String] = cassandraConfig.getStringList("hostList").toList
@@ -41,13 +44,6 @@ trait Config {
   val stackInputPath = appConfig.getString("stackInputPath")
   val outputPath = appConfig.getString("outputPath")
   val yelpInputPath = appConfig.getString("yelpInputPath")
-
-  val twitterConfig = appConfig.getConfig("twitter")
-  val consumerKey = twitterConfig.getString("consumer.key")
-  val consumerSecret = twitterConfig.getString("consumer.secret")
-  val accessKey = twitterConfig.getString("access.key")
-  val accessSecret = twitterConfig.getString("access.secret")
-
 
 }
 

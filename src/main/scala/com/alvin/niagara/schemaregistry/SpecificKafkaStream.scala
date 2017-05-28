@@ -41,7 +41,7 @@ object SpecificKafkaStream extends App with Config {
   employeeSerde.configure(serdeProps, false)
 
   val builder: KStreamBuilder = new KStreamBuilder()
-  val playEvents: KStream[String, Employee] = builder.stream(Serdes.String, employeeSerde, "topic5")
+  val playEvents: KStream[String, Employee] = builder.stream(Serdes.String, employeeSerde, employeeTopic)
 
   playEvents.print(Serdes.String, employeeSerde)
 

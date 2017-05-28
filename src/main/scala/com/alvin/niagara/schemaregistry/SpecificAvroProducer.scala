@@ -15,9 +15,9 @@ import org.apache.log4j.Logger
   */
 
 
-object ProducerApp extends App {
+object ProducerApp extends App with Config {
 
-  val producer = new GenericAvroProducer("topic5")
+  val producer = new GenericAvroProducer(employeeTopic)
 
   val avroRecord = new Employee("alvin", "jin", 100, "345-566-3445")
 
