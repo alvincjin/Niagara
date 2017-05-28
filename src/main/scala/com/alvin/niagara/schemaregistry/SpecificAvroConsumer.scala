@@ -13,9 +13,9 @@ import scala.collection.JavaConversions._
   * Created by alvinjin on 2017-05-05.
   */
 
-object ConsumerApp extends App {
+object ConsumerApp extends App with Config {
 
-  val consumer = new GenericAvroConsumer("group1", "topic5")
+  val consumer = new GenericAvroConsumer("group1", employeeTopic)
 
   consumer.run()
 

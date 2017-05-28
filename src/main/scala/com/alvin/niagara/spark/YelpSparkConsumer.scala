@@ -1,15 +1,15 @@
-package com.alvin.niagara.sparkstreaming
+package com.alvin.niagara.spark
 
 import java.util.UUID
 
 import com.alvin.niagara.config.Config
 import com.alvin.niagara.model._
-import org.apache.spark._
 import org.apache.kafka.common.serialization._
+import org.apache.spark._
+import org.apache.spark.streaming._
+import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
 import org.apache.spark.streaming.kafka010.KafkaUtils
 import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent
-import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
-import org.apache.spark.streaming._
 
 /**
   * Created by alvinjin on 2017-03-15.
