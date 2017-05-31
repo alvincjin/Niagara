@@ -26,7 +26,7 @@ libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-sql" % versions("spark"),
   "org.apache.spark" %% "spark-mllib" % versions("spark"),
   "org.apache.spark" % "spark-streaming-kafka-0-10_2.11" % versions("spark"),
-
+  "databricks" % "tensorframes" % "0.2.8-s_2.11",
 
   //Avro
   "com.databricks" % "spark-avro_2.10" % "3.0.1",
@@ -119,7 +119,8 @@ scalacOptions := Seq("-unchecked", "-deprecation", "-Xexperimental")
 
 resolvers ++= Seq(
   "confluent" at "http://packages.confluent.io/maven/",
-  "Typesafe Simple Repository" at "http://repo.typesafe.com/typesafe/simple/maven-releases/"
+  "Typesafe Simple Repository" at "http://repo.typesafe.com/typesafe/simple/maven-releases/",
+  "Databricks" at "https://dl.bintray.com/spark-packages/maven/"
 )
 
 //Compile avsc to Scala class
