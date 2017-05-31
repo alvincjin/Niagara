@@ -107,12 +107,12 @@
         }, 
         {
             "location": "/about/", 
-            "text": "About\n\n\nAlvin Jin is Sr. Big Data \n Machine Learning Tech Lead @Toronto\n:fireworks:\nEmail: alvincjin@gmail.com", 
+            "text": "About\n\n\nAlvin Jin is a Sr. Big Data \n Machine Learning Tech Lead in Toronto, Canada.\n\n\nEmail: alvincjin@gmail.com", 
             "title": "About"
         }, 
         {
             "location": "/about/#about", 
-            "text": "Alvin Jin is Sr. Big Data   Machine Learning Tech Lead @Toronto\n:fireworks:\nEmail: alvincjin@gmail.com", 
+            "text": "Alvin Jin is a Sr. Big Data   Machine Learning Tech Lead in Toronto, Canada.  Email: alvincjin@gmail.com", 
             "title": "About"
         }
     ]
