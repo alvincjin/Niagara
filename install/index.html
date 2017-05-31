@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>About - Niagara Platform</title>
+  <title>Installation - Niagara Platform</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,9 +17,9 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "About";
-    var mkdocs_page_input_path = "about.md";
-    var mkdocs_page_url = "/about/";
+    var mkdocs_page_name = "Installation";
+    var mkdocs_page_input_path = "install.md";
+    var mkdocs_page_url = "/install/";
   </script>
   
   <script src="../js/jquery-2.1.1.min.js"></script>
@@ -52,9 +52,28 @@
     <a class="" href="..">Home</a>
 	    </li>
           
-            <li class="toctree-l1">
+            <li class="toctree-l1 current">
 		
-    <a class="" href="../install/">Installation</a>
+    <a class="current" href="./">Installation</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#installation">Installation</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#install-java-8-and-scala-211-in-ubuntu">Install Java 8 and Scala 2.11 in Ubuntu</a></li>
+        
+            <li><a class="toctree-l3" href="#create-kafka-and-zookeeper-docker-containers">Create Kafka and Zookeeper Docker Containers</a></li>
+        
+            <li><a class="toctree-l3" href="#install-cassandra">Install Cassandra</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l2"><a href="#build-and-run-the-app">Build and Run the App</a></li>
+    
+
+    </ul>
 	    </li>
           
             <li class="toctree-l1">
@@ -72,15 +91,9 @@
     <a class="" href="../ml/">Machine Learning</a>
 	    </li>
           
-            <li class="toctree-l1 current">
+            <li class="toctree-l1">
 		
-    <a class="current" href="./">About</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l2"><a href="#about">About</a></li>
-    
-
-    </ul>
+    <a class="" href="../about/">About</a>
 	    </li>
           
         </ul>
@@ -105,10 +118,10 @@
     
       
     
-    <li>About</li>
+    <li>Installation</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/AlvinCJin/Niagara/edit/master/docs/about.md"
+        <a href="https://github.com/AlvinCJin/Niagara/edit/master/docs/install.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -118,7 +131,36 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="about">About</h1>
+                <h2 id="installation">Installation</h2>
+<h4 id="install-java-8-and-scala-211-in-ubuntu">Install Java 8 and Scala 2.11 in Ubuntu</h4>
+<p>Please check the steps in my <a href="http://alvincjin.blogspot.ca/2017/01/install-java-and-scala-in-ubuntu.html">Big Data Blog</a></p>
+<h4 id="create-kafka-and-zookeeper-docker-containers">Create Kafka and Zookeeper Docker Containers</h4>
+<p>Install Docker for Mac OS, then create 3 containers for Zookeeper, Kafka broker and Schema Registry, respectively.</p>
+<pre><code>$ cd ~/pathto/Niagara
+
+//Start containers
+$ docker-compose up
+
+
+//Stop containers and remove them entirely
+$ docker-compose down
+
+</code></pre>
+
+<h4 id="install-cassandra">Install Cassandra</h4>
+<p>Download and unzip <a href="http://apache.forsale.plus/cassandra/3.10/apache-cassandra-3.10-bin.tar.gz">Cassandra 3.1.0+</a></p>
+<pre><code>$ cd apache-cassandra-3.1.0
+$ ./bin/cassandra
+</code></pre>
+
+<h2 id="build-and-run-the-app">Build and Run the App</h2>
+<p>Use <a href="https://github.com/julianpeeters/sbt-avrohugger">sbt-avrohugger</a> to automatically generate SpecificRecord case class from avro schema.</p>
+<pre><code>$ sbt avro:generate-specific
+</code></pre>
+
+<p>Build an uber jar with all the dependencies.</p>
+<pre><code>$ sbt clean assembly
+</code></pre>
               
             </div>
           </div>
@@ -126,8 +168,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="../stream/" class="btn btn-neutral float-right" title="Data Streaming">Next <span class="icon icon-circle-arrow-right"></span></a>
       
-        <a href="../ml/" class="btn btn-neutral" title="Machine Learning"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+        <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -157,8 +201,10 @@
           <a href="https://github.com/AlvinCJin/Niagara" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../ml/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
       
+      
+        <span style="margin-left: 15px"><a href="../stream/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

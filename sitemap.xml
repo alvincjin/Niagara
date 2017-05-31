@@ -11,6 +11,38 @@
 
     
     <url>
+     <loc>/install/</loc>
+     <lastmod>2017-05-31</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/stream/</loc>
+     <lastmod>2017-05-31</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/escqrs/</loc>
+     <lastmod>2017-05-31</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/ml/</loc>
+     <lastmod>2017-05-31</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
      <loc>/about/</loc>
      <lastmod>2017-05-31</lastmod>
      <changefreq>daily</changefreq>

@@ -52,18 +52,40 @@
     <a class="current" href=".">Home</a>
     <ul class="subnav">
             
-    <li class="toctree-l2"><a href="#welcome-to-mkdocs">Welcome to MkDocs</a></li>
+    <li class="toctree-l2"><a href="#niagara-stream-platform">Niagara Stream Platform </a></li>
     
         <ul>
         
-            <li><a class="toctree-l3" href="#commands">Commands</a></li>
+            <li><a class="toctree-l3" href="#sdack-tech-stack">SDACK Tech Stack</a></li>
         
-            <li><a class="toctree-l3" href="#project-layout">Project layout</a></li>
+            <li><a class="toctree-l3" href="#dataset">Dataset</a></li>
+        
+            <li><a class="toctree-l3" href="#modules">Modules</a></li>
         
         </ul>
     
 
     </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="install/">Installation</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="stream/">Data Streaming</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="escqrs/">Event Sourcing & CQRS</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="ml/">Machine Learning</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -96,6 +118,9 @@
     <li>Home</li>
     <li class="wy-breadcrumbs-aside">
       
+        <a href="https://github.com/AlvinCJin/Niagara/edit/master/docs/index.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
     </li>
   </ul>
   <hr/>
@@ -103,21 +128,50 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="welcome-to-mkdocs">Welcome to MkDocs</h1>
-<p>For full documentation visit <a href="http://mkdocs.org">mkdocs.org</a>.</p>
-<h2 id="commands">Commands</h2>
+                <h1 id="niagara-stream-platform">Niagara Stream Platform <iframe src="https://ghbtns.com/github-btn.html?user=AlvinCJin&repo=Niagara&size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe></h1>
+<p>Niagara is a Fast &amp; Big Data Processing, Machine Learning, and Data-as-a-Service platform, implemented in Scala with SDACK stack.
+It is built on complicated public data sets to evaluate emerging Stateful Stream Processing to build lightweight Streaming Services.</p>
+<h2 id="sdack-tech-stack">SDACK Tech Stack</h2>
 <ul>
-<li><code>mkdocs new [dir-name]</code> - Create a new project.</li>
-<li><code>mkdocs serve</code> - Start the live-reloading docs server.</li>
-<li><code>mkdocs build</code> - Build the documentation site.</li>
-<li><code>mkdocs help</code> - Print this help message.</li>
+<li>
+<p>The batch analytic engine: Spark (Spark Streaming, SQL, MLlib)</p>
+</li>
+<li>
+<p>The lightweight container: Docker (Kubernetes)</p>
+</li>
+<li>
+<p>The real-time view: Akka (Akka Streams, Http, Alpakka)</p>
+</li>
+<li>
+<p>The scalable storage: Cassandra</p>
+</li>
+<li>
+<p>The distributed message broker: Kafka (Kafka Streams, Connects, Schema Registry)</p>
+</li>
 </ul>
-<h2 id="project-layout">Project layout</h2>
-<pre><code>mkdocs.yml    # The configuration file.
-docs/
-    index.md  # The documentation homepage.
-    ...       # Other markdown pages, images and other files.
-</code></pre>
+<h2 id="dataset">Dataset</h2>
+<ul>
+<li>
+<p>The Yelp Dataset contains 4.1 million reviews(3.5GB) by 1 million users(1.2GB) for 144K businesses(115MB).
+https://www.yelp.ca/dataset_challenge</p>
+</li>
+<li>
+<p>The Stack Exchange Dataset contains 28 million Posts in a 40GB single XML file.
+https://archive.org/details/stackexchange</p>
+</li>
+</ul>
+<h2 id="modules">Modules</h2>
+<ul>
+<li>
+<p>Data Streaming (Kafka, Spark, Akka)</p>
+</li>
+<li>
+<p>CQRS &amp; Event Sourcing</p>
+</li>
+<li>
+<p>Machine Learning</p>
+</li>
+</ul>
               
             </div>
           </div>
@@ -125,7 +179,7 @@ docs/
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="about/" class="btn btn-neutral float-right" title="About">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="install/" class="btn btn-neutral float-right" title="Installation">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
     </div>
@@ -135,6 +189,8 @@ docs/
 
   <div role="contentinfo">
     <!-- Copyright etc -->
+    
+      <p>Crafted by <a href="http://alvincjin.github.io">Alvin Jin</a></p>
     
   </div>
 
@@ -151,9 +207,11 @@ docs/
   <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
+          <a href="https://github.com/AlvinCJin/Niagara" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span style="margin-left: 15px"><a href="about/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+        <span style="margin-left: 15px"><a href="install/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
@@ -164,5 +222,5 @@ docs/
 
 <!--
 MkDocs version : 0.16.3
-Build Date UTC : 2017-05-31 13:32:00
+Build Date UTC : 2017-05-31 14:10:48
 -->

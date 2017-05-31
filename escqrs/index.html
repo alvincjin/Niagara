@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>About - Niagara Platform</title>
+  <title>Event Sourcing & CQRS - Niagara Platform</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,9 +17,9 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "About";
-    var mkdocs_page_input_path = "about.md";
-    var mkdocs_page_url = "/about/";
+    var mkdocs_page_name = "Event Sourcing & CQRS";
+    var mkdocs_page_input_path = "escqrs.md";
+    var mkdocs_page_url = "/escqrs/";
   </script>
   
   <script src="../js/jquery-2.1.1.min.js"></script>
@@ -62,9 +62,15 @@
     <a class="" href="../stream/">Data Streaming</a>
 	    </li>
           
-            <li class="toctree-l1">
+            <li class="toctree-l1 current">
 		
-    <a class="" href="../escqrs/">Event Sourcing & CQRS</a>
+    <a class="current" href="./">Event Sourcing & CQRS</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#cqrs-event-sourcing">CQRS &amp; Event Sourcing</a></li>
+    
+
+    </ul>
 	    </li>
           
             <li class="toctree-l1">
@@ -72,15 +78,9 @@
     <a class="" href="../ml/">Machine Learning</a>
 	    </li>
           
-            <li class="toctree-l1 current">
+            <li class="toctree-l1">
 		
-    <a class="current" href="./">About</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l2"><a href="#about">About</a></li>
-    
-
-    </ul>
+    <a class="" href="../about/">About</a>
 	    </li>
           
         </ul>
@@ -105,10 +105,10 @@
     
       
     
-    <li>About</li>
+    <li>Event Sourcing & CQRS</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/AlvinCJin/Niagara/edit/master/docs/about.md"
+        <a href="https://github.com/AlvinCJin/Niagara/edit/master/docs/escqrs.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -118,7 +118,11 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="about">About</h1>
+                <h2 id="cqrs-event-sourcing">CQRS &amp; Event Sourcing</h2>
+<p>With the distributed guarantees of Exactly Once Processing, Event Driven Services supported by Apache Kafka become reliable, fast and nimble,
+blurring the line between transactional business system and big data pipeline.
+Please check my <a href="http://alvincjin.blogspot.ca/2017/04/event-sourcing-and-cqrs.html">Blog Post</a> for the details of CQRS &amp; Event Sourcing.
+CDC(Chang Data Capture) is an approach to stream the database changes from binlogs to Kafka State Store.</p>
               
             </div>
           </div>
@@ -126,8 +130,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="../ml/" class="btn btn-neutral float-right" title="Machine Learning">Next <span class="icon icon-circle-arrow-right"></span></a>
       
-        <a href="../ml/" class="btn btn-neutral" title="Machine Learning"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+        <a href="../stream/" class="btn btn-neutral" title="Data Streaming"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -157,8 +163,10 @@
           <a href="https://github.com/AlvinCJin/Niagara" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../ml/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../stream/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
+      
+        <span style="margin-left: 15px"><a href="../ml/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

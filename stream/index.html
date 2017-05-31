@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>About - Niagara Platform</title>
+  <title>Data Streaming - Niagara Platform</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,9 +17,9 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "About";
-    var mkdocs_page_input_path = "about.md";
-    var mkdocs_page_url = "/about/";
+    var mkdocs_page_name = "Data Streaming";
+    var mkdocs_page_input_path = "stream.md";
+    var mkdocs_page_url = "/stream/";
   </script>
   
   <script src="../js/jquery-2.1.1.min.js"></script>
@@ -57,9 +57,25 @@
     <a class="" href="../install/">Installation</a>
 	    </li>
           
-            <li class="toctree-l1">
+            <li class="toctree-l1 current">
 		
-    <a class="" href="../stream/">Data Streaming</a>
+    <a class="current" href="./">Data Streaming</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#streaming-frameworks">Streaming Frameworks</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#kafka-streams">Kafka Streams</a></li>
+        
+            <li><a class="toctree-l3" href="#akka-streams">Akka Streams</a></li>
+        
+            <li><a class="toctree-l3" href="#spark-streaming">Spark Streaming</a></li>
+        
+        </ul>
+    
+
+    </ul>
 	    </li>
           
             <li class="toctree-l1">
@@ -72,15 +88,9 @@
     <a class="" href="../ml/">Machine Learning</a>
 	    </li>
           
-            <li class="toctree-l1 current">
+            <li class="toctree-l1">
 		
-    <a class="current" href="./">About</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l2"><a href="#about">About</a></li>
-    
-
-    </ul>
+    <a class="" href="../about/">About</a>
 	    </li>
           
         </ul>
@@ -105,10 +115,10 @@
     
       
     
-    <li>About</li>
+    <li>Data Streaming</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/AlvinCJin/Niagara/edit/master/docs/about.md"
+        <a href="https://github.com/AlvinCJin/Niagara/edit/master/docs/stream.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -118,7 +128,40 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="about">About</h1>
+                <h1 id="streaming-frameworks">Streaming Frameworks</h1>
+<h2 id="kafka-streams">Kafka Streams</h2>
+<p>In many use cases, we have to support an event-by-event low latency model rather than one that focuses on microbatches,
+and deliver upstream changes to the materialized state store to serve microservice.</p>
+<p>A Spark core app ingests Json files and converts Json to Avro messages in Kafka topics, e.g. review, business, user.</p>
+<p>A Kafka streams application consumes review messages as KStream from review topic.
+In the meanwhile, it consumes Business and User data as GlobalKTable.</p>
+<p>KStream works like Fact table, containing large volume immutable transactional records.
+While KTable works like Dimension table, contains small volume domain data snapshot.
+The pipeline enriches Review Stream by joining with Business and User KTables in real-time to a new Kafka topic.
+Then, apply filtering, aggregations and keep the results in local state store to provide Micro-service for Interactive Queries.</p>
+<p>For example, KeyValue query on stars summed by city</p>
+<pre><code>GET /stars/{city}
+</code></pre>
+
+<p>Range Query on stars sumed by business in a time window</p>
+<pre><code>GET /stars/{business}/{from}/{to}
+</code></pre>
+
+<h2 id="akka-streams">Akka Streams</h2>
+<p>The Akka Streams application ingests XML format posts by the file connector in Alpakka.
+Akka streams producer app forms a real-time data pipeline to parse, enrich and transform XML files to Avro messages in a Kafka topic.</p>
+<p>An Akka stream consumer app consumes avro messages from Kafka, and then persists data into Cassandra database.
+The data flow DSL is shown below:</p>
+<pre><code>xmlSource ~&gt; parsing ~&gt; broadcast ~&gt; enrich1 ~&gt; merge ~&gt; fillTitle ~&gt; kafkaSink
+                        broadcast ~&gt; enrich2 ~&gt; merge
+</code></pre>
+
+<p>The service layer provides RESTful APIs built by Akka-Http for users to easily interact with data for ad-hoc analytics.
+Under the hood, the service calls Cassandra APIs to implement CRUD operations.</p>
+<h2 id="spark-streaming">Spark Streaming</h2>
+<p>A Spark core app ingests Json files and converts Json to Avro messages in Kafka topics, e.g. review, business, user.
+A Spark streaming consumer consumes data from Kafka, and then do the transformation and aggregation.
+Select features and persist them into Cassandra.</p>
               
             </div>
           </div>
@@ -126,8 +169,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="../escqrs/" class="btn btn-neutral float-right" title="Event Sourcing & CQRS">Next <span class="icon icon-circle-arrow-right"></span></a>
       
-        <a href="../ml/" class="btn btn-neutral" title="Machine Learning"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+        <a href="../install/" class="btn btn-neutral" title="Installation"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -157,8 +202,10 @@
           <a href="https://github.com/AlvinCJin/Niagara" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../ml/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../install/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
+      
+        <span style="margin-left: 15px"><a href="../escqrs/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
