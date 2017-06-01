@@ -66,6 +66,11 @@ libraryDependencies ++= Seq(
   "org.iq80.leveldb" % "leveldb" % "0.9",
   "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8",
 
+  //force to use json4s 3.2.11 due to 3.5.0 incompatible with spark 2.0
+  "org.json4s" %% "json4s-jackson" % "3.2.11" force(),
+  "org.json4s" %% "json4s-core" % "3.2.11" force(),
+  "org.json4s" %% "json4s-native" % "3.2.11" force(),
+
   "org.scala-lang.modules" %% "scala-xml" % "1.0.6",
   "com.typesafe.slick" %% "slick" % "3.1.0",
   "mysql" % "mysql-connector-java" % "5.1.34",
@@ -73,6 +78,7 @@ libraryDependencies ++= Seq(
   "com.jason-goodwin" %% "authentikat-jwt" % "0.4.3",
   "com.github.nscala-time" %% "nscala-time" % "2.4.0"
 )
+
 
 assemblyJarName in assembly := s"${organization.value}-${name.value}-${version.value}.jar"
 
