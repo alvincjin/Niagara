@@ -1,4 +1,3 @@
-# Streaming Frameworks
 
 ## Kafka Streams
 
@@ -26,9 +25,6 @@ Range Query on stars sumed by business in a time window
 ```
 GET /stars/{business}/{from}/{to}
 ```
-
-
-
 
 
 ## Akka Streams
