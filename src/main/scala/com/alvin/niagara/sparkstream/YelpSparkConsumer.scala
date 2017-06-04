@@ -1,4 +1,4 @@
-package com.alvin.niagara.spark
+package com.alvin.niagara.sparkstream
 
 import java.util.UUID
 

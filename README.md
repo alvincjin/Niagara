@@ -140,5 +140,6 @@ CDC(Chang Data Capture) is an approach to stream the database changes from binlo
 
 ## Machine Learning
 
-### Alternating Least Squares (ALS) Algorithm
-Collaborative Filtering Algorithms: Deciding that two users may both like the same song because they play many other same songs.
+### Alternating Least Squares (ALS)
+ALS is a kind of Collaborative Filtering Algorithms. It can be used to build a recommendation engine :
+Deciding that two users may both like the same restaurants because they review many other same restaurants.

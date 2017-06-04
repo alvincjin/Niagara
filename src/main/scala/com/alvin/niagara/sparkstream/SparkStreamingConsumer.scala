@@ -1,4 +1,4 @@
-package com.alvin.niagara.spark
+package com.alvin.niagara.sparkstream
 
 import com.alvin.niagara.config.Config
 import com.alvin.niagara.model.PostTags
@@ -9,10 +9,10 @@ import com.datastax.spark.connector.streaming._
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization.{ByteArrayDeserializer, StringDeserializer}
 import org.apache.spark.SparkConf
+import org.apache.spark.streaming._
 import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
 import org.apache.spark.streaming.kafka010.KafkaUtils
 import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent
-import org.apache.spark.streaming._
 /**
  * Created by JINC4 on 6/2/2016.
  *
