@@ -66,6 +66,9 @@ libraryDependencies ++= Seq(
   "org.iq80.leveldb" % "leveldb" % "0.9",
   "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8",
 
+  "edu.stanford.nlp" % "stanford-corenlp" % "3.7.0",
+  "edu.stanford.nlp" % "stanford-corenlp" % "3.7.0" classifier "models",
+
   //force to use json4s 3.2.11 due to 3.5.0 incompatible with spark 2.0
   "org.json4s" %% "json4s-jackson" % "3.2.11" force(),
   "org.json4s" %% "json4s-core" % "3.2.11" force(),

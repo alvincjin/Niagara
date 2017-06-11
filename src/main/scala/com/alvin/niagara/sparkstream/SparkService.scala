@@ -1,16 +1,16 @@
-package com.alvin.niagara.spark
+package com.alvin.niagara.sparkstream
 
 import com.alvin.niagara.config.Config
-import org.apache.spark.sql.functions._
-import org.apache.spark.sql.{DataFrame}
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 import com.alvin.niagara.model.PostTags
 import com.alvin.niagara.util.Util
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.{Dataset, SparkSession}
+import org.apache.spark.sql.{DataFrame, Dataset, SparkSession}
+import org.apache.spark.sql.functions._
 import org.apache.spark.streaming.Seconds
 import org.apache.spark.streaming.dstream.DStream
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 /**
  * Created by JINC4 on 6/14/2016.

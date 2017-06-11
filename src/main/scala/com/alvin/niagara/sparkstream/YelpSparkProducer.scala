@@ -1,4 +1,4 @@
-package com.alvin.niagara.spark
+package com.alvin.niagara.sparkstream
 
 import com.alvin.niagara.config.Config
 import com.alvin.niagara.model._
