@@ -52,7 +52,7 @@ object YelpRatingPredictor  extends App with Config {
   topConceptTerms.map(terms => println("Concept terms: "+terms.mkString(", ")))
 
   val queryEngine = new LSAQueryEngine(svd, termIds, docIds, termIdfs)
-  queryEngine.printTopDocsForTermQuery(Seq("good", "service"))
+  queryEngine.printTopDocsForTermQuery(Seq("awesome", "burger"))
 
 
 }
