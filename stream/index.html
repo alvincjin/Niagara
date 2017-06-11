@@ -62,17 +62,13 @@
     <a class="current" href="./">Data Streaming</a>
     <ul class="subnav">
             
-    <li class="toctree-l2"><a href="#streaming-frameworks">Streaming Frameworks</a></li>
+    <li class="toctree-l2"><a href="#kafka-streams">Kafka Streams</a></li>
     
-        <ul>
-        
-            <li><a class="toctree-l3" href="#kafka-streams">Kafka Streams</a></li>
-        
-            <li><a class="toctree-l3" href="#akka-streams">Akka Streams</a></li>
-        
-            <li><a class="toctree-l3" href="#spark-streaming">Spark Streaming</a></li>
-        
-        </ul>
+
+    <li class="toctree-l2"><a href="#akka-streams">Akka Streams</a></li>
+    
+
+    <li class="toctree-l2"><a href="#spark-streaming">Spark Streaming</a></li>
     
 
     </ul>
@@ -125,8 +121,7 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="streaming-frameworks">Streaming Frameworks</h1>
-<h2 id="kafka-streams">Kafka Streams</h2>
+                <h2 id="kafka-streams">Kafka Streams</h2>
 <p>In many use cases, we have to support an event-by-event low latency model rather than one that focuses on microbatches,
 and deliver upstream changes to the materialized state store to serve microservice.</p>
 <p>A Spark core app ingests Json files and converts Json to Avro messages in Kafka topics, e.g. review, business, user.</p>
@@ -179,7 +174,7 @@ Select features and persist them into Cassandra.</p>
   <div role="contentinfo">
     <!-- Copyright etc -->
     
-      <p>Crafted by <a href="http://alvincjin.github.io">Alvin Jin</a></p>
+      <p>Maintained by <a href="http://alvincjin.github.io">Alvin Jin</a></p>
     
   </div>
 

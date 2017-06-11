@@ -27,12 +27,7 @@
         }, 
         {
             "location": "/install/", 
-            "text": "Installation\n\n\nInstall Java 8 and Scala 2.11 in Ubuntu\n\n\nPlease check the steps in my \nBig Data Blog\n\n\nCreate Kafka and Zookeeper Docker Containers\n\n\nInstall Docker for Mac OS, then create 3 containers for Zookeeper, Kafka broker and Schema Registry, respectively.\n\n\n$ cd ~/pathto/Niagara\n\n//Start containers\n$ docker-compose up\n\n\n//Stop containers and remove them entirely\n$ docker-compose down\n\n\n\n\n\nInstall Cassandra\n\n\nDownload and unzip \nCassandra 3.1.0+\n\n\n$ cd apache-cassandra-3.1.0\n$ ./bin/cassandra\n\n\n\n\nBuild and Run the App\n\n\nUse \nsbt-avrohugger\n to automatically generate SpecificRecord case class from avro schema.\n\n\n$ sbt avro:generate-specific\n\n\n\n\nBuild an uber jar with all the dependencies.\n\n\n$ sbt clean assembly", 
-            "title": "Installation"
-        }, 
-        {
-            "location": "/install/#installation", 
-            "text": "", 
+            "text": "Install Java 8 and Scala 2.11 in Ubuntu\n\n\nPlease check the steps in my \nBig Data Blog\n\n\nInstall Kafka and Zookeeper as Docker Containers in Linux\n\n\nInstall Docker for Mac OS, then create 3 containers for Zookeeper, Kafka broker and Schema Registry, respectively.\n\n\n$ cd ~/pathto/Niagara\n\n//Start containers\n$ docker-compose up\n\n\n//Stop containers and remove them entirely\n$ docker-compose down\n\n\n\n\n\nInstall Kafka, Cassandra Manually in Mac OS\n\n\nDownload and unzip \nConfluent-3.2+\n\n\n$ cd /pathto/confluent-3.2.0/\n\n//start Zookeeper\n$ ./bin/zookeeper-server-start etc/kafka/zookeeper.properties\n\n//start Kafka\n$ ./bin/kafka-server-start etc/kafka/server.properties\n\n//start Schema Registry\n$ ./bin/schema-registry-start etc/schema-registry/schema-registry.properties\n\n\n\n\n\nDownload and unzip \nCassandra 3.1.0+\n\n\n$ cd apache-cassandra-3.1.0\n$ ./bin/cassandra\n\n\n\n\nBuild and Run the App\n\n\nUse \nsbt-avrohugger\n to automatically generate SpecificRecord case class from avro schema.\n\n\n$ sbt avro:generate-specific\n\n\n\n\nBuild an uber jar with all the dependencies.\n\n\n$ sbt clean assembly", 
             "title": "Installation"
         }, 
         {
@@ -41,14 +36,14 @@
             "title": "Install Java 8 and Scala 2.11 in Ubuntu"
         }, 
         {
-            "location": "/install/#create-kafka-and-zookeeper-docker-containers", 
+            "location": "/install/#install-kafka-and-zookeeper-as-docker-containers-in-linux", 
             "text": "Install Docker for Mac OS, then create 3 containers for Zookeeper, Kafka broker and Schema Registry, respectively.  $ cd ~/pathto/Niagara\n\n//Start containers\n$ docker-compose up\n\n\n//Stop containers and remove them entirely\n$ docker-compose down", 
-            "title": "Create Kafka and Zookeeper Docker Containers"
+            "title": "Install Kafka and Zookeeper as Docker Containers in Linux"
         }, 
         {
-            "location": "/install/#install-cassandra", 
-            "text": "Download and unzip  Cassandra 3.1.0+  $ cd apache-cassandra-3.1.0\n$ ./bin/cassandra", 
-            "title": "Install Cassandra"
+            "location": "/install/#install-kafka-cassandra-manually-in-mac-os", 
+            "text": "Download and unzip  Confluent-3.2+  $ cd /pathto/confluent-3.2.0/\n\n//start Zookeeper\n$ ./bin/zookeeper-server-start etc/kafka/zookeeper.properties\n\n//start Kafka\n$ ./bin/kafka-server-start etc/kafka/server.properties\n\n//start Schema Registry\n$ ./bin/schema-registry-start etc/schema-registry/schema-registry.properties  Download and unzip  Cassandra 3.1.0+  $ cd apache-cassandra-3.1.0\n$ ./bin/cassandra", 
+            "title": "Install Kafka, Cassandra Manually in Mac OS"
         }, 
         {
             "location": "/install/#build-and-run-the-app", 
@@ -57,13 +52,8 @@
         }, 
         {
             "location": "/stream/", 
-            "text": "Streaming Frameworks\n\n\nKafka Streams\n\n\nIn many use cases, we have to support an event-by-event low latency model rather than one that focuses on microbatches,\nand deliver upstream changes to the materialized state store to serve microservice.\n\n\nA Spark core app ingests Json files and converts Json to Avro messages in Kafka topics, e.g. review, business, user.\n\n\nA Kafka streams application consumes review messages as KStream from review topic.\nIn the meanwhile, it consumes Business and User data as GlobalKTable.\n\n\nKStream works like Fact table, containing large volume immutable transactional records.\nWhile KTable works like Dimension table, contains small volume domain data snapshot.\nThe pipeline enriches Review Stream by joining with Business and User KTables in real-time to a new Kafka topic.\nThen, apply filtering, aggregations and keep the results in local state store to provide Micro-service for Interactive Queries.\n\n\nFor example, KeyValue query on stars summed by city\n\n\nGET /stars/{city}\n\n\n\n\nRange Query on stars sumed by business in a time window\n\n\nGET /stars/{business}/{from}/{to}\n\n\n\n\nAkka Streams\n\n\nThe Akka Streams application ingests XML format posts by the file connector in Alpakka.\nAkka streams producer app forms a real-time data pipeline to parse, enrich and transform XML files to Avro messages in a Kafka topic.\n\n\nAn Akka stream consumer app consumes avro messages from Kafka, and then persists data into Cassandra database.\nThe data flow DSL is shown below:\n\n\nxmlSource ~\n parsing ~\n broadcast ~\n enrich1 ~\n merge ~\n fillTitle ~\n kafkaSink\n                        broadcast ~\n enrich2 ~\n merge\n\n\n\n\nThe service layer provides RESTful APIs built by Akka-Http for users to easily interact with data for ad-hoc analytics.\nUnder the hood, the service calls Cassandra APIs to implement CRUD operations.\n\n\nSpark Streaming\n\n\nA Spark core app ingests Json files and converts Json to Avro messages in Kafka topics, e.g. review, business, user.\nA Spark streaming consumer consumes data from Kafka, and then do the transformation and aggregation.\nSelect features and persist them into Cassandra.", 
+            "text": "Kafka Streams\n\n\nIn many use cases, we have to support an event-by-event low latency model rather than one that focuses on microbatches,\nand deliver upstream changes to the materialized state store to serve microservice.\n\n\nA Spark core app ingests Json files and converts Json to Avro messages in Kafka topics, e.g. review, business, user.\n\n\nA Kafka streams application consumes review messages as KStream from review topic.\nIn the meanwhile, it consumes Business and User data as GlobalKTable.\n\n\nKStream works like Fact table, containing large volume immutable transactional records.\nWhile KTable works like Dimension table, contains small volume domain data snapshot.\nThe pipeline enriches Review Stream by joining with Business and User KTables in real-time to a new Kafka topic.\nThen, apply filtering, aggregations and keep the results in local state store to provide Micro-service for Interactive Queries.\n\n\nFor example, KeyValue query on stars summed by city\n\n\nGET /stars/{city}\n\n\n\n\nRange Query on stars sumed by business in a time window\n\n\nGET /stars/{business}/{from}/{to}\n\n\n\n\nAkka Streams\n\n\nThe Akka Streams application ingests XML format posts by the file connector in Alpakka.\nAkka streams producer app forms a real-time data pipeline to parse, enrich and transform XML files to Avro messages in a Kafka topic.\n\n\nAn Akka stream consumer app consumes avro messages from Kafka, and then persists data into Cassandra database.\nThe data flow DSL is shown below:\n\n\nxmlSource ~\n parsing ~\n broadcast ~\n enrich1 ~\n merge ~\n fillTitle ~\n kafkaSink\n                        broadcast ~\n enrich2 ~\n merge\n\n\n\n\nThe service layer provides RESTful APIs built by Akka-Http for users to easily interact with data for ad-hoc analytics.\nUnder the hood, the service calls Cassandra APIs to implement CRUD operations.\n\n\nSpark Streaming\n\n\nA Spark core app ingests Json files and converts Json to Avro messages in Kafka topics, e.g. review, business, user.\nA Spark streaming consumer consumes data from Kafka, and then do the transformation and aggregation.\nSelect features and persist them into Cassandra.", 
             "title": "Data Streaming"
-        }, 
-        {
-            "location": "/stream/#streaming-frameworks", 
-            "text": "", 
-            "title": "Streaming Frameworks"
         }, 
         {
             "location": "/stream/#kafka-streams", 
@@ -82,17 +72,22 @@
         }, 
         {
             "location": "/escqrs/", 
-            "text": "CQRS \n Event Sourcing\n\n\nWith the distributed guarantees of Exactly Once Processing, Event Driven Services supported by Apache Kafka become reliable, fast and nimble,\nblurring the line between transactional business system and big data pipeline.\nPlease check my \nBlog Post\n for the details of CQRS \n Event Sourcing.\nCDC(Chang Data Capture) is an approach to stream the database changes from binlogs to Kafka State Store.", 
+            "text": "Event Sourcing\n\n\nWith the distributed guarantees of Exactly Once Processing, Event Driven Services supported by Apache Kafka become reliable, fast and nimble,\nblurring the line between transactional business system and big data pipeline.\nPlease check my \nBlog Post\n for the details of CQRS \n Event Sourcing.\nCDC(Chang Data Capture) is an approach to stream the database changes from binlogs to Kafka State Store.\n\n\nCQRS", 
             "title": "Event Sourcing & CQRS"
         }, 
         {
-            "location": "/escqrs/#cqrs-event-sourcing", 
+            "location": "/escqrs/#event-sourcing", 
             "text": "With the distributed guarantees of Exactly Once Processing, Event Driven Services supported by Apache Kafka become reliable, fast and nimble,\nblurring the line between transactional business system and big data pipeline.\nPlease check my  Blog Post  for the details of CQRS   Event Sourcing.\nCDC(Chang Data Capture) is an approach to stream the database changes from binlogs to Kafka State Store.", 
-            "title": "CQRS &amp; Event Sourcing"
+            "title": "Event Sourcing"
+        }, 
+        {
+            "location": "/escqrs/#cqrs", 
+            "text": "", 
+            "title": "CQRS"
         }, 
         {
             "location": "/ml/", 
-            "text": "Machine Learning\n\n\nDeep Learning\n\n\nComing soon ...", 
+            "text": "Machine Learning\n\n\nAlternating Least Squares (ALS)\n\n\nALS is a kind of Collaborative Filtering Algorithms. It can be used to build a recommendation engine :\nDeciding that two users may both like the same restaurants because they review many other same restaurants.\n\n\nLatent Semantic Analysis (LSA)\n\n\nLSA is a technique in natural language processing that seeks to better understand a corpus of documents and the relationships between the words in those documents.\nIt attempts to distill the corpus into a set of relevant concepts.\nEach concept consists of three attributes: a level of affinity for each document in the corpus, a level of affinity for each term in the corpus, and an importance score reflecting how useful the concept is in describing variance in the data set.\nBy selecting only the most important concepts, LSA can throw away some irrelevant noise and merge co-occurring strands to come up with a simpler representation of the data.\n\n\nDeep Learning\n\n\nComing soon ...", 
             "title": "Machine Learning"
         }, 
         {
@@ -101,18 +96,28 @@
             "title": "Machine Learning"
         }, 
         {
+            "location": "/ml/#alternating-least-squares-als", 
+            "text": "ALS is a kind of Collaborative Filtering Algorithms. It can be used to build a recommendation engine :\nDeciding that two users may both like the same restaurants because they review many other same restaurants.", 
+            "title": "Alternating Least Squares (ALS)"
+        }, 
+        {
+            "location": "/ml/#latent-semantic-analysis-lsa", 
+            "text": "LSA is a technique in natural language processing that seeks to better understand a corpus of documents and the relationships between the words in those documents.\nIt attempts to distill the corpus into a set of relevant concepts.\nEach concept consists of three attributes: a level of affinity for each document in the corpus, a level of affinity for each term in the corpus, and an importance score reflecting how useful the concept is in describing variance in the data set.\nBy selecting only the most important concepts, LSA can throw away some irrelevant noise and merge co-occurring strands to come up with a simpler representation of the data.", 
+            "title": "Latent Semantic Analysis (LSA)"
+        }, 
+        {
             "location": "/ml/#deep-learning", 
             "text": "Coming soon ...", 
             "title": "Deep Learning"
         }, 
         {
             "location": "/about/", 
-            "text": "About\n\n\nAlvin Jin is a Sr. Big Data \n Machine Learning Tech Lead in Toronto, Canada.\n\n\nEmail: alvincjin@gmail.com", 
+            "text": "About\n\n\nAlvin Jin\n is a Senior Big Data \n Machine Learning Tech Lead in Toronto, Canada.\nHe mainly focuses on Big Data Platform development and Machine Learning Algorithms research.\n\n\nEmail: alvincjin@gmail.com", 
             "title": "About"
         }, 
         {
             "location": "/about/#about", 
-            "text": "Alvin Jin is a Sr. Big Data   Machine Learning Tech Lead in Toronto, Canada.  Email: alvincjin@gmail.com", 
+            "text": "Alvin Jin  is a Senior Big Data   Machine Learning Tech Lead in Toronto, Canada.\nHe mainly focuses on Big Data Platform development and Machine Learning Algorithms research.  Email: alvincjin@gmail.com", 
             "title": "About"
         }
     ]

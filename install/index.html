@@ -57,17 +57,13 @@
     <a class="current" href="./">Installation</a>
     <ul class="subnav">
             
-    <li class="toctree-l2"><a href="#installation">Installation</a></li>
+    <li class="toctree-l2"><a href="#install-java-8-and-scala-211-in-ubuntu">Install Java 8 and Scala 2.11 in Ubuntu</a></li>
     
-        <ul>
-        
-            <li><a class="toctree-l3" href="#install-java-8-and-scala-211-in-ubuntu">Install Java 8 and Scala 2.11 in Ubuntu</a></li>
-        
-            <li><a class="toctree-l3" href="#create-kafka-and-zookeeper-docker-containers">Create Kafka and Zookeeper Docker Containers</a></li>
-        
-            <li><a class="toctree-l3" href="#install-cassandra">Install Cassandra</a></li>
-        
-        </ul>
+
+    <li class="toctree-l2"><a href="#install-kafka-and-zookeeper-as-docker-containers-in-linux">Install Kafka and Zookeeper as Docker Containers in Linux</a></li>
+    
+
+    <li class="toctree-l2"><a href="#install-kafka-cassandra-manually-in-mac-os">Install Kafka, Cassandra Manually in Mac OS</a></li>
     
 
     <li class="toctree-l2"><a href="#build-and-run-the-app">Build and Run the App</a></li>
@@ -128,10 +124,9 @@
           <div role="main">
             <div class="section">
               
-                <h2 id="installation">Installation</h2>
-<h4 id="install-java-8-and-scala-211-in-ubuntu">Install Java 8 and Scala 2.11 in Ubuntu</h4>
+                <h4 id="install-java-8-and-scala-211-in-ubuntu">Install Java 8 and Scala 2.11 in Ubuntu</h4>
 <p>Please check the steps in my <a href="http://alvincjin.blogspot.ca/2017/01/install-java-and-scala-in-ubuntu.html">Big Data Blog</a></p>
-<h4 id="create-kafka-and-zookeeper-docker-containers">Create Kafka and Zookeeper Docker Containers</h4>
+<h4 id="install-kafka-and-zookeeper-as-docker-containers-in-linux">Install Kafka and Zookeeper as Docker Containers in Linux</h4>
 <p>Install Docker for Mac OS, then create 3 containers for Zookeeper, Kafka broker and Schema Registry, respectively.</p>
 <pre><code>$ cd ~/pathto/Niagara
 
@@ -144,7 +139,21 @@ $ docker-compose down
 
 </code></pre>
 
-<h4 id="install-cassandra">Install Cassandra</h4>
+<h4 id="install-kafka-cassandra-manually-in-mac-os">Install Kafka, Cassandra Manually in Mac OS</h4>
+<p>Download and unzip <a href="https://www.confluent.io/download/#download-center">Confluent-3.2+</a></p>
+<pre><code>$ cd /pathto/confluent-3.2.0/
+
+//start Zookeeper
+$ ./bin/zookeeper-server-start etc/kafka/zookeeper.properties
+
+//start Kafka
+$ ./bin/kafka-server-start etc/kafka/server.properties
+
+//start Schema Registry
+$ ./bin/schema-registry-start etc/schema-registry/schema-registry.properties
+
+</code></pre>
+
 <p>Download and unzip <a href="http://apache.forsale.plus/cassandra/3.10/apache-cassandra-3.10-bin.tar.gz">Cassandra 3.1.0+</a></p>
 <pre><code>$ cd apache-cassandra-3.1.0
 $ ./bin/cassandra
@@ -178,7 +187,7 @@ $ ./bin/cassandra
   <div role="contentinfo">
     <!-- Copyright etc -->
     
-      <p>Crafted by <a href="http://alvincjin.github.io">Alvin Jin</a></p>
+      <p>Maintained by <a href="http://alvincjin.github.io">Alvin Jin</a></p>
     
   </div>
 
