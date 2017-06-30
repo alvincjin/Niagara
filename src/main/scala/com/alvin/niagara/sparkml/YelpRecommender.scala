@@ -47,7 +47,19 @@ object YelpRecommender extends App with Config {
 
   //model.userFactors.select("features").show(truncate = false)
 
-  recommend(489396L, model, userInfo, businessInfo)
+
+  val selectedUsers = userInfo.select("userid").as[Long].distinct().take(10)
+
+  val recommendations = selectedUsers.map( userId => (userId, makeRecommendations(model, userId, 5)))
+
+  recommendations.foreach { case (userId, recommends) =>
+
+    val buzzList = recommends.select("businessid").as[Long].collect()
+
+    println(s"$userId -> ${buzzList.mkString(", ")}" )
+  }
+
+  //recommend(489396L, model, userInfo, businessInfo)
 
   spark.stop()
 
@@ -82,7 +94,7 @@ object YelpRecommender extends App with Config {
     val topRecommendations = makeRecommendations(model, userId, 5)
     val recommendedBuzzIDs =  topRecommendations.select("businessid").as[Long].collect()
 
-    println("=== Businesses recommanded ===")
+    //println("=== Businesses recommanded ===")
 
     users.filter($"userid" === userId).show()
     businesses.filter($"businessid" isin (recommendedBuzzIDs:_*)).show()
